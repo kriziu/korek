@@ -4,17 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:korek/screens/login_screen.dart';
+import 'package:korek/screens/register_screen.dart';
 import 'package:korek/widgets/adaptive_button.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
@@ -25,9 +25,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   };
 
   Future<void> _submitForm() async{
-      if(_formKey.currentState!.validate()){
+    if(_formKey.currentState!.validate()){
 
-      }
+    }
   }
 
   @override
@@ -53,7 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 2,
                     ),
                     Text(
-                      "Sing up before starting learning new things!",
+                      "Sing in before starting learning new things!",
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     const SizedBox(
@@ -81,35 +81,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText: true,
                       material: (_, __) => MaterialTextFormFieldData(
                           decoration: const InputDecoration(
-                        hintText: 'Password',
-                        prefixIcon: Icon(
-                          Icons.lock_open,
-                          size: 24,
-                          color: Color(0xff343434),
-                        ),
-                      )),
+                            hintText: 'Password',
+                            prefixIcon: Icon(
+                              Icons.lock_open,
+                              size: 24,
+                              color: Color(0xff343434),
+                            ),
+                          )),
                       onChanged: (val) => _registerData['password'] = val,
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    PlatformTextFormField(
-                      validator: (val) {
-                        if(val!.length < 6) return 'Provide min 6 letters password';
-                        if(val != _registerData['password']) return 'Passwords don\'t match';
-                        return null;
-                      },
-                      style: const TextStyle(fontSize: 15),
-                      obscureText: true,
-                      material: (_, __) => MaterialTextFormFieldData(
-                          decoration: const InputDecoration(
-                        hintText: 'Confirm Password',
-                        prefixIcon: Icon(
-                          Icons.lock_outline,
-                          size: 24,
-                          color: Color(0xff343434),
-                        ),
-                      )),
                     ),
                     const SizedBox(
                       height: 16,
@@ -117,7 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(
                       child: AdaptiveButton(
                         child: Text(
-                          "Register",
+                          "Login",
                           style: GoogleFonts.montserrat(
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
@@ -134,20 +113,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text("Already have an account?",style: platformThemeData(
+                        Text("Don\'t have an account?",style: platformThemeData(
                           context,
                           material: (data) => data.textTheme.headline5!.copyWith(fontSize: 14.5,color:Colors.black),
                           cupertino: (data) => data.textTheme.navTitleTextStyle.copyWith(fontSize: 14.5,color:Colors.black),
                         )),
                         GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            platformPageRoute(
-                              context: context,
-                              builder: (context) => const LoginScreen(),
-                            ),
-                          ),
-                          child: Text(" Login here",style: platformThemeData(
+                          onTap: () => Navigator.of(context).pop(),
+                          child: Text(" Register here",style: platformThemeData(
                             context,
                             material: (data) => data.textTheme.headline5!.copyWith(fontSize: 14.5,color:Theme.of(context).primaryColor),
                             cupertino: (data) => data.textTheme.navTitleTextStyle.copyWith(fontSize: 14.5,color:Theme.of(context).primaryColor),
