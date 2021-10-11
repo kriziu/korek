@@ -1,15 +1,11 @@
 
 
-GET http://localhost:8080/users/61646ee9633d222e047efb2b
+GET http://localhost:8080/users/61647d8877c05d2104e8642d
 
 ###
 
 GET http://localhost:8080/users
-Content-Type: application/json
 
-{
-  "subjects": [],
-}
 
 ###
 
@@ -46,7 +42,7 @@ Content-Type: application/json
 
 ###
 
-PATCH http://localhost:8080/users/61647aad810eb62405bc73b9
+PATCH http://localhost:8080/users/61647d8877c05d2104e8642d
 Content-Type: application/json
 
 {
