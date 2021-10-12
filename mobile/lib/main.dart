@@ -25,6 +25,8 @@ class Main extends StatelessWidget {
           home: const HomeScreen(),
           material: (_, __) => MaterialAppData(
                 theme: ThemeData(
+                    colorScheme: ColorScheme.fromSwatch()
+                        .copyWith(secondary: const Color(0xffFFC526)),
                   backgroundColor: Colors.white,
                     textSelectionTheme: const TextSelectionThemeData(
                       cursorColor: Colors.black,
