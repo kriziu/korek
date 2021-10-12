@@ -1,0 +1,68 @@
+
+
+GET http://localhost:8080/users/61647d8877c05d2104e8642d
+
+###
+
+GET http://localhost:8080/users
+
+
+###
+
+GET http://localhost:8080/users/byId/6164679799b75f798296c1d2
+
+###
+
+GET http://localhost:8080/users/6162e8dd4a878cace3596fec
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "firstName": "Teacher",
+  "lastName": "s",
+  "email": "t@gmail.com",
+  "password":"password",
+  "userType": "teacher",
+  "subjects": [],
+  "connected": []
+}
+
+###
+
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "email": "woj1k1315@gmail.com",
+  "password":"password"
+}
+
+###
+
+PATCH http://localhost:8080/users/61647d8877c05d2104e8642d
+Content-Type: application/json
+
+{
+  "subjects": ["english"]
+}
+
+###
+POST http://localhost:8080/users/connect/61647bb9c4e75187155063ec
+Content-Type: application/json
+
+{
+  "_id": "61647d8877c05d2104e8642d",
+  "subject": "english"
+}
+
+###
+POST http://localhost:8080/users/disconnect/61647bb9c4e75187155063ec
+Content-Type: application/json
+
+{
+  "_id": "61647d8877c05d2104e8642d",
+  "subject": "english"
+}
