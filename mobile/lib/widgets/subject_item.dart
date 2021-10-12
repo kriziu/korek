@@ -11,12 +11,12 @@ class SubjectItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-          left: index == 0 ? 32 : 16, right: index == 11 ? 32 : 16),
+          left: index == 0 ? 28 : 16, right: index == 11 ? 28 : 16),
       child: Text(subject,
-          style: const TextStyle(
+          style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 17,
-              color: Color(0xffaaaaaa))),
+              color: index == 0 ? Theme.of(context).primaryColor : const Color(0xffaaaaaa))),
     );
   }
 }

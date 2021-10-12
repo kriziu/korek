@@ -8,7 +8,7 @@ class TeacherItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       child: Row(children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
@@ -26,19 +26,47 @@ class TeacherItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Jan Matejko"),
-                Text("Math, Physics, Chemistry f fds  df f fsd dfs sdf",maxLines: 1,overflow: TextOverflow.ellipsis,),
+                const Text(
+                  "Jan Matejko",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18  ,
+                      fontWeight: FontWeight.w700),
+                ),
+                const Text(
+                  "Math, Physics, Chemistry",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: Color(0xffaaaaaa),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(Icons.star, color: Theme.of(context).primaryColor),
-                    Text('4.7')
+                    Icon(Icons.star_outlined, color: Theme.of(context).primaryColor,size: 28,),
+                    const SizedBox(width:4),
+                    const Padding(
+                      padding: EdgeInsets.only(top:4.0),
+                      child: Text('4.7',style:TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700)),
+                    )
                   ],
                 ),
               ],
             ),
           ),
         ),
-        Text('20\$')
+        const Text('20\$',style: TextStyle(
+            color: Colors.black,
+            fontSize: 18  ,
+            fontWeight: FontWeight.w700),)
       ]),
     );
   }
