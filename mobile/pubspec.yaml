@@ -37,6 +37,7 @@ dependencies:
   flutter_platform_widgets: ^1.9.5
   google_fonts: ^2.1.0
   enum_to_string: ^2.0.1
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:korek/screens/home_screen.dart';
 import 'package:korek/screens/register_screen.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,9 +16,10 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformApp(
         title: 'Korek',
-        home: const RegisterScreen(),
+        home: HomeScreen(),
         material: (_, __) => MaterialAppData(
               theme: ThemeData(
+                backgroundColor: Colors.white,
                   textSelectionTheme: const TextSelectionThemeData(
                     cursorColor: Colors.black,
                   ),
@@ -66,9 +68,9 @@ class Main extends StatelessWidget {
             textTheme: CupertinoTextThemeData(
               primaryColor: Colors.black,
               actionTextStyle: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: Colors.black,
-                  fontSize: 40),
+                  fontSize: 32),
               textStyle: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w700,
                   color: Colors.black,
@@ -78,9 +80,9 @@ class Main extends StatelessWidget {
                   color: Colors.black,
                   fontSize: 40),
               navActionTextStyle: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                  fontSize: 40),
+                fontWeight: FontWeight.w300,
+                color: const Color(0xff999999),
+                fontSize: 16),
               navLargeTitleTextStyle: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w700,
                   color: Colors.black,

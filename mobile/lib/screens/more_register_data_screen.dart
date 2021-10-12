@@ -2,6 +2,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:korek/screens/home_screen.dart';
 import 'package:korek/subjects.dart';
 import 'package:korek/widgets/adaptive_button.dart';
 
@@ -23,14 +24,14 @@ class _MoreRegisterDataScreenState extends State<MoreRegisterDataScreen> {
   var isTeacher = false;
 
   Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
+    //if (_formKey.currentState!.validate()) {
       Navigator.pushReplacement(
           context,
           platformPageRoute(
               context: context,
-              builder: (context) => const MoreRegisterDataScreen(),
-              settings: RouteSettings(arguments: _registerData)));
-    }
+              builder: (context) => HomeScreen(),
+              ));
+    //}
   }
 
   @override
@@ -174,10 +175,11 @@ class _MoreRegisterDataScreenState extends State<MoreRegisterDataScreen> {
                     ),
                     SizedBox(
                       child: AdaptiveButton(
+                        outlined: true,
                         child: Text(
                           "Choose school subjects!",
                           style: GoogleFonts.montserrat(
-                              color: Colors.white,
+                              color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.w500,
                               fontSize: 17),
                         ),
@@ -194,7 +196,7 @@ class _MoreRegisterDataScreenState extends State<MoreRegisterDataScreen> {
                       width: double.infinity,
                     ),
                     const SizedBox(
-                      height: 32,
+                      height: 40,
                     ),
                     SizedBox(
                       child: AdaptiveButton(
