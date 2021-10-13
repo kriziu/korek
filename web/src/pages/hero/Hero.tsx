@@ -8,6 +8,7 @@ import { Nav } from './components/Nav';
 import learnSVG from '../../svg/hero_learning.svg';
 import { Center } from '../../components/Center';
 import { BigButton } from './components/BigButton';
+import Footer from '../../components/Footer/Footer';
 
 const Hero: FC = () => {
   const history = useHistory();
@@ -16,7 +17,7 @@ const Hero: FC = () => {
   const handleRegisterButton = () => history.push('/register');
 
   return (
-    <>
+    <div>
       <Nav>
         <h3>KOREK</h3>
         <div>
@@ -46,7 +47,8 @@ const Hero: FC = () => {
       <Center style={{ marginTop: '2rem', paddingBottom: '8rem' }}>
         <BigButton onClick={handleRegisterButton}>Join now</BigButton>
       </Center>
-    </>
+      <Footer />
+    </div>
   );
 };
 

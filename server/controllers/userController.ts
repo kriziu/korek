@@ -89,9 +89,11 @@ router.post('/', async (req, res) => {
       lastName: req.body.lastName,
       email: req.body.email,
       password: hashedPassword,
+      price: req.body.price,
+      avatarId: req.body.avatarId,
       userType: req.body.userType,
       subjects: req.body.subjects,
-      teachers: req.body.teachers,
+      connected: req.body.connected,
     });
 
     try {

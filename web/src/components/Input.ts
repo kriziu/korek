@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
 
-export const Input = styled.input`
+export const Input = styled.input<{ warn?: boolean }>`
   background-color: var(--color-gray-lighter);
-  border: none;
   padding: 1.5rem 3rem;
   color: var(--color-gray-dark);
   font-weight: 500;
@@ -10,9 +9,8 @@ export const Input = styled.input`
   font-size: 1.5rem;
   border-radius: 0.5rem;
   display: block;
-
-  :focus {
-  }
+  border: ${props =>
+    props.warn ? '2px var(--color-red) solid' : '2px transparent solid'};
 `;
 
 export const InputIcon = styled.div`

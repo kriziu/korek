@@ -23,11 +23,13 @@ Content-Type: application/json
 {
   "firstName": "Teacher",
   "lastName": "s",
-  "email": "t@gmail.com",
+  "email": "t1133@gmail.com",
   "password":"password",
+  "price": 20,
+  "avatarId": "female_1",
   "userType": "teacher",
-  "subjects": [],
-  "connected": []
+  "subjects": ["polish"],
+  "connected": [{"_id": "123", "subject": "polish"}]
 }
 
 ###

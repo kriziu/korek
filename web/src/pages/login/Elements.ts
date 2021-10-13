@@ -14,7 +14,7 @@ export const BackBtn = styled.button`
   border-radius: 50%;
   position: absolute;
   top: 10rem;
-  left: 10rem;
+  right: 10rem;
   transition: var(--trans-default);
 
   svg {
