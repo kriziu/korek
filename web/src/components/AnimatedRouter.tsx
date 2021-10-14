@@ -29,6 +29,7 @@ const AnimatedRouter: FC = (): JSX.Element => {
               : 'fade'
           }
           key={location.pathname}
+          unmountOnExit
         >
           <Switch location={location}>
             <Route exact path="/register">

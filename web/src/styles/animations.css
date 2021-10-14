@@ -16,6 +16,24 @@
   transition: var(--trans-long);
 }
 
+.fade-fast-enter {
+  opacity: 0;
+}
+
+.fade-fast-enter-active {
+  opacity: 1;
+  transition: var(--trans-default);
+}
+
+.fade-fast-exit {
+  opacity: 1;
+}
+
+.fade-fast-exit-active {
+  opacity: 0;
+  transition: var(--trans-default);
+}
+
 .left-enter {
   transform: translateX(100%);
   top: 0;

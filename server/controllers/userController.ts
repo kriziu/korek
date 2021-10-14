@@ -106,6 +106,7 @@ router.post('/', async (req, res) => {
     }
   } catch (err) {
     const msg = (err as Error).message;
+    console.log(msg);
     if (msg) return res.status(500).send({ error: msg });
     res.status(500).send();
   }
@@ -117,7 +118,7 @@ router.post('/login', async (req, res) => {
     '+password'
   );
   if (user == null)
-    return res.status(400).json({ error: 'Cannot find user with that email' });
+    return res.json({ error: 'Cannot find user with that email' });
 
   try {
     if (await bcrypt.compare(req.body.password, user.password)) res.json(user);

@@ -1,16 +1,33 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 
 import { FiAtSign } from 'react-icons/fi';
 import { MdLockOutline, MdPersonOutline } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { MultiValue } from 'react-select';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import axios from 'axios';
+import { IoReturnUpBack } from 'react-icons/io5';
 
+import '../../styles/animations.css';
 import { Button } from '../../components/Button';
-import { Header1 } from '../../components/Header';
+import { Header1, Header3 } from '../../components/Header';
 import { Input, InputIcon } from '../../components/Input';
 import useForm from '../../hooks/useForm';
 import { validateEmail } from '../../utils/functions';
-import { Double } from './Elements';
+import { BackBtnSm, Double, SelectContainer } from './Elements';
 import Template from './Template';
+import { StyledSelect } from '../../components/StyledSelect';
+import { SelectSubjects, SubjectType } from '../../types/Subjects';
+import { Avatar, AvatarSelector } from '../../components/Avatar';
+import { Avatars } from '../../types/Avatars';
+import { Center } from '../../components/Center';
+
+const { REACT_APP_SERVER_URL } = process.env;
+
+const imAoptions = [
+  { value: 'student', label: 'Student' },
+  { value: 'teacher', label: 'Teacher' },
+];
 
 const Register: FC = () => {
   const [
@@ -26,6 +43,13 @@ const Register: FC = () => {
     pass: { value: '', required: true },
     confPass: { value: '', required: true },
   });
+
+  const [imA, setImA] = useState(imAoptions[0]);
+  const [help, setHelp] = useState<MultiValue<SubjectType>>([]);
+  const [avatarId, setAvatarId] = useState<Avatars>(Avatars.female_1);
+  const [avatarSetter, setAvatarSetter] = useState(false);
+  const [valid, setValid] = useState(0);
+  const [price, setPrice] = useState('');
 
   const { email, fName, lName, pass, confPass } = formData;
 
@@ -49,16 +73,50 @@ const Register: FC = () => {
 
   const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (pass.value !== confPass.value) {
+      toggleChecked('confPass');
+      return;
+    }
     if (!checkValidity()) return;
     if (!validateEmail(email.value)) {
       toggleChecked('email');
       return;
     }
-    console.log('e');
+
+    setValid(1);
   };
 
-  return (
-    <Template>
+  const handleAvatarSelect = (id: Avatars) => {
+    setAvatarSetter(false);
+    setAvatarId(id);
+  };
+
+  const handleRegister = () => {
+    const subjects = help.map(subject => {
+      return subject.value;
+    });
+
+    REACT_APP_SERVER_URL &&
+      axios
+        .post(`${REACT_APP_SERVER_URL}/users`, {
+          firstName: fName.value,
+          lastName: lName.value,
+          email: email.value,
+          password: pass.value,
+          price: 0,
+          avatarId,
+          userType: imA.value,
+          subjects: subjects,
+          connected: [],
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => console.log(err));
+  };
+
+  const renderRegistration = (): JSX.Element => {
+    return (
       <form onSubmit={handleSubmitForm} noValidate>
         <div style={{ textAlign: 'center' }}>
           <Header1>Create Account</Header1>
@@ -125,6 +183,76 @@ const Register: FC = () => {
         </Double>
         <Button style={{ width: '100%' }}>Register</Button>
       </form>
+    );
+  };
+
+  const renderCompletion = (): JSX.Element => {
+    return (
+      <div>
+        <BackBtnSm onClick={() => setValid(0)}>
+          <IoReturnUpBack />
+        </BackBtnSm>
+
+        <Header1>Complete registration</Header1>
+        <SelectContainer>
+          <Header3 style={{ marginRight: '2rem' }}>I'm a</Header3>
+          <div style={{ flex: 1 }}>
+            <StyledSelect
+              options={imAoptions}
+              value={imA}
+              onChange={e => e && setImA(e)}
+            />
+          </div>
+        </SelectContainer>
+        <div style={{ marginTop: '2rem' }}>
+          <Header3 style={{ marginRight: '2rem', textAlign: 'left' }}>
+            {imA === imAoptions[0] ? 'I need help with' : 'I can help with'}
+          </Header3>
+
+          <StyledSelect
+            options={SelectSubjects}
+            value={help}
+            onChange={e => e && setHelp(e)}
+            isMulti
+          />
+        </div>
+        <Center style={{ margin: '2rem 0' }}>
+          <Header3 style={{ marginRight: '2rem', textAlign: 'left' }}>
+            My avatar
+          </Header3>
+          <div
+            onClick={() => setAvatarSetter(true)}
+            style={{ width: 'min-content' }}
+          >
+            <Avatar id={avatarId} />
+          </div>
+          <CSSTransition
+            in={avatarSetter}
+            timeout={200}
+            classNames="fade-fast"
+            unmountOnExit
+          >
+            <AvatarSelector
+              id={avatarId}
+              avatarSelect={handleAvatarSelect}
+              close={() => setAvatarSetter(false)}
+            />
+          </CSSTransition>
+        </Center>
+        <Button style={{ width: '100%' }} onClick={handleRegister}>
+          Complete
+        </Button>
+      </div>
+    );
+  };
+
+  return (
+    <Template>
+      <SwitchTransition mode="out-in">
+        <CSSTransition timeout={200} classNames="fade-fast" key={valid}>
+          {!valid ? renderRegistration() : renderCompletion()}
+        </CSSTransition>
+      </SwitchTransition>
     </Template>
   );
 };

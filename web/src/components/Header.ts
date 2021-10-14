@@ -6,6 +6,12 @@ export const Header1 = styled.h1`
   text-align: center;
 `;
 
+export const Header2 = styled.h2`
+  font-weight: 500;
+  font-size: 3rem;
+  text-align: center;
+`;
+
 export const Header3 = styled.h1`
   font-weight: 500;
   font-size: 2rem;

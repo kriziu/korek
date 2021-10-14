@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 
 import { MdLockOutline } from 'react-icons/md';
 import { FiAtSign } from 'react-icons/fi';
+import axios from 'axios';
 
 import { Button } from '../../components/Button';
 import { Header1 } from '../../components/Header';
@@ -10,6 +11,8 @@ import Template from './Template';
 import { Link } from 'react-router-dom';
 import useForm from '../../hooks/useForm';
 import { validateEmail } from '../../utils/functions';
+
+const { REACT_APP_SERVER_URL } = process.env;
 
 const Login: FC = () => {
   const [formData, , toggleChecked, handleInputChange, checkValidity] = useForm(
@@ -28,7 +31,15 @@ const Login: FC = () => {
       toggleChecked('email');
       return;
     }
-    console.log('e');
+
+    axios
+      .post(`${REACT_APP_SERVER_URL}/users/login`, {
+        email: email.value,
+        password: pass.value,
+      })
+      .then(res => {
+        console.log(res.data);
+      });
   };
 
   return (

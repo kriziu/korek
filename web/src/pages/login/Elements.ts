@@ -7,6 +7,36 @@ export const Background = styled.div`
   background-color: var(--color-yellow);
 `;
 
+export const BackBtnSm = styled.button`
+  border: none;
+  padding: 1.5rem;
+  background-color: transparent;
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  transition: var(--trans-default);
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    transition: var(--trans-default);
+  }
+
+  :hover {
+    cursor: pointer;
+    padding: 1.5rem;
+
+    svg {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+
+  :active {
+    padding: 1rem;
+  }
+`;
+
 export const BackBtn = styled.button`
   border: none;
   padding: 2rem;
@@ -43,6 +73,7 @@ export const Card = styled.div`
   width: 40%;
   height: max-content;
   border-radius: 5rem;
+  position: relative;
   background-color: var(--color-white);
 
   .flex {
@@ -85,4 +116,12 @@ export const Double = styled.div`
   div {
     width: 48%;
   }
+`;
+
+export const SelectContainer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 2rem;
 `;

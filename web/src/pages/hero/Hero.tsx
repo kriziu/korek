@@ -5,7 +5,6 @@ import { useHistory } from 'react-router';
 import { Button } from '../../components/Button';
 import { Header1, SmallHeader } from '../../components/Header';
 import { Nav } from './components/Nav';
-import learnSVG from '../../svg/hero_learning.svg';
 import { Center } from '../../components/Center';
 import { BigButton } from './components/BigButton';
 import Footer from '../../components/Footer/Footer';
@@ -40,7 +39,7 @@ const Hero: FC = () => {
       </SmallHeader>
 
       <Center style={{ marginBottom: '5rem' }}>
-        <img src={learnSVG} alt="Study online" />
+        <img src="/images/hero_learning.svg" alt="Study online" />
       </Center>
 
       <Header1>Join us to make world better!</Header1>
