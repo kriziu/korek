@@ -11,6 +11,7 @@ import Template from './Template';
 import { Link } from 'react-router-dom';
 import useForm from '../../hooks/useForm';
 import { validateEmail } from '../../utils/functions';
+import { toast } from 'react-toastify';
 
 const { REACT_APP_SERVER_URL } = process.env;
 
@@ -24,6 +25,29 @@ const Login: FC = () => {
 
   const { email, pass } = formData;
 
+  // TOASTS
+  const emailErr = () =>
+    toast.error('Account with that email not found!', {
+      position: 'top-center',
+      autoClose: 10000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+  const passErr = () =>
+    toast.error('Password is wrong!', {
+      position: 'top-center',
+      autoClose: 10000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!checkValidity()) return;
@@ -33,12 +57,14 @@ const Login: FC = () => {
     }
 
     axios
-      .post(`${REACT_APP_SERVER_URL}/users/login`, {
+      .post<{ error?: string }>(`${REACT_APP_SERVER_URL}/users/login`, {
         email: email.value,
         password: pass.value,
       })
       .then(res => {
-        console.log(res.data);
+        const { error } = res.data;
+        error === 'Cannot find user with that email' && emailErr();
+        error === 'Bad password' && passErr();
       });
   };
 

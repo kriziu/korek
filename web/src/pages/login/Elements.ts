@@ -68,6 +68,14 @@ export const BackBtn = styled.button`
   }
 `;
 
+export const Price = styled.input`
+  padding: 1rem;
+  font-size: 1.6rem;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+`;
+
 export const Card = styled.div`
   padding: 5rem 7rem;
   width: 40%;

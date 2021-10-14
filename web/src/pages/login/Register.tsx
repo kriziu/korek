@@ -5,8 +5,9 @@ import { MdLockOutline, MdPersonOutline } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { MultiValue } from 'react-select';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { IoReturnUpBack } from 'react-icons/io5';
+import { toast, ToastContainer } from 'react-toastify';
 
 import '../../styles/animations.css';
 import { Button } from '../../components/Button';
@@ -14,7 +15,7 @@ import { Header1, Header3 } from '../../components/Header';
 import { Input, InputIcon } from '../../components/Input';
 import useForm from '../../hooks/useForm';
 import { validateEmail } from '../../utils/functions';
-import { BackBtnSm, Double, SelectContainer } from './Elements';
+import { BackBtnSm, Double, Price, SelectContainer } from './Elements';
 import Template from './Template';
 import { StyledSelect } from '../../components/StyledSelect';
 import { SelectSubjects, SubjectType } from '../../types/Subjects';
@@ -49,9 +50,32 @@ const Register: FC = () => {
   const [avatarId, setAvatarId] = useState<Avatars>(Avatars.female_1);
   const [avatarSetter, setAvatarSetter] = useState(false);
   const [valid, setValid] = useState(0);
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState('0');
 
   const { email, fName, lName, pass, confPass } = formData;
+
+  // TOASTS
+  const emailFound = () =>
+    toast.error('Account with that email found!', {
+      position: 'top-center',
+      autoClose: 10000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+  const success = () =>
+    toast.success('Account created!', {
+      position: 'top-center',
+      autoClose: 10000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
 
   const makeBigLetter = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.value) {
@@ -98,19 +122,21 @@ const Register: FC = () => {
 
     REACT_APP_SERVER_URL &&
       axios
-        .post(`${REACT_APP_SERVER_URL}/users`, {
+        .post<{ error?: string }>(`${REACT_APP_SERVER_URL}/users`, {
           firstName: fName.value,
           lastName: lName.value,
           email: email.value,
           password: pass.value,
-          price: 0,
+          price,
           avatarId,
           userType: imA.value,
           subjects: subjects,
           connected: [],
         })
         .then(res => {
-          console.log(res.data);
+          res.data.error === 'Found user with that email.'
+            ? emailFound()
+            : success();
         })
         .catch(err => console.log(err));
   };
@@ -196,6 +222,7 @@ const Register: FC = () => {
         <Header1>Complete registration</Header1>
         <SelectContainer>
           <Header3 style={{ marginRight: '2rem' }}>I'm a</Header3>
+
           <div style={{ flex: 1 }}>
             <StyledSelect
               options={imAoptions}
@@ -204,6 +231,27 @@ const Register: FC = () => {
             />
           </div>
         </SelectContainer>
+        {imA === imAoptions[1] && (
+          <SelectContainer>
+            <label htmlFor="price">
+              <Header3 style={{ marginRight: '2rem', textAlign: 'left' }}>
+                Price / h
+              </Header3>
+            </label>
+            <div style={{ flex: 1 }}>
+              <Price
+                id="price"
+                value={price}
+                type="number"
+                onChange={e => {
+                  (parseFloat(e.target.value) > 0 || e.target.value === '') &&
+                    setPrice(e.target.value);
+                }}
+              />
+            </div>
+          </SelectContainer>
+        )}
+
         <div style={{ marginTop: '2rem' }}>
           <Header3 style={{ marginRight: '2rem', textAlign: 'left' }}>
             {imA === imAoptions[0] ? 'I need help with' : 'I can help with'}
