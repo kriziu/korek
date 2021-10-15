@@ -28,6 +28,7 @@ class UsersProvider with ChangeNotifier {
           _students.add(user);
         }
       });
+      notifyListeners();
     } else {
       throw Exception("Cannot read users! Try again later");
     }

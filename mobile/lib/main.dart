@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:korek/providers/users_provider.dart';
 import 'package:korek/screens/home_screen.dart';
+import 'package:korek/screens/login_wrapper.dart';
 import 'package:korek/screens/register_screen.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:korek/screens/wrapper.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 
@@ -24,7 +26,7 @@ class Main extends StatelessWidget {
       ],
       child: PlatformApp(
           title: 'Korek',
-          home: const RegisterScreen(),
+          home: const Wrapper(),
           material: (_, __) => MaterialAppData(
                 theme: ThemeData(
                     snackBarTheme: const SnackBarThemeData(

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:http/http.dart' as http;
+import 'package:korek/providers/auth_provider.dart';
 import 'package:korek/providers/users_provider.dart';
 import 'package:korek/helpers/subjects.dart';
 import 'package:korek/widgets/subject_item.dart';
@@ -71,11 +71,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             iconSize: 40,
                           ),
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.white,
-                            child: Image.network(
-                                "https://cdn.iconscout.com/icon/free/png-256/avatar-373-456325.png"),
+                          GestureDetector(
+                            onTap: () async => await Provider.of<AuthProvider>(context,listen: false).logOut(),
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Colors.white,
+                              child: Image.network(
+                                  "https://cdn.iconscout.com/icon/free/png-256/avatar-373-456325.png"),
+                            ),
                           )
                         ],
                       ),
