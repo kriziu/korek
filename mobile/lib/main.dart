@@ -6,6 +6,7 @@ import 'package:korek/screens/register_screen.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'providers/auth_provider.dart';
 
 void main() {
   runApp(const Main());
@@ -19,15 +20,20 @@ class Main extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<UsersProvider>(create: (_) => UsersProvider()),
+        ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
       ],
       child: PlatformApp(
           title: 'Korek',
-          home: const HomeScreen(),
+          home: const RegisterScreen(),
           material: (_, __) => MaterialAppData(
                 theme: ThemeData(
+                    snackBarTheme: const SnackBarThemeData(
+                        backgroundColor: Color(0xffeeeeee),
+                        contentTextStyle: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w600)),
                     colorScheme: ColorScheme.fromSwatch()
                         .copyWith(secondary: const Color(0xffFFC526)),
-                  backgroundColor: Colors.white,
+                    backgroundColor: Colors.white,
                     textSelectionTheme: const TextSelectionThemeData(
                       cursorColor: Colors.black,
                     ),
@@ -72,8 +78,8 @@ class Main extends StatelessWidget {
                     iconTheme: const IconThemeData(color: Color(0xff343434))),
               ),
           cupertino: (_, __) => CupertinoAppData(
-            theme: CupertinoThemeData(
-              textTheme: CupertinoTextThemeData(
+                  theme: CupertinoThemeData(
+                      textTheme: CupertinoTextThemeData(
                 primaryColor: Colors.black,
                 actionTextStyle: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w600,
@@ -88,14 +94,14 @@ class Main extends StatelessWidget {
                     color: Colors.black,
                     fontSize: 40),
                 navActionTextStyle: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w300,
-                  color: const Color(0xff999999),
-                  fontSize: 16),
+                    fontWeight: FontWeight.w300,
+                    color: const Color(0xff999999),
+                    fontSize: 16),
                 navLargeTitleTextStyle: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w700,
                     color: Colors.black,
                     fontSize: 40),
-                navTitleTextStyle:  GoogleFonts.montserrat(
+                navTitleTextStyle: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w400,
                     color: Colors.black,
                     fontSize: 20),
@@ -107,9 +113,7 @@ class Main extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                     color: Colors.black,
                     fontSize: 40),
-              )
-            )
-          )),
+              )))),
     );
   }
 }

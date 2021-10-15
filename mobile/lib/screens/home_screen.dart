@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:korek/providers/users_provider.dart';
-import 'package:korek/subjects.dart';
+import 'package:korek/helpers/subjects.dart';
 import 'package:korek/widgets/subject_item.dart';
 import 'package:korek/widgets/teahcer_item.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,13 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
-  Future<void> fetchUsers() async => await Provider.of<UsersProvider>(context,listen: false).fetchUsers();
+  Future<void> fetchUsers() async {
+    try{
+      await Provider.of<UsersProvider>(context,listen: false).fetchUsers();
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error : ${e.toString()}")));
+    }
+  }
 
   @override
   void initState() {

@@ -1,9 +1,9 @@
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:korek/models/register_data.dart';
 import 'package:korek/screens/login_screen.dart';
 import 'package:korek/screens/more_register_data_screen.dart';
 import 'package:korek/widgets/adaptive_button.dart';
@@ -20,10 +20,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
 
-  final _registerData = {
-    'email': '',
-    'password': '',
-  };
+  final _registerData = RegisterData();
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -89,7 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       size: 24,
                                       color: Color(0xff343434),
                                     ))),
-                        onChanged: (val) => _registerData['email'] = val,
+                        onChanged: (val) => _registerData.email = val,
                       ),
                       const SizedBox(
                         height: 16,
@@ -111,17 +108,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     color: Color(0xff343434),
                                   ),
                                 )),
-                        onChanged: (val) => _registerData['password'] = val,
+                        onChanged: (val) => _registerData.password = val,
                       ),
                       const SizedBox(
                         height: 16,
                       ),
                       PlatformTextFormField(
                         validator: (val) {
-                          if (val!.length < 6)
+                          if (val!.length < 6) {
                             return 'Provide min 6 letters password';
-                          if (val != _registerData['password'])
+                          }
+                          if (val != _registerData.password) {
                             return 'Passwords don\'t match';
+                          }
                           return null;
                         },
                         style: const TextStyle(fontSize: 15),
