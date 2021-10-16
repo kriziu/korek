@@ -12,7 +12,14 @@ export const Button = styled.button<{ secondary?: boolean }>`
 
   transition: var(--trans-default);
 
-  :hover {
+  :disabled {
+    opacity: 0.3;
+    :hover {
+      cursor: not-allowed;
+    }
+  }
+
+  :hover :not(:disabled) {
     cursor: pointer;
 
     background-color: ${props =>

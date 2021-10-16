@@ -6,6 +6,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Hero from '../pages/hero/Hero';
 import Login from '../pages/login/Login';
 import Register from '../pages/login/Register';
+import Teachers from '../pages/teachers/Teachers';
 
 import '../styles/animations.css';
 
@@ -37,6 +38,9 @@ const AnimatedRouter: FC = (): JSX.Element => {
             </Route>
             <Route exact path="/login">
               <Login />
+            </Route>
+            <Route exact path="/discover">
+              <Teachers />
             </Route>
             <Route exact path="/">
               <Hero />

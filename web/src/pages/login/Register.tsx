@@ -5,9 +5,10 @@ import { MdLockOutline, MdPersonOutline } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { MultiValue } from 'react-select';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { IoReturnUpBack } from 'react-icons/io5';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router';
 
 import '../../styles/animations.css';
 import { Button } from '../../components/Button';
@@ -53,6 +54,8 @@ const Register: FC = () => {
   const [price, setPrice] = useState('0');
 
   const { email, fName, lName, pass, confPass } = formData;
+
+  const history = useHistory();
 
   // TOASTS
   const emailFound = () =>
@@ -137,6 +140,8 @@ const Register: FC = () => {
           res.data.error === 'Found user with that email.'
             ? emailFound()
             : success();
+
+          history.push('/discover');
         })
         .catch(err => console.log(err));
   };
@@ -287,7 +292,11 @@ const Register: FC = () => {
             />
           </CSSTransition>
         </Center>
-        <Button style={{ width: '100%' }} onClick={handleRegister}>
+        <Button
+          style={{ width: '100%' }}
+          onClick={() => help.length && handleRegister()}
+          disabled={help.length ? false : true}
+        >
           Complete
         </Button>
       </div>

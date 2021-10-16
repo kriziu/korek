@@ -20,6 +20,16 @@ export const GlobalStyles = () => (
         font-family: 'Montserrat', sans-serif;
         box-sizing: border-box;
         transition: all 0.3s;
+
+        ::-webkit-scrollbar {
+          width: 1rem;
+          border: none;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background-color: var(--color-gray-dark);
+          border-radius: 5rem;
+        }
       }
 
       html {

@@ -4,7 +4,7 @@ import { AiFillInstagram, AiOutlineTwitter } from 'react-icons/ai';
 import { BsFacebook } from 'react-icons/bs';
 
 import { Header3, SmallHeader } from '../Header';
-import { Container } from './Elements';
+import { Container } from './Footer.elements';
 
 const Footer: FC = () => {
   return (

@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { MdLockOutline } from 'react-icons/md';
 import { FiAtSign } from 'react-icons/fi';
 import axios from 'axios';
+import { useHistory } from 'react-router';
 
 import { Button } from '../../components/Button';
 import { Header1 } from '../../components/Header';
@@ -24,6 +25,8 @@ const Login: FC = () => {
   );
 
   const { email, pass } = formData;
+
+  const history = useHistory();
 
   // TOASTS
   const emailErr = () =>
@@ -65,6 +68,8 @@ const Login: FC = () => {
         const { error } = res.data;
         error === 'Cannot find user with that email' && emailErr();
         error === 'Bad password' && passErr();
+
+        history.push('/');
       });
   };
 
