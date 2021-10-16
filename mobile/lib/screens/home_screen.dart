@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               radius: 30,
                               backgroundColor: Colors.grey[300],
                               child: SvgPicture.asset(
-                                "assets/male_1.svg",
+                                "assets/${user!.avatarId}.svg",
                               ),
                             ),
                           )
@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (BuildContext context, int i) =>
-                      TeacherItem(teachers[i]),
+                      TeacherItem(teachers[i],i),
                   itemCount: teachers.length,
                   shrinkWrap: true,
                 ),

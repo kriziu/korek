@@ -10,7 +10,7 @@ class LoginWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PlatformScaffold(
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
