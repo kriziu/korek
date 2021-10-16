@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:korek/models/user.dart';
 
 class TeacherItem extends StatelessWidget {
-  const TeacherItem({Key? key}) : super(key: key);
+  final User teacher;
+  const TeacherItem(this.teacher,{Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +15,7 @@ class TeacherItem extends StatelessWidget {
       child: Row(children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: Image.network(
-            "https://images.discordapp.net/avatars/555033139542491137/33e7f929df60cf790d8a7a47a7be3f73.png?size=512",
+          child:SvgPicture.asset("assets/${teacher.avatarId}.svg",
             width: 80,
             height: 80,
             fit: BoxFit.cover,
@@ -26,18 +28,20 @@ class TeacherItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Jan Matejko",
-                  style: TextStyle(
+                Text(
+                 "${teacher.firstName} ${teacher.lastName}",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
                       color: Colors.black,
                       fontSize: 18  ,
                       fontWeight: FontWeight.w700),
                 ),
-                const Text(
-                  "Math, Physics, Chemistry",
+                Text(
+                  teacher.subjectsStr,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Color(0xffaaaaaa),
                       fontSize: 14,
                       fontWeight: FontWeight.w500),
@@ -63,7 +67,7 @@ class TeacherItem extends StatelessWidget {
             ),
           ),
         ),
-        const Text('20\$',style: TextStyle(
+        Text('${teacher.price}\$',style: const TextStyle(
             color: Colors.black,
             fontSize: 18  ,
             fontWeight: FontWeight.w700),)

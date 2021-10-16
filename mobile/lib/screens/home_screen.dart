@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:korek/providers/auth_provider.dart';
 import 'package:korek/providers/users_provider.dart';
 import 'package:korek/helpers/subjects.dart';
@@ -19,13 +20,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   Future<void> fetchUsers() async {
-    try{
-      await Provider.of<UsersProvider>(context,listen: false).fetchUsers();
-    }catch(e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error : ${e.toString()}")));
+    try {
+      await Provider.of<UsersProvider>(context, listen: false).fetchUsers();
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Error : ${e.toString()}")));
     }
   }
 
@@ -37,6 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final teachers = Provider.of<UsersProvider>(context).teachers;
+    final user = Provider.of<AuthProvider>(context).user;
+
     return PlatformScaffold(
       material: ((_, __) => MaterialScaffoldData(
           drawer: const Drawer(
@@ -72,17 +76,24 @@ class _HomeScreenState extends State<HomeScreen> {
                             iconSize: 40,
                           ),
                           GestureDetector(
-                            onTap: () async => await Provider.of<AuthProvider>(context,listen: false).logOut(),
+                            onTap: () async {
+                              await Provider.of<AuthProvider>(context,
+                                      listen: false)
+                                  .logOut();
+                            },
                             child: CircleAvatar(
                               radius: 30,
-                              backgroundColor: Colors.white,
-                              child: Image.network(
-                                  "https://cdn.iconscout.com/icon/free/png-256/avatar-373-456325.png"),
+                              backgroundColor: Colors.grey[300],
+                              child: SvgPicture.asset(
+                                "assets/male_1.svg",
+                              ),
                             ),
                           )
                         ],
                       ),
-                      const SizedBox(height:24,),
+                      const SizedBox(
+                        height: 24,
+                      ),
                       Text(
                         "Korek.",
                         style: platformThemeData(
@@ -134,35 +145,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                AnimatedList(
-                  key: _listKey,
+                ListView.builder(
                   physics: const BouncingScrollPhysics(),
-                  itemBuilder: (BuildContext context, int i, animation) =>
-                      SlideTransition(
-                          position: animation.drive(
-                            Tween<Offset>(
-                              begin: const Offset(-1, 0),
-                              end: const Offset(0, 0),
-                            ),
-                          ),
-                          child: const TeacherItem()),
-                  initialItemCount: 10,
+                  itemBuilder: (BuildContext context, int i) =>
+                      TeacherItem(teachers[i]),
+                  itemCount: teachers.length,
                   shrinkWrap: true,
                 ),
-                // TextButton(onPressed: () async {
-                //   var url = Uri.parse('http://192.168.1.129:8080/users');
-                //   var response = await http.get(url);
-                //   print('Response status: ${response.statusCode}');
-                //   print('Response body: ${response.body}');
-                // }, child: Text("ESSA"),
-                //
-                // )
-                ElevatedButton(
-                    onPressed: () {
-                      _listKey.currentState!
-                          .removeItem(3, (context, index) => TeacherItem());
-                    },
-                    child: Text("ESSA"))
               ],
             ),
           ),

@@ -13,12 +13,10 @@ class UsersProvider with ChangeNotifier {
   List<User> get teachers => [..._teachers];
 
   Future<void> fetchUsers() async {
-    final response =
-        await http.get(Uri.parse('$BASE_URL/users'));
+    _students.clear();
+    _teachers.clear();
 
-    if (response.statusCode == 200) {
-      _students.clear();
-      _teachers.clear();
+      final response = await http.get(Uri.parse('$BASE_URL/users'));
       final jsonData = jsonDecode(response.body) as List<dynamic>;
       final data = jsonData.map((user) => User.fromJson(user));
       data.forEach((user) {
@@ -29,8 +27,5 @@ class UsersProvider with ChangeNotifier {
         }
       });
       notifyListeners();
-    } else {
-      throw Exception("Cannot read users! Try again later");
-    }
   }
 }

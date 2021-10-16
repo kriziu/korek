@@ -52,6 +52,23 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+
+  Future<void> logIn(Map<String,dynamic> loginData) async{
+    final response = await http.post(Uri.parse('$BASE_URL/users/login'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(loginData));
+    if ((jsonDecode(response.body) as Map<String, dynamic>).containsKey('error')) {
+      throw Exception(jsonDecode(response.body)['error']);
+    } else {
+      _user = User.fromJson(jsonDecode(response.body));
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString("id", user!.id);
+      notifyListeners();
+    }
+  }
+
   Future<void> logOut() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove("id");

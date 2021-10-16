@@ -30,7 +30,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _registerUser() async {
     try {
       if (_formKey.currentState!.validate()) {
-        showPlatformDialog(context: context, builder: (_) => const LoadingDialog(title:"Registering..."),barrierDismissible: false);
+        showPlatformDialog(
+            context: context,
+            builder: (_) => const LoadingDialog(title: "Registering..."),
+            barrierDismissible: false);
         if (_registerData.subjects.isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text("Choose at least 1 subject")));
@@ -38,19 +41,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
         await Provider.of<AuthProvider>(context, listen: false)
             .registerUser(_registerData);
-        Navigator.of(context)..pop()..pushAndRemoveUntil(
-            platformPageRoute(
-              context: context,
-              builder: (context) => const HomeScreen(),
-            ),
-            (Route<dynamic> route) => false);
+        Navigator.of(context)
+          ..pop()
+          ..pushAndRemoveUntil(
+              platformPageRoute(
+                context: context,
+                builder: (context) => const HomeScreen(),
+              ),
+              (Route<dynamic> route) => false);
       }
     } catch (e) {
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +88,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 48,
                     ),
                     PlatformTextFormField(
+                      textInputAction: TextInputAction.next,
                       validator: (val) =>
                           RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                   .hasMatch(val!)
                               ? null
                               : 'Provide correct email',
+                      keyboardType: TextInputType.emailAddress,
                       style: const TextStyle(fontSize: 15),
                       material: (_, __) => MaterialTextFormFieldData(
                           decoration: const InputDecoration(
@@ -103,6 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 16,
                     ),
                     PlatformTextFormField(
+                      textInputAction: TextInputAction.next,
                       validator: (val) =>
                           val!.length > 1 ? null : 'Provide correct first name',
                       style: const TextStyle(fontSize: 15),
@@ -120,6 +128,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 16,
                     ),
                     PlatformTextFormField(
+                      textInputAction: TextInputAction.next,
                       validator: (val) =>
                           val!.length > 1 ? null : 'Provide correct last name',
                       style: const TextStyle(fontSize: 15),
@@ -138,6 +147,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 16,
                     ),
                     PlatformTextFormField(
+                      textInputAction: TextInputAction.next,
                       validator: (val) => val!.length >= 6
                           ? null
                           : 'Provide min 6 letters password',
@@ -158,6 +168,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 16,
                     ),
                     PlatformTextFormField(
+                      textInputAction: TextInputAction.done,
                       validator: (val) {
                         if (val!.length < 6) {
                           return 'Provide min 6 letters password';
@@ -250,6 +261,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     if (_registerData.userType == "teacher")
                       PlatformTextFormField(
+                        textInputAction: TextInputAction.done,
                         validator: (val) => double.tryParse(val!) == null
                             ? "Wpisz poprawn wartość"
                             : null,
@@ -298,6 +310,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               fontSize: 17),
                         ),
                         onPressed: () {
+                          FocusScope.of(context).unfocus();
                           showPlatformModalSheet(
                             context: context,
                             builder: (_) => PlatformWidget(
@@ -327,6 +340,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     InkWell(
                       onTap: () {
+                        FocusScope.of(context).unfocus();
                         showPlatformModalSheet(
                           context: context,
                           builder: (_) => PlatformWidget(

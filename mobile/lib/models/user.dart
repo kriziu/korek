@@ -23,6 +23,11 @@ class User {
       required this.userType,
       required this.connected});
 
+  String get subjectsStr {
+    if(subjects.length == 1) return EnumToString.convertToString(subjects[0],camelCase: true);
+    return subjects.map((subject) => EnumToString.convertToString(subject,camelCase: true)).toList().join(", ");
+  }
+
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
         firstName: json['firstName'] ?? 'First Name',
