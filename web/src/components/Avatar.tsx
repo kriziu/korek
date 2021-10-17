@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import { Avatars } from '../types/Avatars';
 import { Center } from './Center';
 import { Header2 } from './Header';
+import Modal from './Modal';
 
 const Container = styled.div<{ active?: boolean }>`
   width: 6rem;
@@ -23,24 +24,6 @@ const Container = styled.div<{ active?: boolean }>`
   :active {
     background-color: transparent;
   }
-`;
-
-const Background = styled.div`
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  background-color: rgba(0, 0, 0, 0.7);
-`;
-
-const Card = styled.div`
-  width: 60rem;
-  height: 40rem;
-  background-color: var(--color-white);
-  border-radius: 3rem;
-  padding: 4rem 5rem;
 `;
 
 const GridList = styled.div`
@@ -88,16 +71,14 @@ const AvatarSelector: FC<{
   };
 
   return (
-    <Background onClick={close}>
-      <Center>
-        <Card onClick={e => e.stopPropagation()}>
-          <Header2>Select Avatar</Header2>
-          <Center>
-            <GridList>{renderAvatars()}</GridList>
-          </Center>
-        </Card>
-      </Center>
-    </Background>
+    <Modal close={close}>
+      <>
+        <Header2>Select Avatar</Header2>
+        <Center>
+          <GridList>{renderAvatars()}</GridList>
+        </Center>
+      </>
+    </Modal>
   );
 };
 

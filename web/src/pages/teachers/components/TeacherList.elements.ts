@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { Center } from '../../../components/Center';
 
 export const List = styled.ul`
   list-style: none;

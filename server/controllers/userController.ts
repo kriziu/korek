@@ -163,11 +163,9 @@ router.post('/connect/:id', async (req, res) => {
 
     userToConnect.connected.push({
       _id: userConnecting._id,
-      subject: req.body.subject,
     });
     userConnecting.connected.push({
       _id: userToConnect._id,
-      subject: req.body.subject,
     });
 
     await userToConnect.save();
@@ -199,18 +197,14 @@ router.post('/disconnect/:id', async (req, res) => {
     let tempConnected = [];
 
     tempConnected = userToDisconnect.connected.filter(
-      connection =>
-        connection._id !== userDisconnecting._id &&
-        connection.subject !== req.body.subject
+      connection => connection._id !== userDisconnecting._id
     );
 
     console.log(req.body.subject);
     userToDisconnect.connected = tempConnected;
 
     tempConnected = userDisconnecting.connected.filter(
-      connection =>
-        connection._id !== userToDisconnect._id &&
-        connection.subject !== req.body.subject
+      connection => connection._id !== userToDisconnect._id
     );
     userDisconnecting.connected = tempConnected;
 

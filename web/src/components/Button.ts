@@ -19,7 +19,7 @@ export const Button = styled.button<{ secondary?: boolean }>`
     }
   }
 
-  :hover :not(:disabled) {
+  :hover:not(:disabled) {
     cursor: pointer;
 
     background-color: ${props =>

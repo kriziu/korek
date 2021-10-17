@@ -39,7 +39,7 @@ export interface UserType {
   avatarId: Avatars;
   userType: 'teacher' | 'student';
   subjects: Subjects[];
-  connected: { _id: string; subject: string }[];
+  connected: { _id: string }[];
 }
 
 const userSchema = new mongoose.Schema<UserType>({
@@ -85,11 +85,6 @@ const userSchema = new mongoose.Schema<UserType>({
     {
       _id: {
         type: String,
-        required: true,
-      },
-      subject: {
-        type: String,
-        enum: Subjects,
         required: true,
       },
     },

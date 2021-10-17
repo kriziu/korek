@@ -2,6 +2,7 @@ import { FC, useEffect } from 'react';
 
 import { Route, Switch, useLocation } from 'react-router';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import Chats from '../pages/Chats/Chats';
 
 import Hero from '../pages/hero/Hero';
 import Login from '../pages/login/Login';
@@ -41,6 +42,9 @@ const AnimatedRouter: FC = (): JSX.Element => {
             </Route>
             <Route exact path="/discover">
               <Teachers />
+            </Route>
+            <Route exact path="/chats">
+              <Chats />
             </Route>
             <Route exact path="/">
               <Hero />

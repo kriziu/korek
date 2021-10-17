@@ -1,7 +1,5 @@
 import { FC } from 'react';
 
-import { useHistory } from 'react-router';
-
 import { Button } from '../../components/Button';
 import { Header1, Header2, SmallHeader } from '../../components/Header';
 import { Center } from '../../components/Center';
@@ -12,11 +10,6 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import TeacherList from './components/TeacherList';
 
 const Teachers: FC = () => {
-  const history = useHistory();
-
-  const handleLoginButton = () => history.push('/login');
-  const handleRegisterButton = () => history.push('/register');
-
   return (
     <div>
       <div style={{ minHeight: '100vh' }}>

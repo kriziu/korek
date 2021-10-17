@@ -1,22 +1,34 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
+
+import axios from 'axios';
+
 import { Center } from '../../../components/Center';
-import { Avatars } from '../../../types/Avatars';
 import { Subjects } from '../../../types/Subjects';
 import Teacher from './Teacher';
 import { List, Pages, SubjectList } from './TeacherList.elements';
+import { TeacherType } from '../../../types/Teacher';
 
 const subjects: string[] = Object.values(Subjects).map(subject => subject);
 
 subjects.unshift('all');
 
+const { REACT_APP_SERVER_URL } = process.env;
+
 const TeacherList: FC = () => {
   const [active, setActive] = useState('all');
+  const [teachers, setTeachers] = useState<TeacherType[]>([]);
+
+  useEffect(() => {
+    axios.get<TeacherType[]>(`${REACT_APP_SERVER_URL}/users`).then(res => {
+      setTeachers(res.data);
+    });
+  }, []);
 
   const renderSubjects = (active: string): JSX.Element[] => {
-    return subjects.map((subject, index) => {
+    return subjects.map(subject => {
       return (
         <li
-          key={index}
+          key={subject}
           className={subject === active ? 'active' : ''}
           onClick={() => setActive(subject)}
         >
@@ -27,22 +39,21 @@ const TeacherList: FC = () => {
     });
   };
 
+  const renderTeachers = (): JSX.Element[] => {
+    return teachers.map(teacher => {
+      return (
+        <li key={teacher._id}>
+          <Teacher {...teacher} />
+        </li>
+      );
+    });
+  };
+
   return (
     <div>
       <SubjectList>{renderSubjects(active)}</SubjectList>
       <Center>
-        <List>
-          <li>
-            <Teacher
-              firstName="Bruno"
-              lastName="Dzięcielski"
-              price={20}
-              avatarId={Avatars.male_1}
-              subjects={[Subjects.BIOLOGY, Subjects.CHEMISTRY]}
-              connected={[]}
-            />
-          </li>
-        </List>
+        <List>{renderTeachers()}</List>
       </Center>
       <Center>
         <Pages>

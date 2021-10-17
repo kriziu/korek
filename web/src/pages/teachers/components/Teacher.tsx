@@ -1,12 +1,20 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import { AiFillStar } from 'react-icons/ai';
+import { CSSTransition } from 'react-transition-group';
 
 import { Avatar } from '../../../components/Avatar';
 import { Button } from '../../../components/Button';
-import { Header3 } from '../../../components/Header';
-import { Container, Rating, SubjectList } from './Teacher.elements';
+import { Header2, Header3 } from '../../../components/Header';
+import {
+  Container,
+  Invite,
+  ModalHeading,
+  Rating,
+  SubjectList,
+} from './Teacher.elements';
 import { TeacherType } from '../../../types/Teacher';
+import Modal from '../../../components/Modal';
 
 const Teacher: FC<TeacherType> = ({
   firstName,
@@ -15,18 +23,22 @@ const Teacher: FC<TeacherType> = ({
   subjects,
   avatarId,
 }) => {
-  // DODAC CENE
-  // DODAC POPOVER
+  const [opened, setOpened] = useState(false);
+  const [text, setText] = useState('');
 
   const renderSubjects = (): JSX.Element[] => {
-    return subjects.map((subject, index) => {
+    return subjects.map(subject => {
       return (
-        <li key={index}>
+        <li key={subject}>
           {subject[0].toUpperCase()}
           {subject.slice(1)}
         </li>
       );
     });
+  };
+
+  const handleInvite = () => {
+    setOpened(false);
   };
 
   return (
@@ -36,11 +48,36 @@ const Teacher: FC<TeacherType> = ({
         {firstName} {lastName}
       </Header3>
       <SubjectList>{renderSubjects()}</SubjectList>
+
       <Rating>
         <AiFillStar />
-        <Header3>4.7</Header3>
+        <Header3>4.7 | {price}$ / h</Header3>
       </Rating>
-      <Button style={{ width: '100%' }}>Choose</Button>
+      <Button style={{ width: '100%' }} onClick={() => setOpened(true)}>
+        Choose
+      </Button>
+      <CSSTransition
+        in={opened}
+        timeout={200}
+        classNames="fade-fast"
+        unmountOnExit
+      >
+        <Modal close={() => setOpened(false)}>
+          <>
+            <ModalHeading>
+              <Avatar id={avatarId} />
+              <Header3 style={{ marginTop: '1rem', maxWidth: '18rem' }}>
+                {firstName} {lastName}
+              </Header3>
+            </ModalHeading>
+            <Header2 style={{ marginTop: '1rem' }}>How can I help you?</Header2>
+            <Invite value={text} onChange={e => setText(e.target.value)} />
+            <Button style={{ width: '100%' }} onClick={handleInvite}>
+              Send
+            </Button>
+          </>
+        </Modal>
+      </CSSTransition>
     </Container>
   );
 };
