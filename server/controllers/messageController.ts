@@ -54,29 +54,4 @@ router.get('/:roomId', async (req, res) => {
   }
 });
 
-// GETTING ALL USERS THAT CHATTED BY USER ID
-router.get('/', async (req, res) => {
-  try {
-    const { userId } = req.body;
-
-    let roomsId: string[] = await Message.find({
-      roomId: { $regex: '.*' + userId + '.*' },
-    })
-      .select('roomId')
-      .distinct('roomId');
-
-    roomsId = roomsId.map(roomId => {
-      const ids = roomId.split('_');
-      if (ids[0] === userId) return ids[1];
-      return ids[0];
-    });
-
-    res.json(roomsId);
-  } catch (err) {
-    const msg = (err as Error).message;
-    if (msg) return res.status(400).send({ error: msg });
-    res.status(500).send();
-  }
-});
-
 export default router;

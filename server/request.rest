@@ -86,9 +86,5 @@ DELETE http://localhost:8080/messages/6169395f3bd3943503f43474_61681e655c8c0353f
 
 ###
 
-GET http://localhost:8080/messages
+GET http://localhost:8080/users/chatted/6169395f3bd3943503f43474
 Content-Type: application/json
-
-{
-  "userId": "61681e655c8c0353fa8b30e0"
-}
