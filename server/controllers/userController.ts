@@ -51,30 +51,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GETTING USER BY CONNECTED ID
-router.get('/byId/:id', async (req, res) => {
-  try {
-    const allUsers = await User.find();
-    const users = allUsers.filter(user => {
-      let returnUser = false;
-
-      user.connected.forEach(connection => {
-        if (connection._id === req.params.id) returnUser = true;
-        console.log(connection);
-      });
-
-      if (returnUser) return true;
-      return false;
-    });
-
-    res.json(users);
-  } catch (err) {
-    const msg = (err as Error).message;
-    if (msg) return res.status(500).send({ error: msg });
-    res.status(500).send();
-  }
-});
-
 // CREATING NEW
 router.post('/', async (req, res) => {
   try {
@@ -93,7 +69,6 @@ router.post('/', async (req, res) => {
       avatarId: req.body.avatarId,
       userType: req.body.userType,
       subjects: req.body.subjects,
-      connected: req.body.connected,
     });
 
     try {
@@ -139,79 +114,6 @@ router.patch('/:id', async (req, res) => {
       { new: true }
     );
     res.json(user);
-  } catch (err) {
-    const msg = (err as Error).message;
-    if (msg) return res.status(500).send({ error: msg });
-    res.status(500).send();
-  }
-});
-
-// CONNECTING
-router.post('/connect/:id', async (req, res) => {
-  try {
-    const userToConnect = await User.findById(req.params.id);
-    if (!userToConnect)
-      return res
-        .status(400)
-        .json({ error: 'Cannot find user to connect with that id' });
-
-    const userConnecting = await User.findById(req.body._id);
-    if (!userConnecting)
-      return res
-        .status(400)
-        .json({ error: 'Cannot find user connecting with that id' });
-
-    userToConnect.connected.push({
-      _id: userConnecting._id,
-    });
-    userConnecting.connected.push({
-      _id: userToConnect._id,
-    });
-
-    await userToConnect.save();
-    await userConnecting.save();
-
-    res.json(userToConnect);
-  } catch (err) {
-    const msg = (err as Error).message;
-    if (msg) return res.status(500).send({ error: msg });
-    res.status(500).send();
-  }
-});
-
-// DISCONNECTING
-router.post('/disconnect/:id', async (req, res) => {
-  try {
-    const userToDisconnect = await User.findById(req.params.id);
-    if (!userToDisconnect)
-      return res
-        .status(400)
-        .json({ error: 'Cannot find user to disconnect with that id' });
-
-    const userDisconnecting = await User.findById(req.body._id);
-    if (!userDisconnecting)
-      return res
-        .status(400)
-        .json({ error: 'Cannot find user disconnecting with that id' });
-
-    let tempConnected = [];
-
-    tempConnected = userToDisconnect.connected.filter(
-      connection => connection._id !== userDisconnecting._id
-    );
-
-    console.log(req.body.subject);
-    userToDisconnect.connected = tempConnected;
-
-    tempConnected = userDisconnecting.connected.filter(
-      connection => connection._id !== userToDisconnect._id
-    );
-    userDisconnecting.connected = tempConnected;
-
-    await userToDisconnect.save();
-    await userDisconnecting.save();
-
-    res.json(userDisconnecting);
   } catch (err) {
     const msg = (err as Error).message;
     if (msg) return res.status(500).send({ error: msg });

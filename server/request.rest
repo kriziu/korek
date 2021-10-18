@@ -68,3 +68,27 @@ Content-Type: application/json
   "_id": "61647d8877c05d2104e8642d",
   "subject": "english"
 }
+
+###
+
+POST http://localhost:8080/messages
+Content-Type: application/json
+
+{
+  "roomId": "6169395f3bd3943503f43474_61681e655c8c0353fa8b30e0",
+  "from": "61681e655c8c0353fa8b30e0",
+  "message": "siema 123"
+}
+
+###
+
+DELETE http://localhost:8080/messages/6169395f3bd3943503f43474_61681e655c8c0353fa8b30e0
+
+###
+
+GET http://localhost:8080/messages
+Content-Type: application/json
+
+{
+  "userId": "61681e655c8c0353fa8b30e0"
+}

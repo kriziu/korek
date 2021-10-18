@@ -1,12 +1,9 @@
 import { Avatars } from './Avatars';
-import { Subjects } from './Subjects';
 
-export interface TeacherType {
+export interface StudentType {
   _id: string;
   firstName: string;
   lastName: string;
-  price: number;
   avatarId: Avatars;
-  subjects: Subjects[];
   connected: { _id: string }[];
 }

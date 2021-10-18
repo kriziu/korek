@@ -39,7 +39,6 @@ export interface UserType {
   avatarId: Avatars;
   userType: 'teacher' | 'student';
   subjects: Subjects[];
-  connected: { _id: string }[];
 }
 
 const userSchema = new mongoose.Schema<UserType>({
@@ -81,14 +80,6 @@ const userSchema = new mongoose.Schema<UserType>({
     enum: ['teacher', 'student'],
     required: true,
   },
-  connected: [
-    {
-      _id: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
 });
 
 export type StudentModelType =

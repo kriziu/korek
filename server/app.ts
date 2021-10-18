@@ -2,12 +2,17 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import http from 'http';
+import { Server, Socket } from 'socket.io';
 
 import userController from './controllers/userController';
+import messageController from './controllers/messageController';
+import { MessageType } from './models/message.model';
 
 dotenv.config();
 
 const app = express();
+const server = http.createServer(app);
 const port = process.env.PORT || 8080;
 
 const { DB_PASS } = process.env;
@@ -26,8 +31,27 @@ app.use(cors());
 
 app.use('/users', userController);
 
+app.use('/messages', messageController);
+
 app.get('/', (req, res) => {
   res.send('Server running...');
 });
 
-app.listen(port);
+// SOCKET IO
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+  },
+});
+
+io.on('connection', (socket: Socket) => {
+  socket.on('joinRoom', (id: string) => {
+    socket.join(id);
+  });
+
+  socket.on('send', (msg: MessageType) => {
+    io.to(msg.roomId).emit('receive', msg);
+  });
+});
+
+server.listen(port);
