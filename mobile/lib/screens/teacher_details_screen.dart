@@ -30,11 +30,19 @@ class TeacherDetailsScreen extends StatelessWidget {
 
   Widget _content(BuildContext context, Orientation orientation) => SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 48, 24, 24),
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Align(
+                child: IconButton(
+                  iconSize: 30,
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                alignment: Alignment.centerLeft,
+              ),
               Center(
                 child: Hero(
                     tag: "avatar_$index",
@@ -51,6 +59,7 @@ class TeacherDetailsScreen extends StatelessWidget {
                     color: Colors.black,
                     fontSize: 24,
                     fontWeight: FontWeight.w700),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
@@ -59,6 +68,7 @@ class TeacherDetailsScreen extends StatelessWidget {
                     color: Color(0xffaaaaaa),
                     fontSize: 18,
                     fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               Row(
@@ -91,7 +101,8 @@ class TeacherDetailsScreen extends StatelessWidget {
                     fontWeight: FontWeight.w700),
               ),
               if (orientation == Orientation.portrait) const Spacer(),
-              if (orientation == Orientation.landscape) const SizedBox(height: 36),
+              if (orientation == Orientation.landscape)
+                const SizedBox(height: 36),
               SizedBox(
                 child: AdaptiveButton(
                     child: Text(

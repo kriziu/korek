@@ -16,6 +16,7 @@ class TeacherItem extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
+        FocusScope.of(context).unfocus();
         Navigator.of(context).push(platformPageRoute(
             context: context,
             builder: (context) => TeacherDetailsScreen(teacher,index)));
