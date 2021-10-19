@@ -20,7 +20,7 @@ export const List = styled.ul`
     border-radius: 5rem;
   }
 
-  .item:not(:first-child, :last-child) {
+  .item:not(:first-of-type, :last-child) {
     margin: 3rem 0;
   }
 `;

@@ -2,3 +2,5 @@ server/node_modules
 server/dist
 server/.env
 web/.env
+server/.gcloudignore
+server/app.yaml

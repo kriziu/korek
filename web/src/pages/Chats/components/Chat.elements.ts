@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Input } from '../../../components/Input';
 
 export const Container = styled.div``;
 
@@ -12,7 +13,52 @@ export const Top = styled.div`
   }
 `;
 
+export const Messages = styled.ul`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin-top: 5rem;
+  overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    width: 1rem;
+    border: none;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-gray-dark);
+    border-radius: 5rem;
+  }
+`;
+
 export const Message = styled.p<{ mine?: boolean }>`
   background-color: ${({ mine }) =>
-    mine ? 'var(--color-yellow)' : 'var(--color-gray)'};
+    mine ? 'var(--color-yellow)' : 'var(--color-gray-lighter)'};
+  color: ${({ mine }) => (mine ? 'var(--color-white)' : 'var(--color-black)')};
+  border-radius: 2rem;
+  min-width: 5rem;
+  width: max-content;
+  max-width: 50rem;
+  height: fit-content;
+  padding: 2rem;
+  font-weight: 500;
+  align-self: ${({ mine }) => (mine ? 'flex-end' : 'flex-start')};
+
+  :not(:last-child) {
+    margin-bottom: 2rem;
+  }
+`;
+
+export const StyledInput = styled(Input)`
+  border-radius: 2rem;
+`;
+
+export const Bottom = styled.form`
+  display: flex;
+  margin-right: 10rem;
+  margin-top: 5rem;
+  button {
+    margin-left: 2rem;
+    width: 15rem;
+  }
 `;
