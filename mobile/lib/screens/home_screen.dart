@@ -1,14 +1,13 @@
-import 'package:enum_to_string/enum_to_string.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:korek/helpers/subjects.dart';
 import 'package:korek/models/filters.dart';
 import 'package:korek/models/user.dart';
 import 'package:korek/providers/auth_provider.dart';
 import 'package:korek/providers/users_provider.dart';
-import 'package:korek/helpers/subjects.dart';
+import 'package:korek/screens/profile_screen.dart';
+import 'package:korek/widgets/home_drawer.dart';
 import 'package:korek/widgets/subject_item.dart';
 import 'package:korek/widgets/teahcer_item.dart';
 import 'package:provider/provider.dart';
@@ -17,12 +16,12 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _controller = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<void> fetchUsers() async {
     try {
@@ -62,12 +61,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
-  void chooseSubject(Subjects subject){
+  void chooseSubject(Subjects subject) {
     setState(() {
-      if(_filters.subjects.contains(subject)){
+      if (_filters.subjects.contains(subject)) {
         _filters.subjects.remove(subject);
-      }else{
+      } else {
         _filters.subjects.add(subject);
       }
     });
@@ -86,11 +84,12 @@ class _HomeScreenState extends State<HomeScreen> {
           .toList();
     }
 
-    if(_filters.subjects.isNotEmpty){
+    if (_filters.subjects.isNotEmpty) {
       List<User> helperTeachers = [];
       teachers.forEach((teacher) {
         teacher.subjects.forEach((subject) {
-          if(_filters.subjects.contains(subject) && !helperTeachers.contains(teacher)){
+          if (_filters.subjects.contains(subject) &&
+              !helperTeachers.contains(teacher)) {
             helperTeachers.add(teacher);
           }
         });
@@ -100,9 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     final allTeachers = Provider.of<UsersProvider>(context).teachers;
@@ -111,12 +107,9 @@ class _HomeScreenState extends State<HomeScreen> {
     filterTeachers(allTeachers);
     final user = Provider.of<AuthProvider>(context).user;
 
-    return PlatformScaffold(
-      material: ((_, __) => MaterialScaffoldData(
-          drawer: const Drawer(
-            child: Text("IMO ESSA"),
-          ),
-          widgetKey: _scaffoldKey)),
+    return Scaffold(
+      key: _scaffoldKey,
+      drawer: const HomeDrawer(),
       body: SafeArea(
         child: RefreshIndicator(
           color: Theme.of(context).primaryColor,
@@ -137,8 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           IconButton(
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),
-                            onPressed: () =>
-                                _scaffoldKey.currentState!.openDrawer(),
+                            onPressed: () => _scaffoldKey.currentState!.openDrawer(),
                             icon: const Icon(
                               Icons.menu_rounded,
                               size: 40,
@@ -146,16 +138,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             iconSize: 40,
                           ),
                           GestureDetector(
-                            onTap: () async {
-                              await Provider.of<AuthProvider>(context,
-                                      listen: false)
-                                  .logOut();
+                            onTap: () {
+                              Navigator.of(context).push(platformPageRoute(
+                                  context: context,
+                                  builder: (context) => ProfileScreen()));
                             },
                             child: CircleAvatar(
                               radius: 30,
                               backgroundColor: Colors.grey[300],
-                              child: SvgPicture.asset(
-                                "assets/${user!.avatarId}.svg",
+                              child: Hero(
+                                tag: "profileimg",
+                                child: SvgPicture.asset(
+                                  "assets/${user!.avatarId}.svg",
+                                ),
                               ),
                             ),
                           )
@@ -256,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemBuilder: (BuildContext context, int i) => SubjectItem(
                           subject: subjectsList[i],
                           index: i,
-                          chooseSubject:chooseSubject,
+                          chooseSubject: chooseSubject,
                           isChosen: _filters.subjects.contains(
                             subjectsList[i],
                           )),
@@ -265,13 +260,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (BuildContext context, int i) =>
-                      TeacherItem(teachers[i], i),
-                  itemCount: teachers.length,
-                  shrinkWrap: true,
-                ),
+                teachers.isNotEmpty
+                    ? ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (BuildContext context, int i) =>
+                            TeacherItem(teachers[i], i),
+                        itemCount: teachers.length,
+                        shrinkWrap: true,
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 36),
+                        child: Center(
+                            child: Column(
+                          children: const [
+                            Text(
+                              "No teachers found!",
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 20),
+                            ),
+                            SizedBox(height: 8),
+                            Icon(Icons.mood_bad_rounded, size: 48)
+                          ],
+                        )),
+                      ),
               ],
             ),
           ),
@@ -279,5 +290,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 }

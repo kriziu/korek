@@ -9,7 +9,7 @@ import 'package:korek/helpers/avatars.dart';
 import 'package:korek/helpers/subjects.dart';
 import 'package:korek/models/register_data.dart';
 import 'package:korek/providers/auth_provider.dart';
-import 'package:korek/screens/home_screen.dart';
+import 'package:korek/screens/home_screen_wrapper.dart';
 import 'package:korek/widgets/adaptive_button.dart';
 import 'package:korek/widgets/dialogs/loading_dialog.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ..pushAndRemoveUntil(
               platformPageRoute(
                 context: context,
-                builder: (context) => const HomeScreen(),
+                builder: (context) => const HomeScreenWrapper(),
               ),
               (Route<dynamic> route) => false);
       }
