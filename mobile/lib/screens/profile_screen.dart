@@ -5,8 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:korek/helpers/helpers.dart';
 import 'package:korek/models/update_data.dart';
 import 'package:korek/providers/auth_provider.dart';
+import 'package:korek/screens/change_avatar_screen.dart';
 import 'package:korek/screens/change_profile_item_screen.dart';
-import 'package:korek/widgets/adaptive_button.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -56,10 +56,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   alignment: Alignment.centerLeft,
                 ),
-                Hero(
-                  tag: "profileimg",
-                  child: SvgPicture.asset("assets/${user!.avatarId}.svg",
-                      width: 120, height: 120),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(platformPageRoute(
+                      context: context,
+                      builder: (context) => const ChangeAvatarScreen())),
+                  child: Stack(
+                    children: [
+                      Hero(
+                        tag: "profileimg",
+                        child: SvgPicture.asset("assets/${user!.avatarId}.svg",
+                            width: 120, height: 120),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: const Icon(
+                            Icons.edit,
+                            size: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Text(
@@ -87,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // ), onChanged: (bool value) {
                 // }, value: true,),
                 ListView.builder(
-                  itemBuilder: (context, i) =>  _settingItem(i),
+                  itemBuilder: (context, i) => _settingItem(i),
                   itemCount: UpdateData.updatedData.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -100,16 +125,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _settingItem(int index){
-
+  Widget _settingItem(int index) {
     final updateDataObj = UpdateData.updatedData[index];
-    if(updateDataObj.databaseName == "price" && Provider.of<AuthProvider>(context,listen: false).user!.userType == "student") return Container();
+    if (updateDataObj.databaseName == "price" &&
+        Provider.of<AuthProvider>(context, listen: false).user!.userType ==
+            "student") return Container();
 
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(platformPageRoute(context: context,builder : (context) => ChangeProfileItemScreen(updateDataObj))),
+      onTap: () => Navigator.of(context).push(platformPageRoute(
+          context: context,
+          builder: (context) => ChangeProfileItemScreen(updateDataObj))),
       child: Container(
         decoration: BoxDecoration(
-            color: const Color(0xffefefef), borderRadius: BorderRadius.circular(4)),
+            color: const Color(0xffefefef),
+            borderRadius: BorderRadius.circular(4)),
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
         margin: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
@@ -118,9 +147,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(width: 8),
             Expanded(
                 child: Text(
-                  "Change ${updateDataObj.name}",
-                  style: const TextStyle(color: Colors.black, fontSize: 17),
-                )),
+              "Change ${updateDataObj.name}",
+              style: const TextStyle(color: Colors.black, fontSize: 17),
+            )),
             const Icon(
               Icons.keyboard_arrow_right,
               size: 32,
@@ -130,5 +159,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-
 }
