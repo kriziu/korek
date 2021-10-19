@@ -27,6 +27,9 @@ class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
             BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chats'),
           ],
         ),
-        body: views.elementAt(index));
+        body: IndexedStack(
+          children: views,
+          index: index,
+        ));
   }
 }

@@ -75,4 +75,23 @@ class AuthProvider with ChangeNotifier {
     _user = null;
     notifyListeners();
   }
+
+
+  Future<void> updateUserInfo(String fieldName, dynamic newValue) async{
+      final response = await http.patch(Uri.parse('$BASE_URL/users/${user!.id}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          fieldName : newValue
+        })
+      );
+      final jsonData = (jsonDecode(response.body) as Map<String, dynamic>);
+      if (jsonData.containsKey('error') || jsonData.containsKey('message')) {
+        throw Exception(response.body);
+      } else {
+        _user = User.fromJson(jsonDecode(response.body));
+        notifyListeners();
+      }
+  }
 }

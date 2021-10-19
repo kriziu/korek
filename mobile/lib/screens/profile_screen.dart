@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:korek/helpers/helpers.dart';
+import 'package:korek/models/update_data.dart';
 import 'package:korek/providers/auth_provider.dart';
+import 'package:korek/screens/change_profile_item_screen.dart';
 import 'package:korek/widgets/adaptive_button.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -85,8 +87,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // ), onChanged: (bool value) {
                 // }, value: true,),
                 ListView.builder(
-                  itemBuilder: (context, index) => _settingItem(),
-                  itemCount: 10,
+                  itemBuilder: (context, i) =>  _settingItem(i),
+                  itemCount: UpdateData.updatedData.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                 )
@@ -98,18 +100,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _settingItem() => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+  Widget _settingItem(int index){
+
+    final updateDataObj = UpdateData.updatedData[index];
+    if(updateDataObj.databaseName == "price" && Provider.of<AuthProvider>(context,listen: false).user!.userType == "student") return Container();
+
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(platformPageRoute(context: context,builder : (context) => ChangeProfileItemScreen(updateDataObj))),
+      child: Container(
+        decoration: BoxDecoration(
+            color: const Color(0xffefefef), borderRadius: BorderRadius.circular(4)),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+        margin: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
-          children: const [
-            Icon(Icons.alternate_email, size: 28),
-            SizedBox(width: 8),
-            Expanded(child: Text("Change email")),
-            Icon(
+          children: [
+            Icon(updateDataObj.icon, size: 28),
+            const SizedBox(width: 8),
+            Expanded(
+                child: Text(
+                  "Change ${updateDataObj.name}",
+                  style: const TextStyle(color: Colors.black, fontSize: 17),
+                )),
+            const Icon(
               Icons.keyboard_arrow_right,
               size: 32,
             ),
           ],
         ),
-      );
+      ),
+    );
+  }
+
 }
