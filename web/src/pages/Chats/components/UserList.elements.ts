@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { scrollY } from '../../../styles/scroll';
 
 export const Container = styled.div`
   margin: 0 20rem;
@@ -10,15 +11,7 @@ export const List = styled.ul`
   height: 65vh;
   overflow-y: scroll;
 
-  ::-webkit-scrollbar {
-    width: 1rem;
-    border: none;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--color-gray-dark);
-    border-radius: 5rem;
-  }
+  ${scrollY}
 
   .item:not(:first-of-type, :last-child) {
     margin: 3rem 0;

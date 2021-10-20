@@ -1,4 +1,5 @@
 import { css, Global } from '@emotion/react';
+import { scrollY } from './scroll';
 
 export const GlobalStyles = () => (
   <Global
@@ -21,15 +22,7 @@ export const GlobalStyles = () => (
         box-sizing: border-box;
         transition: all 0.3s;
 
-        ::-webkit-scrollbar {
-          width: 1rem;
-          border: none;
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background-color: var(--color-gray-dark);
-          border-radius: 5rem;
-        }
+        ${scrollY}
       }
 
       html {

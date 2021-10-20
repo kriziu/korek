@@ -13,10 +13,9 @@ import {
   Rating,
   SubjectList,
 } from './Teacher.elements';
-import { TeacherType } from '../../../types/Teacher';
 import Modal from '../../../components/Modal';
 
-const Teacher: FC<TeacherType> = ({
+const Teacher: FC<UserType> = ({
   firstName,
   lastName,
   price,

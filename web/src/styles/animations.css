@@ -34,6 +34,28 @@
   transition: var(--trans-default);
 }
 
+.slide-enter {
+  transform: translateY(100%);
+  top: 0;
+}
+
+.slide-enter-active {
+  top: 0;
+  transform: translateY(0);
+  transition: var(--trans-default);
+}
+
+.slide-exit {
+  top: 0;
+  transform: translateY(0);
+}
+
+.slide-exit-active {
+  top: 0;
+  transform: translateY(100%);
+  transition: var(--trans-default);
+}
+
 .left-enter {
   transform: translateX(100%);
   top: 0;

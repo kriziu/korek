@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Input } from '../../../components/Input';
+import { scrollY } from '../../../styles/scroll';
 
 export const Container = styled.div``;
 
@@ -16,19 +17,13 @@ export const Top = styled.div`
 export const Messages = styled.ul`
   display: flex;
   flex-direction: column;
-  width: 80%;
+  width: 100%;
+  height: 60vh;
+  padding-right: 2rem;
   margin-top: 5rem;
   overflow-y: scroll;
 
-  ::-webkit-scrollbar {
-    width: 1rem;
-    border: none;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--color-gray-dark);
-    border-radius: 5rem;
-  }
+  ${scrollY}
 `;
 
 export const Message = styled.p<{ mine?: boolean }>`
@@ -55,7 +50,6 @@ export const StyledInput = styled(Input)`
 
 export const Bottom = styled.form`
   display: flex;
-  margin-right: 10rem;
   margin-top: 5rem;
   button {
     margin-left: 2rem;

@@ -1,10 +1,17 @@
 import styled from '@emotion/styled';
+import { Center } from '../../../components/Center';
+import { scrollY } from '../../../styles/scroll';
 
 export const List = styled.ul`
   list-style: none;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10rem;
+  max-height: 60vh;
+  overflow-y: scroll;
+  margin-bottom: 4rem;
+
+  ${scrollY}
 `;
 
 export const SubjectList = styled.ul`
@@ -38,35 +45,13 @@ export const SubjectList = styled.ul`
   }
 `;
 
-export const Pages = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 10rem;
-  margin: 2rem 0;
+export const NotFound = styled(Center)`
+  height: 60vh;
+  flex-direction: column;
+  margin-bottom: 4rem;
 
-  button {
-    color: var(--color-gray-dark);
-    border: none;
-    background-color: transparent;
-    padding: 0;
-    margin: 0;
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    font-size: 1.6rem;
-    font-weight: 500;
-    transition: var(--trans-default);
-
-    :hover {
-      text-decoration-color: var(--color-gray-dark);
-      cursor: pointer;
-    }
-
-    .disabled {
-      color: var(--color-gray);
-
-      :focus {
-        text-decoration-color: transparent;
-      }
-    }
+  img {
+    padding-top: 5rem;
+    height: 60rem;
   }
 `;

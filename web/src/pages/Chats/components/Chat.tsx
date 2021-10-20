@@ -1,44 +1,69 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 
 import { io } from 'socket.io-client';
+import axios from 'axios';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import { Avatar } from '../../../components/Avatar';
 import { Button } from '../../../components/Button';
 import { Header3 } from '../../../components/Header';
-import { MessageType } from '../../../types/Message';
-import { StudentType } from '../../../types/Student';
-import { TeacherType } from '../../../types/Teacher';
 import { Bottom, Message, Messages, StyledInput, Top } from './Chat.elements';
+import '../../../styles/animations.css';
+import { CurrentChat } from '../Chats';
+import { loggedUserContext } from '../../../context/loggedUser';
 
 const { REACT_APP_SERVER_URL } = process.env;
 
 const socket = io(REACT_APP_SERVER_URL || '');
 
-const id = Math.round(Math.random() * 100).toString();
+const Chat: FC<CurrentChat> = ({ firstName, lastName, avatarId, roomId }) => {
+  const { user } = useContext(loggedUserContext);
 
-const Chat: FC<TeacherType | StudentType> = ({
-  firstName,
-  lastName,
-  _id,
-  avatarId,
-}) => {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [message, setMessage] = useState('');
+  const ref = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
-    socket.emit('joinRoom', '123');
+    socket.emit('joinRoom', roomId);
 
     socket.on('receive', (msg: MessageType) => {
       setMessages(prev => [...prev, msg]);
     });
+
+    axios
+      .get<MessageType[]>(`${REACT_APP_SERVER_URL}/messages/${roomId}`)
+      .then(res => {
+        setMessages(res.data);
+
+        ref.current?.scrollTo({
+          top: ref.current.scrollHeight,
+        });
+      });
+
+    console.log(user);
   }, []);
+
+  useEffect(() => {
+    messages.length &&
+      messages[messages.length - 1].from === user?._id &&
+      ref.current?.scrollTo({
+        top: ref.current.scrollHeight,
+        behavior: 'smooth',
+      });
+  }, [messages]);
 
   const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!message) return;
     socket.emit('send', {
-      roomId: '123',
+      roomId,
       message,
-      from: id,
+      from: user?._id,
+    });
+    axios.post(`${REACT_APP_SERVER_URL}/messages`, {
+      roomId,
+      message,
+      from: user?._id,
     });
     setMessage('');
   };
@@ -46,9 +71,11 @@ const Chat: FC<TeacherType | StudentType> = ({
   const renderMessages = (): JSX.Element[] => {
     return messages.map((messageArr, index) => {
       return (
-        <Message key={index} mine={messageArr.from === id}>
-          {messageArr.message}
-        </Message>
+        <CSSTransition key={index} classNames="slide" timeout={200}>
+          <Message mine={messageArr.from === user?._id}>
+            {messageArr.message}
+          </Message>
+        </CSSTransition>
       );
     });
   };
@@ -63,14 +90,18 @@ const Chat: FC<TeacherType | StudentType> = ({
         <Button>Enter room</Button>
         <Button secondary>Pay</Button>
       </Top>
-      <Messages>{renderMessages()}</Messages>
-      <Bottom onSubmit={handleSendMessage}>
-        <StyledInput
-          value={message}
-          onChange={e => setMessage(e.target.value)}
-        />
-        <Button type="submit">Send</Button>
-      </Bottom>
+      <div style={{ width: '80%' }}>
+        <Messages ref={ref}>
+          <TransitionGroup component={null}>{renderMessages()}</TransitionGroup>
+        </Messages>
+        <Bottom onSubmit={handleSendMessage}>
+          <StyledInput
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+          />
+          <Button type="submit">Send</Button>
+        </Bottom>
+      </div>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react';
 import { FiAtSign } from 'react-icons/fi';
 import { MdLockOutline, MdPersonOutline } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-import { MultiValue } from 'react-select';
+import { GroupBase, MultiValue, OptionsOrGroups } from 'react-select';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import axios from 'axios';
 import { IoReturnUpBack } from 'react-icons/io5';
@@ -19,10 +19,24 @@ import { validateEmail } from '../../utils/functions';
 import { BackBtnSm, Double, Price, SelectContainer } from './Elements';
 import Template from './Template';
 import { StyledSelect } from '../../components/StyledSelect';
-import { SelectSubjects, SubjectType } from '../../types/Subjects';
 import { Avatar, AvatarSelector } from '../../components/Avatar';
-import { Avatars } from '../../types/Avatars';
 import { Center } from '../../components/Center';
+import { SUBJECTS } from '../../contants';
+
+const SelectSubjects: OptionsOrGroups<SubjectType, GroupBase<any>> = [
+  { value: SUBJECTS.MATH, label: 'Math' },
+  { value: SUBJECTS.CHEMISTRY, label: 'Chemistry' },
+  { value: SUBJECTS.PHYSICS, label: 'Physics' },
+  { value: SUBJECTS.POLISH, label: 'Polish' },
+  { value: SUBJECTS.ENGLISH, label: 'English' },
+  { value: SUBJECTS.BIOLOGY, label: 'Biology' },
+  { value: SUBJECTS.FRENCH, label: 'French' },
+  { value: SUBJECTS.INFORMATIC, label: 'Informatic' },
+  { value: SUBJECTS.SPANISH, label: 'Spanish' },
+  { value: SUBJECTS.GERMAN, label: 'German' },
+  { value: SUBJECTS.HISTORY, label: 'History' },
+  { value: SUBJECTS.GEOGRAPHIC, label: 'Geographic' },
+];
 
 const { REACT_APP_SERVER_URL } = process.env;
 

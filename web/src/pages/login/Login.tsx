@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 
 import { MdLockOutline } from 'react-icons/md';
 import { FiAtSign } from 'react-icons/fi';
@@ -13,10 +13,13 @@ import { Link } from 'react-router-dom';
 import useForm from '../../hooks/useForm';
 import { validateEmail } from '../../utils/functions';
 import { toast } from 'react-toastify';
+import { loggedUserContext } from '../../context/loggedUser';
 
 const { REACT_APP_SERVER_URL } = process.env;
 
 const Login: FC = () => {
+  const { setUser } = useContext(loggedUserContext);
+
   const [formData, , toggleChecked, handleInputChange, checkValidity] = useForm(
     {
       email: { value: '', required: true },
@@ -60,16 +63,16 @@ const Login: FC = () => {
     }
 
     axios
-      .post<{ error?: string }>(`${REACT_APP_SERVER_URL}/users/login`, {
+      .post<UserType>(`${REACT_APP_SERVER_URL}/users/login`, {
         email: email.value,
         password: pass.value,
       })
       .then(res => {
-        const { error } = res.data;
-        error === 'Cannot find user with that email' && emailErr();
-        error === 'Bad password' && passErr();
-
-        history.push('/');
+        setUser(res.data);
+        history.push('/chats');
+      })
+      .catch(err => {
+        console.log(err);
       });
   };
 

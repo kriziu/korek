@@ -6,16 +6,17 @@ import { ToastContainer } from 'react-toastify';
 
 import { GlobalStyles } from '../styles/GlobalStyles';
 import AnimatedRouter from './AnimatedRouter';
+import LoggedUserProvider from '../context/loggedUser';
 
 const App: FC = () => {
   return (
-    <>
+    <LoggedUserProvider>
       <GlobalStyles />
       <ToastContainer />
       <Router>
         <AnimatedRouter />
       </Router>
-    </>
+    </LoggedUserProvider>
   );
 };
 

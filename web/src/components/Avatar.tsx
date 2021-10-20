@@ -2,7 +2,6 @@ import { FC } from 'react';
 
 import styled from '@emotion/styled';
 
-import { Avatars } from '../types/Avatars';
 import { Center } from './Center';
 import { Header2 } from './Header';
 import Modal from './Modal';
