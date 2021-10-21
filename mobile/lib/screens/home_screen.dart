@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> fetchUsers() async {
     try {
-      await Provider.of<UsersProvider>(context, listen: false).fetchUsers();
+      await Provider.of<UsersProvider>(context, listen: false).fetchTeachers();
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Error : ${e.toString()}")));
@@ -130,7 +130,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           IconButton(
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints(),
-                            onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+                            onPressed: () =>
+                                _scaffoldKey.currentState!.openDrawer(),
                             icon: const Icon(
                               Icons.menu_rounded,
                               size: 40,
@@ -149,7 +150,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Hero(
                                 tag: "profileimg",
                                 child: SvgPicture.asset(
-                                  user != null ? "assets/${user.avatarId}.svg" : "assets/male_1.svg",
+                                  user != null
+                                      ? "assets/${user.avatarId}.svg"
+                                      : "assets/male_1.svg",
                                 ),
                               ),
                             ),

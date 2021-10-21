@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:korek/models/filters.dart';
 import 'package:korek/providers/auth_provider.dart';
+import 'package:korek/screens/profile_screen.dart';
 import 'package:korek/widgets/chat_item.dart';
+import 'package:korek/widgets/home_drawer.dart';
 import 'package:provider/provider.dart';
 
 class ChatsScreen extends StatefulWidget {
@@ -13,11 +16,15 @@ class ChatsScreen extends StatefulWidget {
 }
 
 class _ChatsScreenState extends State<ChatsScreen> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<AuthProvider>(context).user;
 
     return PlatformScaffold(
+      material: (_, __) => MaterialScaffoldData(
+          widgetKey: _scaffoldKey, drawer: const HomeDrawer()),
       body: SafeArea(
         child: RefreshIndicator(
           color: Theme.of(context).primaryColor,
@@ -26,9 +33,48 @@ class _ChatsScreenState extends State<ChatsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (user != null && user.userType == "teacher")
+                  Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          onPressed: () =>
+                              _scaffoldKey.currentState!.openDrawer(),
+                          icon: const Icon(
+                            Icons.menu_rounded,
+                            size: 40,
+                          ),
+                          iconSize: 40,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(platformPageRoute(
+                                context: context,
+                                builder: (context) => const ProfileScreen()));
+                          },
+                          child: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.grey[300],
+                            child: Hero(
+                              tag: "profileimg",
+                              child: SvgPicture.asset(
+                                  "assets/${user.avatarId}.svg"),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+                  padding: EdgeInsets.fromLTRB(
+                      24,
+                      (user != null && user.userType == "teacher") ? 0 : 32,
+                      24,
+                      32),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -63,7 +109,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
                                     color: Color(0xff888888)),
                                 hintText: 'Search',
                                 contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 8)),
+                                    const EdgeInsets.symmetric(horizontal: 8)),
                             style: const TextStyle(fontSize: 15),
                           )),
                           const SizedBox(width: 12),
