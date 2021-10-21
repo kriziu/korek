@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 
 import axios from 'axios';
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -8,19 +8,24 @@ import { Input, InputIcon } from '../../../components/Input';
 import User from './User';
 import { Container, List } from './UserList.elements';
 import { CurrentChat } from '../Chats';
+import { loggedUserContext } from '../../../context/loggedUser';
 
 const { REACT_APP_SERVER_URL } = process.env;
 
 const UserList: FC<{
   setCurrentChat: React.Dispatch<React.SetStateAction<CurrentChat | undefined>>;
 }> = ({ setCurrentChat }) => {
+  const { user } = useContext(loggedUserContext);
+
   const [users, setUsers] = useState<UserType[]>([]);
 
   useEffect(() => {
-    axios.get<UserType[]>(`${REACT_APP_SERVER_URL}/users`).then(res => {
-      setUsers(res.data);
-    });
-  }, []);
+    axios
+      .get<UserType[]>(`${REACT_APP_SERVER_URL}/users/chatted/${user?._id}`)
+      .then(res => {
+        setUsers(res.data);
+      });
+  }, [user?._id]);
 
   const renderUsers = (): JSX.Element[] => {
     return users.map(user => {

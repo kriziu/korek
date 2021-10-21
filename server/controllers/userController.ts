@@ -1,10 +1,39 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 import Message from '../models/message.model';
 import User, { Subjects } from '../models/user.model';
+import { authenticateToken } from './authenticationController';
 
 const router = Router();
+
+// GETTING ALL USERS THAT CHATTED BY USER ID
+router.get('/chatted', authenticateToken, async (req, res) => {
+  try {
+    const { authId } = req.body;
+
+    let roomsId: string[] = await Message.find({
+      roomId: { $regex: '.*' + authId + '.*' },
+    })
+      .select('roomId')
+      .distinct('roomId');
+
+    const usersId = roomsId.map(roomId => {
+      const ids = roomId.split('_');
+      if (ids[0] === authId) return ids[1];
+      return ids[0];
+    });
+
+    const users = await User.find({ _id: { $in: usersId } });
+
+    res.json(users);
+  } catch (err) {
+    const msg = (err as Error).message;
+    if (msg) return res.status(400).send({ error: msg });
+    res.status(500).send();
+  }
+});
 
 // GETTING ONE
 router.get('/:id', async (req, res) => {
@@ -22,13 +51,15 @@ router.get('/:id', async (req, res) => {
 });
 
 // GETTING ALL TEACHERS OR BY SUBJECTS
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
     const teachers = await User.find({ userType: 'teacher' });
 
     const teachersWithSubjects = teachers.filter(teacher =>
       teacher.subjects.length === 0 ? false : true
     );
+
+    console.log(req.body.authId);
 
     const subjects: Subjects[] = req.body.subjects;
 
@@ -49,33 +80,6 @@ router.get('/', async (req, res) => {
   } catch (err) {
     const msg = (err as Error).message;
     if (msg) return res.status(500).send({ error: msg });
-    res.status(500).send();
-  }
-});
-
-// GETTING ALL USERS THAT CHATTED BY USER ID
-router.get('/chatted/:userId', async (req, res) => {
-  try {
-    const { userId } = req.params;
-
-    let roomsId: string[] = await Message.find({
-      roomId: { $regex: '.*' + userId + '.*' },
-    })
-      .select('roomId')
-      .distinct('roomId');
-
-    const usersId = roomsId.map(roomId => {
-      const ids = roomId.split('_');
-      if (ids[0] === userId) return ids[1];
-      return ids[0];
-    });
-
-    const users = await User.find({ _id: { $in: usersId } });
-
-    res.json(users);
-  } catch (err) {
-    const msg = (err as Error).message;
-    if (msg) return res.status(400).send({ error: msg });
     res.status(500).send();
   }
 });
@@ -125,8 +129,15 @@ router.post('/login', async (req, res) => {
     return res.json({ error: 'Cannot find user with that email' });
 
   try {
-    if (await bcrypt.compare(req.body.password, user.password)) res.json(user);
-    else res.json({ error: 'Bad password' });
+    if (await bcrypt.compare(req.body.password, user.password)) {
+      const { _id } = user;
+      const token = jwt.sign(
+        { _id },
+        process.env.ACCESS_TOKEN_SECRET as string
+      );
+
+      res.json({ user: user, token: token });
+    } else res.json({ error: 'Bad password' });
   } catch (err) {
     const msg = (err as Error).message;
     if (msg) return res.status(500).send({ error: msg });
@@ -135,10 +146,10 @@ router.post('/login', async (req, res) => {
 });
 
 // UPDATING ONE
-router.patch('/:id', async (req, res) => {
+router.patch('/', authenticateToken, async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
-      { _id: req.params.id },
+      { _id: req.body.authId },
       req.body,
       { new: true }
     );

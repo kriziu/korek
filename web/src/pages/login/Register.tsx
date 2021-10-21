@@ -21,7 +21,7 @@ import Template from './Template';
 import { StyledSelect } from '../../components/StyledSelect';
 import { Avatar, AvatarSelector } from '../../components/Avatar';
 import { Center } from '../../components/Center';
-import { SUBJECTS } from '../../contants';
+import { SUBJECTS, AVATARS } from '../../contants';
 
 const SelectSubjects: OptionsOrGroups<SubjectType, GroupBase<any>> = [
   { value: SUBJECTS.MATH, label: 'Math' },
@@ -62,7 +62,7 @@ const Register: FC = () => {
 
   const [imA, setImA] = useState(imAoptions[0]);
   const [help, setHelp] = useState<MultiValue<SubjectType>>([]);
-  const [avatarId, setAvatarId] = useState<Avatars>(Avatars.female_1);
+  const [avatarId, setAvatarId] = useState<AVATARS>(AVATARS.FEMALE_1);
   const [avatarSetter, setAvatarSetter] = useState(false);
   const [valid, setValid] = useState(0);
   const [price, setPrice] = useState('0');
@@ -127,7 +127,7 @@ const Register: FC = () => {
     setValid(1);
   };
 
-  const handleAvatarSelect = (id: Avatars) => {
+  const handleAvatarSelect = (id: AVATARS) => {
     setAvatarSetter(false);
     setAvatarId(id);
   };

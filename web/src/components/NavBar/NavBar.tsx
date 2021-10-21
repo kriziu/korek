@@ -11,7 +11,7 @@ const NavBar: FC = () => {
       <h3 onClick={() => history.push('/')}>KOREK</h3>
       <ul>
         <li>
-          <Link to="/">Chats</Link>
+          <Link to="/chats">Chats</Link>
         </li>
         <li>
           <Link to="/discover">Discover Teachers</Link>

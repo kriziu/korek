@@ -12,7 +12,7 @@ import Template from './Template';
 import { Link } from 'react-router-dom';
 import useForm from '../../hooks/useForm';
 import { validateEmail } from '../../utils/functions';
-import { toast } from 'react-toastify';
+//import { toast } from 'react-toastify';
 import { loggedUserContext } from '../../context/loggedUser';
 
 const { REACT_APP_SERVER_URL } = process.env;
@@ -32,27 +32,27 @@ const Login: FC = () => {
   const history = useHistory();
 
   // TOASTS
-  const emailErr = () =>
-    toast.error('Account with that email not found!', {
-      position: 'top-center',
-      autoClose: 10000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+  // const emailErr = () =>
+  //   toast.error('Account with that email not found!', {
+  //     position: 'top-center',
+  //     autoClose: 10000,
+  //     hideProgressBar: false,
+  //     closeOnClick: true,
+  //     pauseOnHover: true,
+  //     draggable: true,
+  //     progress: undefined,
+  //   });
 
-  const passErr = () =>
-    toast.error('Password is wrong!', {
-      position: 'top-center',
-      autoClose: 10000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+  // const passErr = () =>
+  //   toast.error('Password is wrong!', {
+  //     position: 'top-center',
+  //     autoClose: 10000,
+  //     hideProgressBar: false,
+  //     closeOnClick: true,
+  //     pauseOnHover: true,
+  //     draggable: true,
+  //     progress: undefined,
+  //   });
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

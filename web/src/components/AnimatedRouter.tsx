@@ -1,7 +1,8 @@
-import { FC, useEffect } from 'react';
+import { FC, useContext, useEffect } from 'react';
 
-import { Route, Switch, useLocation } from 'react-router';
+import { Route, Switch, useHistory, useLocation } from 'react-router';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { loggedUserContext } from '../context/loggedUser';
 import Chats from '../pages/Chats/Chats';
 
 import Hero from '../pages/hero/Hero';
@@ -12,11 +13,23 @@ import Teachers from '../pages/teachers/Teachers';
 import '../styles/animations.css';
 
 const AnimatedRouter: FC = (): JSX.Element => {
+  const { user } = useContext(loggedUserContext);
+
   const location = useLocation();
+  const history = useHistory();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [location]);
+
+    if (
+      location.pathname !== '/' &&
+      location.pathname !== '/register' &&
+      location.pathname !== '/login' &&
+      !user
+    ) {
+      history.push('/');
+    }
+  }, [location, user, history]);
 
   return (
     <div style={{ position: 'relative' }}>

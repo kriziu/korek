@@ -8,11 +8,12 @@ import Chat from './components/Chat';
 import UserList from './components/UserList';
 import '../../styles/animations.css';
 import { Center } from '../../components/Center';
+import { AVATARS } from '../../contants';
 
 export interface CurrentChat {
   firstName: string;
   lastName: string;
-  avatarId: Avatars;
+  avatarId: AVATARS;
   roomId: string;
 }
 
@@ -36,10 +37,11 @@ const Chats: FC = () => {
               ) : (
                 <Center
                   style={{
-                    width: '100%',
+                    flex: 1,
                     height: 'auto',
                     flexDirection: 'column',
                     marginLeft: '-30rem',
+                    pointerEvents: 'none',
                   }}
                 >
                   <img src="/images/hero_chat.svg" alt="Start chatting" />

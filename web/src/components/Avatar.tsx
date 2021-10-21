@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import { Center } from './Center';
 import { Header2 } from './Header';
 import Modal from './Modal';
+import { AVATARS } from '../contants';
 
 const Container = styled.div<{ active?: boolean }>`
   width: 6rem;
@@ -32,7 +33,7 @@ const GridList = styled.div`
   gap: 3.5rem;
 `;
 
-const Avatar: FC<{ id: Avatars }> = ({ id }) => {
+const Avatar: FC<{ id: AVATARS }> = ({ id }) => {
   return (
     <Container>
       <img src={`/images/${id}.svg`} alt="Avatar" />
@@ -41,19 +42,19 @@ const Avatar: FC<{ id: Avatars }> = ({ id }) => {
 };
 
 const AvatarSelector: FC<{
-  id: Avatars;
-  avatarSelect: (id: Avatars) => void;
+  id: AVATARS;
+  avatarSelect: (id: AVATARS) => void;
   close: () => void;
 }> = ({ id, avatarSelect, close }) => {
   const renderAvatars = (): JSX.Element[] => {
     const avatars = [];
 
     for (let i = 1; i <= 6; i++) {
-      avatars.push(<Avatar id={(Avatars as any)[`female_${i}`]}></Avatar>);
+      avatars.push(<Avatar id={(AVATARS as any)[`FEMALE_${i}`]}></Avatar>);
     }
 
     for (let i = 1; i <= 6; i++) {
-      avatars.push(<Avatar id={(Avatars as any)[`male_${i}`]}></Avatar>);
+      avatars.push(<Avatar id={(AVATARS as any)[`MALE_${i}`]}></Avatar>);
     }
 
     return avatars.map(avatar => {

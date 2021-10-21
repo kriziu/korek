@@ -41,7 +41,7 @@ const Chat: FC<CurrentChat> = ({ firstName, lastName, avatarId, roomId }) => {
       });
 
     console.log(user);
-  }, []);
+  }, [roomId, user]);
 
   useEffect(() => {
     messages.length &&
@@ -50,7 +50,7 @@ const Chat: FC<CurrentChat> = ({ firstName, lastName, avatarId, roomId }) => {
         top: ref.current.scrollHeight,
         behavior: 'smooth',
       });
-  }, [messages]);
+  }, [messages, user?._id]);
 
   const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -81,7 +81,7 @@ const Chat: FC<CurrentChat> = ({ firstName, lastName, avatarId, roomId }) => {
   };
 
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ flex: 1 }}>
       <Top>
         <Avatar id={avatarId} />
         <Header3 style={{ marginLeft: '1rem' }}>

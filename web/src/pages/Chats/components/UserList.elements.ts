@@ -13,7 +13,7 @@ export const List = styled.ul`
 
   ${scrollY}
 
-  .item:not(:first-of-type, :last-child) {
-    margin: 3rem 0;
+  .item:not(:last-child) {
+    margin-bottom: 6rem;
   }
 `;

@@ -49,7 +49,10 @@ const User: FC<UserProps> = ({
       avatarId,
       firstName,
       lastName,
-      roomId: _id + '_' + user?._id,
+      roomId:
+        user?.userType === 'teacher'
+          ? user._id + '_' + _id
+          : _id + '_' + user?._id,
     });
   };
 
