@@ -8,7 +8,7 @@ import 'package:korek/widgets/adaptive_button.dart';
 import 'package:korek/widgets/dialogs/loading_dialog.dart';
 import 'package:provider/provider.dart';
 
-import 'home_screen_wrapper.dart';
+import '../widgets/wrappers/home_screen_wrapper.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

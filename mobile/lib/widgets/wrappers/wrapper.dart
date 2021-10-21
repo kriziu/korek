@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:korek/providers/auth_provider.dart';
-import 'package:korek/screens/home_screen_wrapper.dart';
+import 'package:korek/widgets/wrappers/home_screen_wrapper.dart';
 import 'package:korek/widgets/wrappers/login_wrapper.dart';
 import 'package:provider/provider.dart';
 

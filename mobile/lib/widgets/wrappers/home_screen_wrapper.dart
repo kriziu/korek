@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:korek/screens/chat_screen.dart';
+import 'package:korek/screens/chats_screen.dart';
 import 'package:korek/screens/home_screen.dart';
 
 class HomeScreenWrapper extends StatefulWidget {
@@ -12,7 +12,7 @@ class HomeScreenWrapper extends StatefulWidget {
 }
 
 class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
-  final views = [const HomeScreen(), const ChatScreen()];
+  final views = [const HomeScreen(), const ChatsScreen()];
 
   int index = 0;
 

@@ -13,6 +13,11 @@ class TeacherDetailsScreen extends StatelessWidget {
   const TeacherDetailsScreen(this.teacher, this.index, {Key? key})
       : super(key: key);
 
+
+  Future<void> _sendMessage() async {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
@@ -158,14 +163,18 @@ class TeacherDetailsScreen extends StatelessWidget {
                                         color:
                                         Theme.of(context).primaryColor),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
                                 ),
                                 PlatformDialogAction(
                                   child: Text("Send",
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .primaryColor)),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    _sendMessage();
+                                  },
                                 ),
                               ],
                             ));

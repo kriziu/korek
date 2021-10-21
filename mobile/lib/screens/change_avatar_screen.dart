@@ -21,8 +21,7 @@ class _ChangeAvatarScreenState extends State<ChangeAvatarScreen> {
   @override
   void initState() {
     super.initState();
-    currentAvatarId =
-        Provider.of<AuthProvider>(context, listen: false).user!.avatarId;
+    currentAvatarId = Provider.of<AuthProvider>(context, listen: false).user!.avatarId;
   }
 
   @override
