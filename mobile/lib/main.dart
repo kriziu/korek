@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:korek/providers/users_provider.dart';
-import 'package:korek/widgets/wrappers/home_screen_wrapper.dart';
-import 'package:korek/widgets/wrappers/login_wrapper.dart';
-import 'package:korek/screens/register_screen.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:korek/providers/messages_provider.dart';
+import 'package:korek/providers/users_provider.dart';
 import 'package:korek/widgets/wrappers/wrapper.dart';
 import 'package:provider/provider.dart';
+
 import 'providers/auth_provider.dart';
 
 void main() {
@@ -23,20 +22,24 @@ class Main extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<UsersProvider>(create: (_) => UsersProvider()),
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
+        ChangeNotifierProvider<MessagesProvider>(
+            create: (_) => MessagesProvider()),
       ],
       child: PlatformApp(
           title: 'Korek',
           home: const Wrapper(),
           material: (_, __) => MaterialAppData(
                 theme: ThemeData(
-                  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                    selectedItemColor: Color(0xffFFC526),
-                  ),
-                  switchTheme: SwitchThemeData(
-                    thumbColor:  MaterialStateProperty.all(const Color(0xffFFC526)),
-                    trackColor: MaterialStateProperty.all(const Color(
-                        0x55BFBFBF)),
-                  ),
+                    bottomNavigationBarTheme:
+                        const BottomNavigationBarThemeData(
+                      selectedItemColor: Color(0xffFFC526),
+                    ),
+                    switchTheme: SwitchThemeData(
+                      thumbColor:
+                          MaterialStateProperty.all(const Color(0xffFFC526)),
+                      trackColor:
+                          MaterialStateProperty.all(const Color(0x55BFBFBF)),
+                    ),
                     snackBarTheme: const SnackBarThemeData(
                         backgroundColor: Color(0xffeeeeee),
                         contentTextStyle: TextStyle(

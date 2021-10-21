@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () {
                               Navigator.of(context).push(platformPageRoute(
                                   context: context,
-                                  builder: (context) => ProfileScreen()));
+                                  builder: (context) => const ProfileScreen()));
                             },
                             child: CircleAvatar(
                               radius: 30,
@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Hero(
                                 tag: "profileimg",
                                 child: SvgPicture.asset(
-                                  "assets/${user!.avatarId}.svg",
+                                  user != null ? "assets/${user.avatarId}.svg" : "assets/male_1.svg",
                                 ),
                               ),
                             ),

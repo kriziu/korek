@@ -3,10 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:korek/models/message.dart';
+import 'package:korek/providers/auth_provider.dart';
+import 'package:korek/providers/messages_provider.dart';
 import 'package:korek/widgets/message_item.dart';
+import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
+  // final String secondUserId;
   const ChatScreen({Key? key}) : super(key: key);
 
   @override
@@ -15,7 +19,22 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final _controller = ScrollController();
+  late final Message message;
 
+
+  @override
+  void initState() {
+    super.initState();
+    final currentUserId = Provider.of<AuthProvider>(context,listen: false).user!.id;
+    //message = Message( , currentUserId, "");
+
+  }
+
+
+
+  Future<void> _sendMessage () async {
+      //Provider.of<MessagesProvider>(context,listen: false).sendMessage()
+  }
 
 
   @override

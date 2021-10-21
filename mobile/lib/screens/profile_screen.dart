@@ -2,11 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:korek/helpers/helpers.dart';
 import 'package:korek/models/update_data.dart';
 import 'package:korek/providers/auth_provider.dart';
 import 'package:korek/screens/change_avatar_screen.dart';
 import 'package:korek/screens/change_profile_item_screen.dart';
+import 'package:korek/widgets/adaptive_button.dart';
+import 'package:korek/widgets/wrappers/login_wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -45,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24),
-            child: Column(
+            child: user != null ? Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Align(
@@ -64,7 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Hero(
                         tag: "profileimg",
-                        child: SvgPicture.asset("assets/${user!.avatarId}.svg",
+                        child: SvgPicture.asset("assets/${user.avatarId}.svg",
                             width: 120, height: 120),
                       ),
                       Positioned(
@@ -116,9 +119,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   itemCount: UpdateData.updatedData.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
+                ),
+                const SizedBox(height: 16,),
+                SizedBox(
+                  width: double.infinity,
+                  child: AdaptiveButton(
+                    child: Text("Log out",style: GoogleFonts.montserrat(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 17),),
+                    onPressed: () async {
+                      Provider.of<AuthProvider>(context, listen: false)
+                          .logOut();
+                      Navigator.of(context).pushAndRemoveUntil(
+                          platformPageRoute(
+                              context: context,
+                              builder: (context) => const LoginWrapper()),
+                              (route) => false);
+
+                    },
+                  ),
                 )
               ],
-            ),
+            ) : const Text("Something went wrong!"),
           ),
         ),
       ),

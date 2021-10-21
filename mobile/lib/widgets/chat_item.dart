@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:korek/models/user.dart';
 import 'package:korek/screens/chat_screen.dart';
 import 'package:korek/widgets/message_item.dart';
 
 class ChatItem extends StatelessWidget {
+ // final User user;
   const ChatItem({Key? key}) : super(key: key);
 
   @override
@@ -13,7 +15,7 @@ class ChatItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         FocusScope.of(context).unfocus();
-        Navigator.of(context).push(platformPageRoute(context: context,builder: (context)=>const ChatScreen()));
+        Navigator.of(context).push(platformPageRoute(context: context,builder: (context)=>ChatScreen()));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
