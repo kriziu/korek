@@ -1,19 +1,22 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:korek/models/message.dart';
+import 'package:korek/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class MessageItem extends StatelessWidget {
-  final int index;
+  final Message message;
 
-  const MessageItem(this.index, {Key? key}) : super(key: key);
+  const MessageItem(this.message, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final curUserId = Provider.of<AuthProvider>(context).user!.id;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal:24.0),
       child: Row(
         children: [
-          if (index % 2 == 1)
+          if (message.from == curUserId)
             Expanded(
               child: Container(),
               flex: 1,
@@ -29,20 +32,20 @@ class MessageItem extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                     topLeft: const Radius.circular(20),
                     topRight: const Radius.circular(20),
-                      bottomLeft: Radius.circular(index % 2 == 1 ? 20 : 0),
-                      bottomRight: Radius.circular(index % 2 == 1 ? 0 : 20)),
-                  color: index % 2 == 1
+                      bottomLeft: Radius.circular((message.from == curUserId) ? 20 : 0),
+                      bottomRight: Radius.circular((message.from == curUserId) ? 0 : 20)),
+                  color:(message.from == curUserId)
                       ? const Color(0xffffbc00)
                       : const Color(0xffefefef)),
               child: Text(
-                "Text widomosci essa essa ezssa essae sswea sa asd sdfkmnksdfjnksdkjsdgkojsdfjiksd",
+                message.message,
                 style: TextStyle(
-                    color: index % 2 == 1 ? Colors.white : Colors.black,
+                    color: (message.from == curUserId) ? Colors.white : Colors.black,
                     fontWeight: FontWeight.w500),
               ),
             ),
           ),
-          if (index % 2 == 0)
+          if (message.from !=curUserId)
             Expanded(
               child: Container(),
               flex: 1,

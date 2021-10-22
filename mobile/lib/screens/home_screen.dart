@@ -58,6 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
       case Sort.highPrice:
         teachers.sort((a, b) => a.price.compareTo(b.price));
         break;
+      case Sort.newest:break;
+      case Sort.oldest:break;
     }
   }
 
@@ -271,21 +273,26 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemCount: teachers.length,
                         shrinkWrap: true,
                       )
-                    : Padding(
-                        padding: const EdgeInsets.only(top: 36),
-                        child: Center(
-                            child: Column(
-                          children: const [
-                            Text(
-                              "No teachers found!",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 20),
-                            ),
-                            SizedBox(height: 8),
-                            Icon(Icons.mood_bad_rounded, size: 48)
-                          ],
-                        )),
-                      ),
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: 16),
+                          Center(
+                              child: Text(
+                            "No teachers Found",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w700),
+                          )),
+                          SizedBox(height: 16),
+                          Center(
+                              child: SvgPicture.asset(
+                            'assets/hero_no_results.svg',
+                            height: 200,
+                          ))
+                        ],
+                      )
               ],
             ),
           ),

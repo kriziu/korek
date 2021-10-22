@@ -8,11 +8,17 @@ import 'package:korek/models/user.dart';
 
 class MessagesProvider with ChangeNotifier {
 
+
+  List<Message> _messages = [];
+  List<Message> get messages => [..._messages];
+
+
   final List<User> _chatted = [];
   List<User> get chatted => [..._chatted];
 
 
   Future<void> sendMessage(Message message) async {
+    _messages.add(message);
     final response = await http.post(
       Uri.parse('$BASE_URL/messages'),
       body: jsonEncode(message.toJson()),
@@ -24,6 +30,7 @@ class MessagesProvider with ChangeNotifier {
         .containsKey('error')) {
       throw Exception(jsonDecode(response.body)['error']);
     }
+
     notifyListeners();
   }
 
@@ -41,5 +48,24 @@ class MessagesProvider with ChangeNotifier {
     }catch(e){
       rethrow;
     }
+  }
+
+  Future<void> fetchChatMessages(String roomId) async {
+    try{
+      _messages.clear();
+      final response = await http.get(Uri.parse('$BASE_URL/messages/$roomId'));
+      final jsonData = jsonDecode(response.body) as List<dynamic>;
+      final data = jsonData.map((message) => Message.fromJson(message));
+      data.forEach((message) {
+        _messages.add(message);
+      });
+      notifyListeners();
+    }catch(e){
+      rethrow;
+    }
+  }
+  void receiveMessage(Message message){
+    _messages.add(message);
+    notifyListeners();
   }
 }

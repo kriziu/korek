@@ -11,7 +11,6 @@ import 'package:korek/screens/change_profile_item_screen.dart';
 import 'package:korek/widgets/adaptive_button.dart';
 import 'package:korek/widgets/wrappers/login_wrapper.dart';
 import 'package:provider/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -21,22 +20,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  @override
-  void initState() {
-    final socket = IO.io(
-      BASE_URL,
-      <String, dynamic>{
-        'transports': ['websocket']
-      },
-    );
-    socket.onConnect((data) {
-      socket.emit("joinRoom", "123");
-      socket.emit("send", "essa");
-      socket.on("receive", (msg) => print(msg));
-    });
-    socket.connect();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

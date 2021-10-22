@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:korek/models/filters.dart';
+import 'package:korek/models/user.dart';
 import 'package:korek/providers/auth_provider.dart';
+import 'package:korek/providers/messages_provider.dart';
 import 'package:korek/screens/profile_screen.dart';
 import 'package:korek/widgets/chat_item.dart';
 import 'package:korek/widgets/home_drawer.dart';
@@ -16,11 +18,76 @@ class ChatsScreen extends StatefulWidget {
 }
 
 class _ChatsScreenState extends State<ChatsScreen> {
+  SortType sortType = SortType.sortMessagesMethods[0];
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final _searchController = TextEditingController();
+  String? searchStr;
+  List<User> chats = [];
+
+  Future<void> _fetchChats(String id) async {
+    try {
+      await Provider.of<MessagesProvider>(context, listen: false)
+          .fetchChatted(id);
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Error : ${e.toString()}")));
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final user = Provider.of<AuthProvider>(context, listen: false).user;
+    if (user != null) {
+      _fetchChats(user.id);
+    }
+  }
+
+  void sortChats(List<User> chats) {
+    switch (sortType.sort) {
+      case Sort.nameAZ:
+        chats.sort((a, b) => a.firstName.compareTo(b.firstName));
+        break;
+      case Sort.nameZA:
+        chats.sort((a, b) => b.firstName.compareTo(a.firstName));
+        break;
+      case Sort.newest:
+        chats.sort((a, b) => b.firstName.compareTo(a.firstName));
+        break;
+      case Sort.oldest:
+        chats.sort((a, b) => b.firstName.compareTo(a.firstName));
+        break;
+      case Sort.rating:
+        break;
+      case Sort.highPrice:
+        break;
+      case Sort.lowPrice:
+        break;
+    }
+  }
+
+  void filterChats(List<User> allChats) {
+    if (searchStr!=null) {
+      chats = allChats
+          .where((teacher) =>
+              teacher.firstName
+                  .toLowerCase()
+                  .contains(searchStr!.toLowerCase()) ||
+              teacher.lastName
+                  .toLowerCase()
+                  .contains(searchStr!.toLowerCase()))
+          .toList();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<AuthProvider>(context).user;
+    final allChats = Provider.of<MessagesProvider>(context).chatted;
+    chats = allChats;
+    sortChats(chats);
+    filterChats(allChats);
 
     return PlatformScaffold(
       material: (_, __) => MaterialScaffoldData(
@@ -28,7 +95,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
       body: SafeArea(
         child: RefreshIndicator(
           color: Theme.of(context).primaryColor,
-          onRefresh: () async => {},
+          onRefresh: () async => await _fetchChats(user!.id),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,13 +161,18 @@ class _ChatsScreenState extends State<ChatsScreen> {
                         children: [
                           Expanded(
                               child: TextField(
-                            onChanged: (str) {},
+                            controller: _searchController,
+                            onChanged: (val) => setState(() => searchStr = val),
                             keyboardType: TextInputType.text,
                             textInputAction: TextInputAction.search,
                             decoration: InputDecoration(
                                 suffixIcon: GestureDetector(
                                   onTap: () {
-                                    setState(() {});
+                                    setState(() {
+                                      searchStr = null;
+                                      _searchController.clear();
+                                      FocusScope.of(context).unfocus();
+                                    });
                                   },
                                   child: const Icon(Icons.clear,
                                       color: Color(0xff888888)),
@@ -116,37 +188,60 @@ class _ChatsScreenState extends State<ChatsScreen> {
                           PopupMenuButton<SortType>(
                             tooltip: "Sort by",
                             onSelected: (SortType sortType) {
-                              setState(() {});
+                              setState(() {
+                                this.sortType = sortType;
+                              });
                             },
-                            itemBuilder: (context) => SortType.sortMethods
-                                .map((sortType) => PopupMenuItem(
-                                    child: Text(sortType.name,
-                                        style: const TextStyle(
-                                          // color: _filters.sortType.name ==
-                                          //     sortType.name
-                                          //     ? Theme.of(context).primaryColor
-                                          //     :
-                                          color: Colors.black,
-                                          // fontWeight: _filters.sortType.name ==
-                                          //     sortType.name
-                                          //     ? FontWeight.w600
-                                          //     : FontWeight.w400),
-                                        )),
-                                    value: sortType))
+                            itemBuilder: (context) => SortType
+                                .sortMessagesMethods
+                                .map((sortTypeData) => PopupMenuItem(
+                                    child: Text(sortTypeData.name,
+                                        style: TextStyle(
+                                            color: sortType.name ==
+                                                    sortTypeData.name
+                                                ? Theme.of(context).primaryColor
+                                                : Colors.black,
+                                            fontWeight: sortType.name ==
+                                                    sortTypeData.name
+                                                ? FontWeight.w600
+                                                : FontWeight.w400)),
+                                    value: sortTypeData))
                                 .toList(),
                             child: const Icon(Icons.filter_list),
                           )
                         ],
                       ),
                       const SizedBox(
-                        height: 32,
+                        height: 16,
                       ),
-                      ListView.builder(
-                        itemBuilder: (context, index) => const ChatItem(),
-                        itemCount: 10,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                      )
+                      chats.isNotEmpty
+                          ? ListView.builder(
+                              itemBuilder: (context, i) => ChatItem(chats[i]),
+                              itemCount: chats.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                            )
+                          : Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(height: 16),
+                                const Center(
+                                    child: Text(
+                                  "No Chats Found",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700),
+                                )),
+                                const SizedBox(height: 16),
+                                Center(
+                                    child: SvgPicture.asset(
+                                  'assets/hero_no_results.svg',
+                                  height: 200,
+                                ))
+                              ],
+                            )
                     ],
                   ),
                 ),

@@ -23,10 +23,21 @@ class SortType {
         SortType("Price ⬇", Sort.lowPrice),
         SortType("Price ⬆", Sort.highPrice),
       ];
+
+  static List<SortType> get sortMessagesMethods => [
+    SortType("Name [A-Z]", Sort.nameAZ),
+    SortType("Name [Z-A]", Sort.nameZA),
+    SortType("Newest", Sort.newest),
+    SortType("Oldest", Sort.oldest),
+  ];
 }
+
+
 
 enum Sort {
   rating,
+  newest,
+  oldest,
   highPrice,
   lowPrice,
   nameAZ,

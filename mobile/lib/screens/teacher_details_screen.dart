@@ -3,19 +3,56 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:korek/models/message.dart';
 import 'package:korek/models/user.dart';
+import 'package:korek/providers/auth_provider.dart';
 import 'package:korek/widgets/adaptive_button.dart';
+import 'package:korek/widgets/dialogs/loading_dialog.dart';
+import 'package:provider/provider.dart';
+import 'package:korek/providers/messages_provider.dart';
 
-class TeacherDetailsScreen extends StatelessWidget {
+class TeacherDetailsScreen extends StatefulWidget {
   final User teacher;
   final int index;
 
   const TeacherDetailsScreen(this.teacher, this.index, {Key? key})
       : super(key: key);
 
+  @override
+  State<TeacherDetailsScreen> createState() => _TeacherDetailsScreenState();
+}
+
+class _TeacherDetailsScreenState extends State<TeacherDetailsScreen> {
+  final _controller = TextEditingController();
 
   Future<void> _sendMessage() async {
+    final currentUser = Provider.of<AuthProvider>(context, listen: false).user;
+    try {
+      if (_controller.text.length < 6) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Write bigger message")));
+        return;
+      }
 
+      showPlatformDialog(
+          context: context,
+          builder: (_) => const LoadingDialog(title: "Sending..."),
+          barrierDismissible: false);
+
+      await Provider.of<MessagesProvider>(context, listen: false).sendMessage(
+          Message(widget.teacher.id + "_" + currentUser!.id, currentUser.id,
+              _controller.text));
+      Navigator.of(context)
+        ..pop()
+        ..pop()
+        ..pop();
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Message sent.")));
+    } catch (e) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    }
   }
 
   @override
@@ -35,7 +72,10 @@ class TeacherDetailsScreen extends StatelessWidget {
             children: [
               Container(
                 constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height - 48 - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom,
+                  minHeight: MediaQuery.of(context).size.height -
+                      48 -
+                      MediaQuery.of(context).padding.top -
+                      MediaQuery.of(context).padding.bottom,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,16 +92,16 @@ class TeacherDetailsScreen extends StatelessWidget {
                     ),
                     Center(
                       child: Hero(
-                          tag: "avatar_$index",
+                          tag: "avatar_${widget.index}",
                           child: SvgPicture.asset(
-                            "assets/${teacher.avatarId}.svg",
+                            "assets/${widget.teacher.avatarId}.svg",
                             width: 200,
                             height: 200,
                           )),
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      "${teacher.firstName} ${teacher.lastName}",
+                      "${widget.teacher.firstName} ${widget.teacher.lastName}",
                       style: const TextStyle(
                           color: Colors.black,
                           fontSize: 24,
@@ -70,7 +110,7 @@ class TeacherDetailsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      teacher.subjectsStr,
+                      widget.teacher.subjectsStr,
                       style: const TextStyle(
                           color: Color(0xffaaaaaa),
                           fontSize: 18,
@@ -101,7 +141,7 @@ class TeacherDetailsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 36),
                     Text(
-                      '${teacher.price}\$/h',
+                      '${widget.teacher.price}\$/h',
                       style: const TextStyle(
                           color: Colors.black,
                           fontSize: 30,
@@ -113,7 +153,7 @@ class TeacherDetailsScreen extends StatelessWidget {
               Positioned(
                 bottom: 0,
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width-48,
+                  width: MediaQuery.of(context).size.width - 48,
                   child: AdaptiveButton(
                       child: Text(
                         "Choose teacher",
@@ -126,58 +166,63 @@ class TeacherDetailsScreen extends StatelessWidget {
                         showPlatformDialog(
                             context: context,
                             builder: (context) => PlatformAlertDialog(
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/${teacher.avatarId}.svg",
-                                    width: 30,
-                                    height: 30,
+                                  title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        "assets/${widget.teacher.avatarId}.svg",
+                                        width: 30,
+                                        height: 30,
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        "${widget.teacher.firstName} ${widget.teacher.lastName}",
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    "${teacher.firstName} ${teacher.lastName}",
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w700),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const Text("How I can help you?"),
+                                      const SizedBox(height: 8),
+                                      TextField(
+                                        controller: _controller,
+                                        minLines: 3,
+                                        maxLines: 3,
+                                        decoration: InputDecoration(
+                                            hintText: "Message"),
+                                      )
+                                    ],
                                   ),
-                                ],
-                              ),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const [
-                                  Text("How I can help you?"),
-                                  SizedBox(height: 8),
-                                  TextField(
-                                    minLines: 3,
-                                    maxLines: 3,
-                                  )
-                                ],
-                              ),
-                              actions: [
-                                PlatformDialogAction(
-                                  child: Text(
-                                    "Cancel",
-                                    style: TextStyle(
-                                        color:
-                                        Theme.of(context).primaryColor),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                PlatformDialogAction(
-                                  child: Text("Send",
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .primaryColor)),
-                                  onPressed: () {
-                                    _sendMessage();
-                                  },
-                                ),
-                              ],
-                            ));
+                                  actions: [
+                                    PlatformDialogAction(
+                                      child: Text(
+                                        "Cancel",
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    PlatformDialogAction(
+                                      child: Text("Send",
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor)),
+                                      onPressed: () {
+                                        _sendMessage();
+                                      },
+                                    ),
+                                  ],
+                                ));
                       }),
                 ),
               )

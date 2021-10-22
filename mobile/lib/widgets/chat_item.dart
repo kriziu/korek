@@ -3,11 +3,11 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:korek/models/user.dart';
 import 'package:korek/screens/chat_screen.dart';
-import 'package:korek/widgets/message_item.dart';
+
 
 class ChatItem extends StatelessWidget {
- // final User user;
-  const ChatItem({Key? key}) : super(key: key);
+  final User user;
+  const ChatItem(this.user,{Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class ChatItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         FocusScope.of(context).unfocus();
-        Navigator.of(context).push(platformPageRoute(context: context,builder: (context)=>ChatScreen()));
+        Navigator.of(context).push(platformPageRoute(context: context,builder: (context)=> ChatScreen(user)));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
@@ -23,7 +23,7 @@ class ChatItem extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: SvgPicture.asset(
-              "assets/male_1.svg",
+              "assets/${user.avatarId}.svg",
               width: 80,
               height: 80,
               fit: BoxFit.cover,
@@ -36,28 +36,28 @@ class ChatItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "essa",
+                  Text(
+                    '${user.firstName} ${user.lastName}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.w700),
                   ),
-                  const Text(
-                    "LOL",
+                  Text(
+                    user.userType,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Color(0xffaaaaaa),
                         fontSize: 14,
                         fontWeight: FontWeight.w500),
                   ),
-                  const SizedBox(
+                  if(user.userType == "teacher") const SizedBox(
                     height: 4,
                   ),
-                  Row(
+                  if(user.userType == "teacher") Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Icon(
