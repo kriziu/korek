@@ -87,5 +87,5 @@ DELETE http://localhost:8080/messages/6169395f3bd3943503f43474_61681e655c8c0353f
 
 ###
 
-GET http://localhost:8080/users/chatted
+GET http://localhost:8080/users/chatted/6171c57a15b144ce4c33a554
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTcxODU4NDIxNmZhZGNlZDVkOTg2MzQiLCJpYXQiOjE2MzQ4MzE3NjZ9.uWZD0e3bavpsiHOAYQ4ViOFTnT7_qzJ6_t12vzBb2Z0

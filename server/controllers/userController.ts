@@ -9,9 +9,9 @@ import { authenticateToken } from './authenticationController';
 const router = Router();
 
 // GETTING ALL USERS THAT CHATTED BY USER ID
-router.get('/chatted', authenticateToken, async (req, res) => {
+router.get('/chatted/:authId', async (req, res) => {
   try {
-    const { authId } = req.body;
+    const { authId } = req.params;
 
     let roomsId: string[] = await Message.find({
       roomId: { $regex: '.*' + authId + '.*' },
@@ -51,7 +51,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // GETTING ALL TEACHERS OR BY SUBJECTS
-router.get('/', authenticateToken, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const teachers = await User.find({ userType: 'teacher' });
 
@@ -136,7 +136,7 @@ router.post('/login', async (req, res) => {
         process.env.ACCESS_TOKEN_SECRET as string
       );
 
-      res.json({ user: user, token: token });
+      res.json(user);
     } else res.json({ error: 'Bad password' });
   } catch (err) {
     const msg = (err as Error).message;
