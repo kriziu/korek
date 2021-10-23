@@ -3,6 +3,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:korek/helpers/helpers.dart';
 import 'package:korek/helpers/subjects.dart';
+import 'package:korek/helpers/token_manager.dart';
 import 'package:korek/models/filters.dart';
 import 'package:korek/models/user.dart';
 import 'package:korek/providers/auth_provider.dart';
@@ -40,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+
     fetchUsers();
   }
 

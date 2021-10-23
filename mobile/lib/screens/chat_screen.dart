@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -27,6 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _inputController = TextEditingController();
   late final Message message;
   late IO.Socket socket;
+
   Future<void> _fetchMessages() async {
     try {
       await Provider.of<MessagesProvider>(context, listen: false)
@@ -36,6 +36,7 @@ class _ChatScreenState extends State<ChatScreen> {
           .showSnackBar(SnackBar(content: Text("Error : ${e.toString()}")));
     }
   }
+
   @override
   void initState() {
     final currentUser = Provider.of<AuthProvider>(context, listen: false).user;
@@ -46,13 +47,14 @@ class _ChatScreenState extends State<ChatScreen> {
     socket = IO.io(
       BASE_URL,
       <String, dynamic>{
-        'transports': ['websocket']
+        'transports': ['websocket'],
       },
     );
     socket.onConnect((data) {
-      socket.emit("joinRoom",roomId);
+      socket.emit("joinRoom", roomId);
       socket.on("receive", (msg) {
-        Provider.of<MessagesProvider>(context,listen: false).receiveMessage(Message.fromJson(msg));
+        Provider.of<MessagesProvider>(context, listen: false)
+            .receiveMessage(Message.fromJson(msg));
       });
     });
     socket.connect();
@@ -63,23 +65,25 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _sendMessage() async {
-    if(_inputController.text.isEmpty){
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Write correct message")));
+    if (_inputController.text.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Write correct message")));
       return;
     }
     socket.emit("send", {
-      "roomId":message.roomId,
-      "from":message.from,
-      "message":message.message,
+      "roomId": message.roomId,
+      "from": message.from,
+      "message": message.message,
     });
-    Provider.of<MessagesProvider>(context,listen: false).sendMessage(message);
+    Provider.of<MessagesProvider>(context, listen: false).sendMessage(message);
     _inputController.clear();
     FocusScope.of(context).unfocus();
   }
 
   @override
   Widget build(BuildContext context) {
-    final messages = Provider.of<MessagesProvider>(context).messages.reversed.toList();
+    final messages =
+        Provider.of<MessagesProvider>(context).messages.reversed.toList();
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
@@ -139,7 +143,7 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               Expanded(
                   child: PlatformTextField(
-                    controller: _inputController,
+                controller: _inputController,
                 onChanged: (val) => message.message = val,
                 hintText: "Start typing...",
               )),

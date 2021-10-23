@@ -1,12 +1,12 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:korek/helpers/helpers.dart';
 import 'package:korek/models/user.dart';
-import 'package:http/http.dart' as http;
 
 class UsersProvider with ChangeNotifier {
   final List<User> _teachers = [];
-
 
   List<User> get teachers => [..._teachers];
 
