@@ -1,13 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:korek/models/user.dart';
 import 'package:korek/screens/chat_screen.dart';
-
+import 'package:korek/widgets/adaptive_button.dart';
 
 class ChatItem extends StatelessWidget {
   final User user;
-  const ChatItem(this.user,{Key? key}) : super(key: key);
+
+  const ChatItem(this.user, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,8 @@ class ChatItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         FocusScope.of(context).unfocus();
-        Navigator.of(context).push(platformPageRoute(context: context,builder: (context)=> ChatScreen(user)));
+        Navigator.of(context).push(platformPageRoute(
+            context: context, builder: (context) => ChatScreen(user)));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
@@ -54,33 +58,80 @@ class ChatItem extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.w500),
                   ),
-                  if(user.userType == "teacher") const SizedBox(
-                    height: 4,
-                  ),
-                  if(user.userType == "teacher") Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.star_outlined,
-                        color: Theme.of(context).primaryColor,
-                        size: 28,
-                      ),
-                      const SizedBox(width: 4),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 4.0),
-                        child: Text('4.7',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700)),
-                      )
-                    ],
-                  ),
+                  if (user.userType == "teacher")
+                    const SizedBox(
+                      height: 4,
+                    ),
+                  if (user.userType == "teacher")
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star_outlined,
+                          color: Theme.of(context).primaryColor,
+                          size: 28,
+                        ),
+                        const SizedBox(width: 4),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 4.0),
+                          child: Text('4.7',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700)),
+                        )
+                      ],
+                    ),
+                  if (user.userType == "teacher")
+                    const SizedBox(
+                      height: 4,
+                    ),
+                  if (user.userType == "teacher")
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AdaptiveButton(
+                            smallPadding: true,
+                            onPressed: () {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.monetization_on,color: Colors.white,),
+                                const SizedBox(width: 4,),
+                                Text("Pay",style: GoogleFonts.montserrat(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 17)),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8,),
+                        Expanded(
+                          child: AdaptiveButton(
+                            smallPadding: true,
+                            outlined: true,
+                            onPressed: () {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.star,color: Theme.of(context).primaryColor,),
+                                const SizedBox(width: 4,),
+                                Text("Rate",style: GoogleFonts.montserrat(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 17),),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    )
                 ],
               ),
             ),
           ),
-         const Icon(Icons.keyboard_arrow_right)
+          const Icon(Icons.keyboard_arrow_right)
         ]),
       ),
     );

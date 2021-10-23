@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:korek/screens/privacy_policy_screen.dart';
 import 'package:korek/screens/profile_screen.dart';
+import 'package:korek/screens/sources_screen.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({Key? key}) : super(key: key);
@@ -46,7 +48,12 @@ class HomeDrawer extends StatelessWidget {
               color: Colors.black,
             ),
             title: const Text('Privacy Policy'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context)
+                ..pop()
+                ..push(platformPageRoute(
+                    context: context, builder: (context) => const PrivacyPolicyScreen()));
+            },
           ),
           ListTile(
             leading: const Icon(
@@ -54,7 +61,12 @@ class HomeDrawer extends StatelessWidget {
               color: Colors.black,
             ),
             title: const Text('Sources'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context)
+                ..pop()
+                ..push(platformPageRoute(
+                    context: context, builder: (context) => const SourcesScreen()));
+            },
           ),
         ],
       ),

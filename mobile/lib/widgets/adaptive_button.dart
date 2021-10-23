@@ -8,12 +8,14 @@ class AdaptiveButton extends StatelessWidget {
   final Widget child;
   final Function onPressed;
   final bool outlined;
+  final bool smallPadding;
 
   const AdaptiveButton(
       {Key? key,
       required this.child,
       required this.onPressed,
-      this.outlined = false})
+      this.outlined = false,
+      this.smallPadding = false})
       : super(key: key);
 
   @override
@@ -28,7 +30,7 @@ class AdaptiveButton extends StatelessWidget {
             onPressed: () => onPressed(),
             child: child,
             style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 12),
+              padding: EdgeInsets.symmetric(vertical: smallPadding ? 6: 12),
               backgroundColor:
               outlined ? Colors.white : Theme.of(context).primaryColor,
               side: outlined

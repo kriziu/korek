@@ -18,7 +18,6 @@ class MessagesProvider with ChangeNotifier {
 
 
   Future<void> sendMessage(Message message) async {
-    _messages.add(message);
     final response = await http.post(
       Uri.parse('$BASE_URL/messages'),
       body: jsonEncode(message.toJson()),

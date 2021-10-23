@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:korek/helpers/helpers.dart';
 import 'package:korek/helpers/subjects.dart';
 import 'package:korek/models/filters.dart';
 import 'package:korek/models/user.dart';
@@ -11,6 +12,7 @@ import 'package:korek/widgets/home_drawer.dart';
 import 'package:korek/widgets/subject_item.dart';
 import 'package:korek/widgets/teahcer_item.dart';
 import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -37,7 +38,11 @@ class _ChatScreenState extends State<ChatScreen> {
   }
   @override
   void initState() {
+    final currentUser = Provider.of<AuthProvider>(context, listen: false).user;
 
+    final roomId = currentUser!.userType == "teacher"
+        ? currentUser.id + "_" + widget.chatUser.id
+        : widget.chatUser.id + "_" + currentUser.id;
     socket = IO.io(
       BASE_URL,
       <String, dynamic>{
@@ -45,18 +50,13 @@ class _ChatScreenState extends State<ChatScreen> {
       },
     );
     socket.onConnect((data) {
-      print("CONNECTEDDD");
-      socket.emit("joinRoom", "123");
-      socket.emit("send", "essa");
-      socket.on("receive", (msg) => print(msg));
+      socket.emit("joinRoom",roomId);
+      socket.on("receive", (msg) {
+        Provider.of<MessagesProvider>(context,listen: false).receiveMessage(Message.fromJson(msg));
+      });
     });
     socket.connect();
 
-
-    final currentUser = Provider.of<AuthProvider>(context, listen: false).user;
-    final roomId = currentUser!.userType == "teacher"
-        ? currentUser.id + "_" + widget.chatUser.id
-        : widget.chatUser.id + "_" + currentUser.id;
     message = Message(roomId, currentUser.id, "");
     _fetchMessages();
     super.initState();
@@ -67,7 +67,11 @@ class _ChatScreenState extends State<ChatScreen> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Write correct message")));
       return;
     }
-    socket.emit("send", message.message);
+    socket.emit("send", {
+      "roomId":message.roomId,
+      "from":message.from,
+      "message":message.message,
+    });
     Provider.of<MessagesProvider>(context,listen: false).sendMessage(message);
     _inputController.clear();
     FocusScope.of(context).unfocus();

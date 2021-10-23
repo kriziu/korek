@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -9,7 +11,17 @@ import 'package:provider/provider.dart';
 
 import 'providers/auth_provider.dart';
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const Main());
 }
 
@@ -30,6 +42,7 @@ class Main extends StatelessWidget {
           home: const Wrapper(),
           material: (_, __) => MaterialAppData(
                 theme: ThemeData(
+                  dividerColor: Colors.grey,
                     bottomNavigationBarTheme:
                         const BottomNavigationBarThemeData(
                       selectedItemColor: Color(0xffFFC526),
