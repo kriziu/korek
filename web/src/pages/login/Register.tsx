@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 
 import { FiAtSign } from 'react-icons/fi';
 import { MdLockOutline, MdPersonOutline } from 'react-icons/md';
@@ -22,6 +22,7 @@ import { StyledSelect } from '../../components/StyledSelect';
 import { Avatar, AvatarSelector } from '../../components/Avatar';
 import { Center } from '../../components/Center';
 import { SUBJECTS, AVATARS } from '../../contants';
+import { loggedUserContext } from '../../context/loggedUser';
 
 const SelectSubjects: OptionsOrGroups<SubjectType, GroupBase<any>> = [
   { value: SUBJECTS.MATH, label: 'Math' },
@@ -46,6 +47,8 @@ const imAoptions = [
 ];
 
 const Register: FC = () => {
+  const { setToken } = useContext(loggedUserContext);
+
   const [
     formData,
     setFormData,
@@ -74,17 +77,6 @@ const Register: FC = () => {
   // TOASTS
   const emailFound = () =>
     toast.error('Account with that email found!', {
-      position: 'top-center',
-      autoClose: 10000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-
-  const success = () =>
-    toast.success('Account created!', {
       position: 'top-center',
       autoClose: 10000,
       hideProgressBar: false,
@@ -139,7 +131,7 @@ const Register: FC = () => {
 
     REACT_APP_SERVER_URL &&
       axios
-        .post<{ error?: string }>(`${REACT_APP_SERVER_URL}/users`, {
+        .post<LoginType>(`${REACT_APP_SERVER_URL}/users`, {
           firstName: fName.value,
           lastName: lName.value,
           email: email.value,
@@ -151,11 +143,13 @@ const Register: FC = () => {
           connected: [],
         })
         .then(res => {
-          res.data.error === 'Found user with that email.'
-            ? emailFound()
-            : success();
+          const { data } = res;
 
-          history.push('/discover');
+          if (res.data.error === 'Found user with that email.') emailFound();
+          else {
+            setToken(data.token);
+            history.push('/discover');
+          }
         })
         .catch(err => console.log(err));
   };

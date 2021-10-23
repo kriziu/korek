@@ -19,7 +19,9 @@ const StyledSubjectList = styled(SubjectList)`
 `;
 
 interface UserProps extends UserType {
-  setCurrentChat: React.Dispatch<React.SetStateAction<CurrentChat | undefined>>;
+  setCurrentChat: React.Dispatch<React.SetStateAction<CurrentChat>>;
+  handleDeleteUserChat: (_id: string) => void;
+  chat: CurrentChat;
 }
 
 const User: FC<UserProps> = ({
@@ -30,6 +32,7 @@ const User: FC<UserProps> = ({
   _id,
   subjects,
   setCurrentChat,
+  handleDeleteUserChat,
 }) => {
   const { user } = useContext(loggedUserContext);
 
@@ -64,14 +67,20 @@ const User: FC<UserProps> = ({
       </Header3>
       <StyledSubjectList>{renderSubjects()}</StyledSubjectList>
 
-      <Header3 style={{ marginTop: '1rem' }}>{price}$ / h</Header3>
+      {user?.userType === 'student' && (
+        <Header3 style={{ marginTop: '1rem' }}>{price}$ / h</Header3>
+      )}
       <Button
         style={{ width: '100%', margin: '1rem 0' }}
         onClick={handleSetCurrentChat}
       >
         Chat
       </Button>
-      <Button style={{ width: '100%' }} secondary>
+      <Button
+        style={{ width: '100%' }}
+        secondary
+        onClick={() => handleDeleteUserChat(_id)}
+      >
         Revoke
       </Button>
     </Container>

@@ -23,4 +23,9 @@ declare global {
     userType: 'teacher' | 'student';
     subjects: SUBJECTS[];
   }
+
+  interface LoginType {
+    token: string;
+    error?: string;
+  }
 }

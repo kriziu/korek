@@ -12,13 +12,13 @@ import Template from './Template';
 import { Link } from 'react-router-dom';
 import useForm from '../../hooks/useForm';
 import { validateEmail } from '../../utils/functions';
-//import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { loggedUserContext } from '../../context/loggedUser';
 
 const { REACT_APP_SERVER_URL } = process.env;
 
 const Login: FC = () => {
-  const { setUser } = useContext(loggedUserContext);
+  const { setToken } = useContext(loggedUserContext);
 
   const [formData, , toggleChecked, handleInputChange, checkValidity] = useForm(
     {
@@ -32,27 +32,27 @@ const Login: FC = () => {
   const history = useHistory();
 
   // TOASTS
-  // const emailErr = () =>
-  //   toast.error('Account with that email not found!', {
-  //     position: 'top-center',
-  //     autoClose: 10000,
-  //     hideProgressBar: false,
-  //     closeOnClick: true,
-  //     pauseOnHover: true,
-  //     draggable: true,
-  //     progress: undefined,
-  //   });
+  const emailErr = () =>
+    toast.error('Account with that email not found!', {
+      position: 'top-center',
+      autoClose: 10000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
 
-  // const passErr = () =>
-  //   toast.error('Password is wrong!', {
-  //     position: 'top-center',
-  //     autoClose: 10000,
-  //     hideProgressBar: false,
-  //     closeOnClick: true,
-  //     pauseOnHover: true,
-  //     draggable: true,
-  //     progress: undefined,
-  //   });
+  const passErr = () =>
+    toast.error('Password is wrong!', {
+      position: 'top-center',
+      autoClose: 10000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -63,13 +63,22 @@ const Login: FC = () => {
     }
 
     axios
-      .post<UserType>(`${REACT_APP_SERVER_URL}/users/login`, {
+      .post<LoginType>(`${REACT_APP_SERVER_URL}/users/login`, {
         email: email.value,
         password: pass.value,
       })
       .then(res => {
-        setUser(res.data);
-        history.push('/chats');
+        const { data } = res;
+        if (data.error) {
+          if (data.error === 'Cannot find user with that email') {
+            emailErr();
+          } else if (data.error === 'Bad password') {
+            passErr();
+          }
+        } else {
+          setToken(data.token);
+          history.push('/');
+        }
       })
       .catch(err => {
         console.log(err);

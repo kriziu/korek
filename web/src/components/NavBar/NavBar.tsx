@@ -1,9 +1,14 @@
-import { FC } from 'react';
-import { Nav } from './NavBar.elements';
+import { FC, useContext } from 'react';
+
 import { Link, useHistory } from 'react-router-dom';
+
+import { Nav } from './NavBar.elements';
 import { Button } from '../Button';
+import { loggedUserContext } from '../../context/loggedUser';
 
 const NavBar: FC = () => {
+  const { user } = useContext(loggedUserContext);
+
   const history = useHistory();
 
   return (
@@ -11,10 +16,12 @@ const NavBar: FC = () => {
       <h3 onClick={() => history.push('/')}>KOREK</h3>
       <ul>
         <li>
-          <Link to="/chats">Chats</Link>
+          <Link to="/">Chats</Link>
         </li>
         <li>
-          <Link to="/discover">Discover Teachers</Link>
+          <Link to="/discover">
+            Discover {user?.userType === 'student' && 'teachers'}
+          </Link>
         </li>
         <li>
           <Link to="/wallet">Wallet</Link>

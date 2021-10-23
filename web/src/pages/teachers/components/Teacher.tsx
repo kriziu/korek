@@ -27,7 +27,7 @@ const Teacher: FC<UserType> = ({
   subjects,
   avatarId,
 }) => {
-  const { user } = useContext(loggedUserContext);
+  const { user, token } = useContext(loggedUserContext);
 
   const [opened, setOpened] = useState(false);
   const [text, setText] = useState('');
@@ -45,13 +45,21 @@ const Teacher: FC<UserType> = ({
 
   const handleInvite = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    axios.post(`${REACT_APP_SERVER_URL}/messages`, {
-      roomId: _id + '_' + user?._id,
-      message: text,
-      from: user?._id,
-    });
-    setOpened(false);
+    if (token && text) {
+      axios.post(
+        `${REACT_APP_SERVER_URL}/messages`,
+        {
+          roomId: _id + '_' + user?._id,
+          message: text,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setOpened(false);
+    }
   };
 
   return (

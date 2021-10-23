@@ -52,6 +52,10 @@ io.on('connection', (socket: Socket) => {
   socket.on('send', (msg: MessageType) => {
     io.to(msg.roomId).emit('receive', msg);
   });
+
+  socket.on('deleteRoom', (id: string) => {
+    io.to(id).emit('deleted', id);
+  });
 });
 
 server.listen(port);

@@ -9,9 +9,9 @@ export const authenticateToken: RequestHandler = (req, res, next) => {
     jwt.verify(
       token,
       process.env.ACCESS_TOKEN_SECRET as string,
-      (err: any, user: any) => {
+      (err: any, data: any) => {
         if (err) return res.sendStatus(403);
-        req.body.authId = user._id;
+        req.body.authId = data.user._id;
         next();
       }
     );

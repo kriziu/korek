@@ -18,21 +18,26 @@ export interface CurrentChat {
 }
 
 const Chats: FC = () => {
-  const [chat, setChat] = useState<CurrentChat>();
+  const [chat, setChat] = useState<CurrentChat>({
+    firstName: '',
+    lastName: '',
+    avatarId: AVATARS.FEMALE_1,
+    roomId: '',
+  });
 
   return (
     <div>
       <div style={{ minHeight: '100vh' }}>
         <NavBar />
         <div style={{ display: 'flex' }}>
-          <UserList setCurrentChat={setChat} />
+          <UserList setCurrentChat={setChat} chat={chat} />
           <SwitchTransition>
             <CSSTransition
               timeout={200}
               key={chat?.roomId}
               classNames="fade-fast"
             >
-              {chat ? (
+              {chat.roomId ? (
                 <Chat {...chat} />
               ) : (
                 <Center

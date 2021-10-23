@@ -92,9 +92,6 @@ const TeacherList: FC = () => {
             return ret;
           });
 
-    console.log(tempTeachers);
-    console.log(teachers);
-
     if (!tempTeachers[0] && found) setFound(0);
     else if (tempTeachers[0] && !found) setFound(1);
 

@@ -9,9 +9,11 @@ import { authenticateToken } from './authenticationController';
 const router = Router();
 
 // GETTING ALL USERS THAT CHATTED BY USER ID
-router.get('/chatted/:authId', async (req, res) => {
+router.get('/chatted', authenticateToken, async (req, res) => {
   try {
-    const { authId } = req.params;
+    const { authId } = req.body;
+
+    console.log(authId);
 
     let roomsId: string[] = await Message.find({
       roomId: { $regex: '.*' + authId + '.*' },
@@ -106,7 +108,13 @@ router.post('/', async (req, res) => {
 
     try {
       const newUser = await user.save();
-      res.status(201).json(newUser);
+
+      const token = jwt.sign(
+        { user },
+        process.env.ACCESS_TOKEN_SECRET as string
+      );
+
+      res.json({ token: token });
     } catch (err) {
       const msg = (err as Error).message;
       if (msg) return res.status(400).send({ error: msg });
@@ -130,13 +138,12 @@ router.post('/login', async (req, res) => {
 
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
-      const { _id } = user;
       const token = jwt.sign(
-        { _id },
+        { user },
         process.env.ACCESS_TOKEN_SECRET as string
       );
 
-      res.json(user);
+      res.json({ token: token });
     } else res.json({ error: 'Bad password' });
   } catch (err) {
     const msg = (err as Error).message;

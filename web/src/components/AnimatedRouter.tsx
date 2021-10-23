@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect } from 'react';
 
-import { Route, Switch, useHistory, useLocation } from 'react-router';
+import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { loggedUserContext } from '../context/loggedUser';
 import Chats from '../pages/Chats/Chats';
@@ -22,13 +22,14 @@ const AnimatedRouter: FC = (): JSX.Element => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     if (
-      location.pathname !== '/' &&
-      location.pathname !== '/register' &&
-      location.pathname !== '/login' &&
-      !user
-    ) {
+      (location.pathname !== '/' &&
+        location.pathname !== '/register' &&
+        location.pathname !== '/login' &&
+        !user) ||
+      (user &&
+        (location.pathname === '/login' || location.pathname === '/register'))
+    )
       history.push('/');
-    }
   }, [location, user, history]);
 
   return (
@@ -40,7 +41,9 @@ const AnimatedRouter: FC = (): JSX.Element => {
             location.pathname === '/login' || location.pathname === '/register'
               ? 'right'
               : location.pathname === '/'
-              ? 'left'
+              ? user?._id
+                ? 'fade'
+                : 'left'
               : 'fade'
           }
           key={location.pathname}
@@ -54,13 +57,13 @@ const AnimatedRouter: FC = (): JSX.Element => {
               <Login />
             </Route>
             <Route exact path="/discover">
-              <Teachers />
-            </Route>
-            <Route exact path="/chats">
-              <Chats />
+              {user?.userType === 'teacher' ? <div>1</div> : <Teachers />}
             </Route>
             <Route exact path="/">
-              <Hero />
+              {user?._id ? <Chats /> : <Hero />}
+            </Route>
+            <Route path="*">
+              <Redirect to="/" />
             </Route>
           </Switch>
         </CSSTransition>

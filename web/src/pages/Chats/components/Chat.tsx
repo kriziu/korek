@@ -1,6 +1,5 @@
 import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 
-import { io } from 'socket.io-client';
 import axios from 'axios';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
@@ -11,37 +10,40 @@ import { Bottom, Message, Messages, StyledInput, Top } from './Chat.elements';
 import '../../../styles/animations.css';
 import { CurrentChat } from '../Chats';
 import { loggedUserContext } from '../../../context/loggedUser';
+import { socket } from '../../../utils/socket';
 
 const { REACT_APP_SERVER_URL } = process.env;
 
-const socket = io(REACT_APP_SERVER_URL || '');
-
 const Chat: FC<CurrentChat> = ({ firstName, lastName, avatarId, roomId }) => {
-  const { user } = useContext(loggedUserContext);
+  const { user, token } = useContext(loggedUserContext);
 
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [message, setMessage] = useState('');
   const ref = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
-    socket.emit('joinRoom', roomId);
+    if (token) {
+      socket.emit('joinRoom', roomId);
 
-    socket.on('receive', (msg: MessageType) => {
-      setMessages(prev => [...prev, msg]);
-    });
-
-    axios
-      .get<MessageType[]>(`${REACT_APP_SERVER_URL}/messages/${roomId}`)
-      .then(res => {
-        setMessages(res.data);
-
-        ref.current?.scrollTo({
-          top: ref.current.scrollHeight,
-        });
+      socket.on('receive', (msg: MessageType) => {
+        setMessages(prev => [...prev, msg]);
       });
 
-    console.log(user);
-  }, [roomId, user]);
+      axios
+        .get<MessageType[]>(`${REACT_APP_SERVER_URL}/messages/${roomId}`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then(res => {
+          setMessages(res.data);
+
+          ref.current?.scrollTo({
+            top: ref.current.scrollHeight,
+          });
+        });
+    }
+  }, [roomId, user, token]);
 
   useEffect(() => {
     messages.length &&
@@ -60,11 +62,19 @@ const Chat: FC<CurrentChat> = ({ firstName, lastName, avatarId, roomId }) => {
       message,
       from: user?._id,
     });
-    axios.post(`${REACT_APP_SERVER_URL}/messages`, {
-      roomId,
-      message,
-      from: user?._id,
-    });
+    token &&
+      axios.post(
+        `${REACT_APP_SERVER_URL}/messages`,
+        {
+          roomId,
+          message,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
     setMessage('');
   };
 
@@ -88,7 +98,7 @@ const Chat: FC<CurrentChat> = ({ firstName, lastName, avatarId, roomId }) => {
           {firstName} {lastName}
         </Header3>
         <Button>Enter room</Button>
-        <Button secondary>Pay</Button>
+        {user?.userType === 'student' && <Button secondary>Pay</Button>}
       </Top>
       <div style={{ width: '80%' }}>
         <Messages ref={ref}>
