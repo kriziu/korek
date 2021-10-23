@@ -280,14 +280,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(height: 16),
-                          Center(
+                          const SizedBox(height: 16),
+                          const Center(
                               child: Text(
                             "No teachers Found",
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w700),
                           )),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           Center(
                               child: SvgPicture.asset(
                             'assets/hero_no_results.svg',

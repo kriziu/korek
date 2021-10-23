@@ -23,6 +23,8 @@ class AuthProvider with ChangeNotifier {
         .containsKey('error')) {
       throw Exception(jsonDecode(response.body)['error']);
     } else {
+      // final token = jsonDecode(response.body);
+      //Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
       _user = User.fromJson(jsonDecode(response.body));
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString("id", user!.id);

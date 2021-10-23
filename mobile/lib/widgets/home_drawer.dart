@@ -3,6 +3,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:korek/screens/privacy_policy_screen.dart';
 import 'package:korek/screens/profile_screen.dart';
 import 'package:korek/screens/sources_screen.dart';
+import 'package:korek/screens/wallet_screen.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({Key? key}) : super(key: key);
@@ -29,6 +30,19 @@ class HomeDrawer extends StatelessWidget {
                   ),
                 ],
               )),
+          ListTile(
+            leading: const Icon(
+              Icons.account_balance_wallet,
+              color: Colors.black,
+            ),
+            title: const Text('Wallet'),
+            onTap: () {
+              Navigator.of(context)
+                ..pop()
+                ..push(platformPageRoute(
+                    context: context, builder: (context) => const WalletScreen()));
+            },
+          ),
           ListTile(
             leading: const Icon(
               Icons.settings,
