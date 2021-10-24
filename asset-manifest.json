@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/korek/static/css/main.fa05643a.chunk.css",
+    "main.js": "/korek/static/js/main.251351bb.chunk.js",
+    "main.js.map": "/korek/static/js/main.251351bb.chunk.js.map",
+    "runtime-main.js": "/korek/static/js/runtime-main.d69e8be4.js",
+    "runtime-main.js.map": "/korek/static/js/runtime-main.d69e8be4.js.map",
+    "static/css/2.f4c56af9.chunk.css": "/korek/static/css/2.f4c56af9.chunk.css",
+    "static/js/2.39a1ce37.chunk.js": "/korek/static/js/2.39a1ce37.chunk.js",
+    "static/js/2.39a1ce37.chunk.js.map": "/korek/static/js/2.39a1ce37.chunk.js.map",
+    "index.html": "/korek/index.html",
+    "static/css/2.f4c56af9.chunk.css.map": "/korek/static/css/2.f4c56af9.chunk.css.map",
+    "static/css/main.fa05643a.chunk.css.map": "/korek/static/css/main.fa05643a.chunk.css.map",
+    "static/js/2.39a1ce37.chunk.js.LICENSE.txt": "/korek/static/js/2.39a1ce37.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d69e8be4.js",
+    "static/css/2.f4c56af9.chunk.css",
+    "static/js/2.39a1ce37.chunk.js",
+    "static/css/main.fa05643a.chunk.css",
+    "static/js/main.251351bb.chunk.js"
+  ]
+}
