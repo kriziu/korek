@@ -25,7 +25,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _controller = ScrollController();
   final _inputController = TextEditingController();
   late final Message message;
-  late IO.Socket socket;
+  final IO.Socket socket = appSocket;
 
   Future<void> _fetchMessages() async {
     try {
@@ -40,29 +40,20 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     final currentUser = Provider.of<AuthProvider>(context, listen: false).user;
-
     final roomId = currentUser!.userType == "teacher"
         ? currentUser.id + "_" + widget.chatUser.id
         : widget.chatUser.id + "_" + currentUser.id;
-    socket = IO.io(
-      BASE_URL,
-      <String, dynamic>{
-        'transports': ['websocket'],
-      },
-    );
-    socket.onConnect((data) {
-      socket.emit("joinRoom", roomId);
-      socket.on("receive", (msg) {
-        Provider.of<MessagesProvider>(context, listen: false)
-            .receiveMessage(Message.fromJson(msg));
-      });
+
+    socket.on("receive", (msg) {
+      Provider.of<MessagesProvider>(context, listen: false)
+          .receiveMessage(Message.fromJson(msg));
     });
-    socket.connect();
 
     message = Message(roomId, currentUser.id, "");
     _fetchMessages();
     super.initState();
   }
+
 
   Future<void> _sendMessage() async {
     if (_inputController.text.isEmpty) {

@@ -13,7 +13,7 @@ class MessagesProvider with ChangeNotifier {
 
   List<Message> get messages => [..._messages];
 
-  final List<User> _chatted = [];
+  List<User> _chatted = [];
 
   List<User> get chatted => [..._chatted];
 
@@ -35,7 +35,7 @@ class MessagesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchChatted(String id) async {
+  Future<void> fetchChatted() async {
     final token = await TokenManager.token;
     try {
       _chatted.clear();
@@ -76,5 +76,26 @@ class MessagesProvider with ChangeNotifier {
   void receiveMessage(Message message) {
     _messages.add(message);
     notifyListeners();
+  }
+  void clearMessages(){
+    _messages = [];
+    notifyListeners();
+  }
+
+  Future<void> deleteChat(String roomId,String userId) async{
+      final token = await TokenManager.token;
+      final response = await http.delete(
+        Uri.parse('$BASE_URL/messages/$roomId'),
+        headers: <String, String>{
+          HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: token,
+        },
+      );
+      if ((jsonDecode(response.body) as Map<String, dynamic>)
+          .containsKey('error')) {
+        throw Exception(jsonDecode(response.body)['error']);
+      }
+      _chatted = _chatted.where((user) => user.id != userId).toList();
+      notifyListeners();
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:korek/helpers/helpers.dart';
 import 'package:korek/models/message.dart';
 import 'package:korek/models/user.dart';
 import 'package:korek/providers/auth_provider.dart';
@@ -33,15 +34,20 @@ class _TeacherDetailsScreenState extends State<TeacherDetailsScreen> {
             const SnackBar(content: Text("Write bigger message")));
         return;
       }
-
       showPlatformDialog(
           context: context,
           builder: (_) => const LoadingDialog(title: "Sending..."),
           barrierDismissible: false);
 
+      final roomId = widget.teacher.id + '_' + Provider.of<AuthProvider>(context,listen: false).user!.id;
+      appSocket.emit('createRoom', roomId);
+      appSocket.emit('joinRoom', roomId);
+
       await Provider.of<MessagesProvider>(context, listen: false).sendMessage(
           Message(widget.teacher.id + "_" + currentUser!.id, currentUser.id,
               _controller.text));
+      Provider.of<MessagesProvider>(context, listen: false).fetchChatted();
+
       Navigator.of(context)
         ..pop()
         ..pop()
@@ -217,8 +223,8 @@ class _TeacherDetailsScreenState extends State<TeacherDetailsScreen> {
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .primaryColor)),
-                                      onPressed: () {
-                                        _sendMessage();
+                                      onPressed: () async {
+                                        await _sendMessage();
                                       },
                                     ),
                                   ],

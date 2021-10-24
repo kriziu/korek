@@ -4,23 +4,68 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:korek/helpers/helpers.dart';
 import 'package:korek/models/rating.dart';
 import 'package:korek/models/user.dart';
+import 'package:korek/providers/auth_provider.dart';
+import 'package:korek/providers/messages_provider.dart';
 import 'package:korek/screens/chat_screen.dart';
 import 'package:korek/screens/pay_screen.dart';
 import 'package:korek/widgets/adaptive_button.dart';
+import 'package:provider/provider.dart';
 
 class ChatItem extends StatelessWidget {
   final User user;
-  const ChatItem(this.user, {Key? key}) : super(key: key);
 
+  const ChatItem(this.user, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
+      onLongPress: () => showPlatformDialog(
+          context: context,
+          builder: (context) => PlatformAlertDialog(
+                title: const Text(
+                  "Are you sure to delete this chat?",
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w700),
+                ),
+                actions: [
+                  PlatformDialogAction(
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  PlatformDialogAction(
+                    child: Text("Delete",
+                        style:
+                            TextStyle(color: Theme.of(context).primaryColor)),
+                    onPressed: () {
+                      final currentUser =
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .user;
+                      if (currentUser != null) {
+                        final roomId = currentUser.userType == "teacher"
+                            ? currentUser.id + "_" + user.id
+                            : user.id + "_" + currentUser.id;
+                        appSocket.emit(
+                          "deleteRoom",roomId
+                        );
+                        Provider.of<MessagesProvider>(context,listen: false).deleteChat(roomId, user.id);
+                      }
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              )),
       onTap: () {
         FocusScope.of(context).unfocus();
+        Provider.of<MessagesProvider>(context, listen: false).clearMessages();
         Navigator.of(context).push(platformPageRoute(
             context: context, builder: (context) => ChatScreen(user)));
       },
@@ -96,7 +141,9 @@ class ChatItem extends StatelessWidget {
                           child: AdaptiveButton(
                             smallPadding: true,
                             onPressed: () {
-                              Navigator.of(context).push(platformPageRoute(context:context,builder: (context) => PayScreen(user)));
+                              Navigator.of(context).push(platformPageRoute(
+                                  context: context,
+                                  builder: (context) => PayScreen(user)));
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -125,10 +172,11 @@ class ChatItem extends StatelessWidget {
                             smallPadding: true,
                             outlined: true,
                             onPressed: () {
-                              final Rating rating = Rating(5,"");
+                              final Rating rating = Rating(5, "");
                               showPlatformDialog(
                                   context: context,
-                                  builder: (context) =>_ratingDialog(context,rating));
+                                  builder: (context) =>
+                                      _ratingDialog(context, rating));
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -163,64 +211,60 @@ class ChatItem extends StatelessWidget {
     );
   }
 
-
-  Widget _ratingDialog(BuildContext context,Rating rating) => PlatformAlertDialog(
-    title: Text(
-      "Add rate to ${user.firstName} ${user.lastName}",
-      style: const TextStyle(
-          fontWeight: FontWeight.w700,
-          color: Colors.black),
-    ),
-    content: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Center(
-          child: RatingBar.builder(
-            initialRating: 5,
-            minRating: 1,
-            direction: Axis.horizontal,
-            allowHalfRating: true,
-            itemCount: 5,
-            glowColor: Colors.amber,
-            itemPadding: const EdgeInsets.symmetric(
-                horizontal: 4.0),
-            itemBuilder: (context, _) => Icon(
-              Icons.star,
-              color: Theme.of(context).primaryColor,
+  Widget _ratingDialog(BuildContext context, Rating rating) =>
+      PlatformAlertDialog(
+        title: Text(
+          "Add rate to ${user.firstName} ${user.lastName}",
+          style:
+              const TextStyle(fontWeight: FontWeight.w700, color: Colors.black),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Center(
+              child: RatingBar.builder(
+                initialRating: 5,
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                glowColor: Colors.amber,
+                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => Icon(
+                  Icons.star,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onRatingUpdate: (r) {
+                  rating.rating = r;
+                },
+              ),
             ),
-            onRatingUpdate: (r) {
-              rating.rating = r;
+            const SizedBox(
+              height: 16,
+            ),
+            PlatformTextField(
+              onChanged: (val) => rating.rateMessage = val,
+              hintText: 'Optional Message',
+              minLines: 3,
+              maxLines: 5,
+            )
+          ],
+        ),
+        actions: [
+          PlatformDialogAction(
+            child: Text(
+              "Cancel",
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
             },
           ),
-        ),
-        const SizedBox(height: 16,),
-        PlatformTextField(
-          onChanged: (val) => rating.rateMessage = val,
-          hintText: 'Optional Message',
-          minLines: 3,
-          maxLines: 5,
-        )
-      ],
-    ),
-    actions: [
-      PlatformDialogAction(
-        child: Text(
-          "Cancel",
-          style: TextStyle(
-              color: Theme.of(context)
-                  .primaryColor),
-        ),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      ),
-      PlatformDialogAction(
-        child: Text("Add Rate",
-            style: TextStyle(
-                color: Theme.of(context)
-                    .primaryColor)),
-        onPressed: () {},
-      ),
-    ],
-  );
+          PlatformDialogAction(
+            child: Text("Add Rate",
+                style: TextStyle(color: Theme.of(context).primaryColor)),
+            onPressed: () {},
+          ),
+        ],
+      );
 }

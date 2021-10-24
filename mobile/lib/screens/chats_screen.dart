@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:korek/helpers/helpers.dart';
 import 'package:korek/models/filters.dart';
 import 'package:korek/models/user.dart';
 import 'package:korek/providers/auth_provider.dart';
@@ -24,11 +25,22 @@ class _ChatsScreenState extends State<ChatsScreen> {
   final _searchController = TextEditingController();
   String? searchStr;
   List<User> chats = [];
+  final socket = appSocket;
 
-  Future<void> _fetchChats(String id) async {
+  Future<void> _fetchChats() async {
     try {
       await Provider.of<MessagesProvider>(context, listen: false)
-          .fetchChatted(id);
+          .fetchChatted();
+      final currentUser =
+          Provider.of<AuthProvider>(context, listen: false).user;
+      Provider.of<MessagesProvider>(context, listen: false)
+          .chatted
+          .forEach((user) {
+        final roomId = currentUser!.userType == 'teacher'
+            ? currentUser.id + '_' + user.id
+            : user.id + '_' + currentUser.id;
+        socket.emit('joinRoom', roomId);
+      });
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Error : ${e.toString()}")));
@@ -38,10 +50,19 @@ class _ChatsScreenState extends State<ChatsScreen> {
   @override
   void initState() {
     super.initState();
-    final user = Provider.of<AuthProvider>(context, listen: false).user;
-    if (user != null) {
-      _fetchChats(user.id);
-    }
+    _fetchChats();
+
+    socket.on("created", (id) {
+      final ids = id.toString().split("_");
+      final user = Provider.of<AuthProvider>(context, listen: false).user;
+
+      if (user != null && ids.contains(user.id)) {
+        _fetchChats();
+      }
+    });
+    socket.on("deleted", (id) {
+      _fetchChats();
+    });
   }
 
   void sortChats(List<User> chats) {
@@ -68,15 +89,13 @@ class _ChatsScreenState extends State<ChatsScreen> {
   }
 
   void filterChats(List<User> allChats) {
-    if (searchStr!=null) {
+    if (searchStr != null) {
       chats = allChats
           .where((teacher) =>
               teacher.firstName
                   .toLowerCase()
                   .contains(searchStr!.toLowerCase()) ||
-              teacher.lastName
-                  .toLowerCase()
-                  .contains(searchStr!.toLowerCase()))
+              teacher.lastName.toLowerCase().contains(searchStr!.toLowerCase()))
           .toList();
     }
   }
@@ -95,7 +114,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
       body: SafeArea(
         child: RefreshIndicator(
           color: Theme.of(context).primaryColor,
-          onRefresh: () async => await _fetchChats(user!.id),
+          onRefresh: () async => await _fetchChats(),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
