@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 
 import {
   CSSTransition,
@@ -13,6 +13,7 @@ import { List, NotFound, SubjectList } from './TeacherList.elements';
 import '../../../styles/animations.css';
 import { Header2 } from '../../../components/Header';
 import { SUBJECTS } from '../../../contants';
+import { loggedUserContext } from '../../../context/loggedUser';
 
 const subjects: string[] = Object.values(SUBJECTS).map(subject => subject);
 
@@ -20,17 +21,46 @@ subjects.unshift('all');
 
 const { REACT_APP_SERVER_URL } = process.env;
 
-const TeacherList: FC = () => {
-  const [active, setActive] = useState<typeof subjects>(['all']);
+const TeacherList: FC<{ search: string }> = ({ search }) => {
+  const { user, token } = useContext(loggedUserContext);
+
+  const [active, setActive] = useState<typeof subjects>([]);
   const [teachers, setTeachers] = useState<UserType[]>([]);
   const [found, setFound] = useState(1);
 
   useEffect(() => {
+    setFound(1);
+  }, [search]);
+
+  useEffect(() => {
+    user && setActive(user.subjects);
+
     axios.get<UserType[]>(`${REACT_APP_SERVER_URL}/users`).then(res => {
-      setTeachers(res.data);
-      setFound(1);
+      if (token && res.data.length) {
+        axios
+          .get<UserType[]>(`${REACT_APP_SERVER_URL}/users/chatted`, {
+            headers: {
+              Authorization: token,
+            },
+          })
+          .then(res1 => {
+            const toSet = res.data.filter(teacher => {
+              let isReturn = true;
+
+              res1.data.forEach(teacher1 => {
+                if (teacher._id === teacher1._id) isReturn = false;
+              });
+
+              return isReturn;
+            });
+
+            setTeachers(toSet);
+
+            if (toSet.length) setFound(1);
+          });
+      }
     });
-  }, []);
+  }, [token, user]);
 
   const handleActiveClick = (subject: string) => {
     setFound(1);
@@ -81,25 +111,37 @@ const TeacherList: FC = () => {
     const tempTeachers =
       active[0] === 'all'
         ? teachers
-        : teachers.filter(teacher => {
-            let ret = false;
-            teacher.subjects.forEach(subject => {
-              active.forEach(act => {
-                if (act === subject) ret = true;
+        : teachers
+            .filter(teacher => {
+              let ret = false;
+              teacher.subjects.forEach(subject => {
+                active.forEach(act => {
+                  if (act === subject) ret = true;
+                });
               });
-            });
 
-            return ret;
-          });
+              return ret;
+            })
+            .filter(teacher => {
+              return (
+                teacher.firstName.toLowerCase() +
+                ' ' +
+                teacher.lastName.toLowerCase()
+              ).includes(search.toLowerCase());
+            });
 
     if (!tempTeachers[0] && found) setFound(0);
     else if (tempTeachers[0] && !found) setFound(1);
+
+    const deleteFromList = (id: string) => {
+      setTeachers(prev => prev.filter(teacher => teacher._id !== id));
+    };
 
     return tempTeachers.map(teacher => {
       return (
         <CSSTransition key={teacher._id} timeout={200} classNames="slide">
           <li>
-            <Teacher {...teacher} />
+            <Teacher {...teacher} deleteFromList={deleteFromList} />
           </li>
         </CSSTransition>
       );

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import { Button } from '../../components/Button';
 import { Header1, Header2, SmallHeader } from '../../components/Header';
@@ -10,6 +10,9 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import TeacherList from './components/TeacherList';
 
 const Teachers: FC = () => {
+  const [search, setSearch] = useState('');
+  const [tempSearch, setTempSearch] = useState('');
+
   return (
     <div>
       <div style={{ minHeight: '100vh' }}>
@@ -20,16 +23,26 @@ const Teachers: FC = () => {
         <SmallHeader style={{ marginBottom: '5rem' }}>
           We believe everyone can make something amazing!
         </SmallHeader>
-
-        <Center style={{ marginBottom: '5rem' }}>
-          <InputIcon style={{ width: '60rem' }}>
-            <AiOutlineSearch />
-            <Input placeholder="Search for teachers" />
-          </InputIcon>
-          <Button style={{ padding: '1.4rem 4rem' }}>Search</Button>
-        </Center>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            setSearch(tempSearch);
+          }}
+        >
+          <Center style={{ marginBottom: '5rem' }}>
+            <InputIcon style={{ width: '60rem' }}>
+              <AiOutlineSearch />
+              <Input
+                placeholder="Search for teachers"
+                value={tempSearch}
+                onChange={e => setTempSearch(e.target.value)}
+              />
+            </InputIcon>
+            <Button style={{ padding: '1.4rem 4rem' }}>Search</Button>
+          </Center>
+        </form>
         <Header2>Popular Teachers</Header2>
-        <TeacherList />
+        <TeacherList search={search} />
       </div>
       <Footer />
     </div>

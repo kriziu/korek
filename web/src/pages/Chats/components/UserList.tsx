@@ -22,6 +22,7 @@ const UserList: FC<{
 }> = ({ setCurrentChat, chat }) => {
   const { token, user } = useContext(loggedUserContext);
 
+  const [search, setSearch] = useState('');
   const [users, setUsers] = useState<UserType[]>([]);
 
   useEffect(() => {
@@ -117,20 +118,28 @@ const UserList: FC<{
   };
 
   const renderUsers = (): JSX.Element[] => {
-    return users.map(user => {
-      return (
-        <CSSTransition timeout={200} classNames="slide" key={user._id}>
-          <li className="item">
-            <User
-              {...user}
-              setCurrentChat={setCurrentChat}
-              chat={chat}
-              handleDeleteUserChat={handleDeleteUserChat}
-            />
-          </li>
-        </CSSTransition>
-      );
-    });
+    return users
+      .filter(teacher => {
+        return (
+          teacher.firstName.toLowerCase() +
+          ' ' +
+          teacher.lastName.toLowerCase()
+        ).includes(search.toLowerCase());
+      })
+      .map(user => {
+        return (
+          <CSSTransition timeout={200} classNames="slide" key={user._id}>
+            <li className="item">
+              <User
+                {...user}
+                setCurrentChat={setCurrentChat}
+                chat={chat}
+                handleDeleteUserChat={handleDeleteUserChat}
+              />
+            </li>
+          </CSSTransition>
+        );
+      });
   };
 
   return (
@@ -140,7 +149,11 @@ const UserList: FC<{
       </Header3>
       <InputIcon>
         <AiOutlineSearch />
-        <Input placeholder="Search" />
+        <Input
+          placeholder="Search"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
       </InputIcon>
 
       <List>

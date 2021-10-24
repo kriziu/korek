@@ -1,5 +1,5 @@
 import { createContext, FC, useEffect, useState } from 'react';
-import { decodeToken } from 'react-jwt';
+import decode from 'jwt-decode';
 
 export const loggedUserContext = createContext<{
   user: UserType | null;
@@ -16,7 +16,7 @@ const LoggedUserProvider: FC = ({ children }) => {
     const localToken = localStorage.getItem('token');
 
     if (localToken) {
-      const decoded = decodeToken(localToken) as {
+      const decoded = decode(localToken) as {
         iat: number;
         user: UserType;
       };
@@ -29,11 +29,14 @@ const LoggedUserProvider: FC = ({ children }) => {
   useEffect(() => {
     if (token) {
       localStorage.setItem('token', token);
-      const decoded = decodeToken(token) as {
+      const decoded = decode(token) as {
         iat: number;
         user: UserType;
       };
       decoded && setUser(decoded.user);
+    } else {
+      localStorage.removeItem('token');
+      setUser(null);
     }
   }, [token]);
 

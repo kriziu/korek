@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import jwt from 'jsonwebtoken';
+
 import User from '../models/user.model';
 import { authenticateToken } from './authenticationController';
 
@@ -28,7 +30,9 @@ router.post('/pay', authenticateToken, async (req, res) => {
     await user.save();
     await userToPay.save();
 
-    res.json(user);
+    const token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET as string);
+
+    res.json({ token: token });
   } catch (err) {
     const msg = (err as Error).message;
     if (msg) return res.status(400).send({ error: msg });
@@ -52,7 +56,9 @@ router.post('/deposit', authenticateToken, async (req, res) => {
     user.wallet += much;
     await user.save();
 
-    res.json(user);
+    const token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET as string);
+
+    res.json({ token: token });
   } catch (err) {
     const msg = (err as Error).message;
     if (msg) return res.status(400).send({ error: msg });
@@ -80,7 +86,9 @@ router.post('/withdraw', authenticateToken, async (req, res) => {
     user.wallet -= much;
     await user.save();
 
-    res.json(user);
+    const token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET as string);
+
+    res.json({ token: token });
   } catch (err) {
     const msg = (err as Error).message;
     if (msg) return res.status(400).send({ error: msg });

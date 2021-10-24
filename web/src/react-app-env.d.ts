@@ -19,9 +19,18 @@ declare global {
     lastName: string;
     email: string;
     price: number;
+    rate: number;
+    wallet: number;
     avatarId: AVATARS;
     userType: 'teacher' | 'student';
     subjects: SUBJECTS[];
+  }
+
+  interface RateType {
+    teacherId: string;
+    from: any;
+    stars: number;
+    message: string;
   }
 
   interface LoginType {

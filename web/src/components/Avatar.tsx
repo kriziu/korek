@@ -33,9 +33,18 @@ const GridList = styled.div`
   gap: 3.5rem;
 `;
 
-const Avatar: FC<{ id: AVATARS }> = ({ id }) => {
+type Sizes = {
+  [key: string]: string;
+};
+
+const Avatar: FC<{ id: AVATARS; size?: string }> = ({ id, size = 'md' }) => {
+  const sizes: Sizes = {
+    md: '',
+    lg: '15rem',
+  };
+
   return (
-    <Container>
+    <Container style={{ minWidth: sizes[size], minHeight: sizes[size] }}>
       <img src={`/images/${id}.svg`} alt="Avatar" />
     </Container>
   );
@@ -73,7 +82,7 @@ const AvatarSelector: FC<{
   return (
     <Modal close={close}>
       <>
-        <Header2>Select Avatar</Header2>
+        <Header2 style={{ marginBottom: '2rem' }}>Select Avatar</Header2>
         <Center>
           <GridList>{renderAvatars()}</GridList>
         </Center>

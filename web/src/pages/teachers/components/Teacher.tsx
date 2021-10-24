@@ -20,13 +20,19 @@ import { socket } from '../../../utils/socket';
 
 const { REACT_APP_SERVER_URL } = process.env;
 
-const Teacher: FC<UserType> = ({
+interface TeacherProps extends UserType {
+  deleteFromList: (id: string) => void;
+}
+
+const Teacher: FC<TeacherProps> = ({
   _id,
   firstName,
   lastName,
   price,
   subjects,
   avatarId,
+  rate,
+  deleteFromList,
 }) => {
   const { user, token } = useContext(loggedUserContext);
 
@@ -63,6 +69,7 @@ const Teacher: FC<UserType> = ({
           },
         }
       );
+      deleteFromList(_id);
       setOpened(false);
     }
   };
@@ -77,7 +84,9 @@ const Teacher: FC<UserType> = ({
 
       <Rating>
         <AiFillStar />
-        <Header3>4.7 | {price}$ / h</Header3>
+        <Header3>
+          {rate} | {price}$ / h
+        </Header3>
       </Rating>
       <Button style={{ width: '100%' }} onClick={() => setOpened(true)}>
         Choose

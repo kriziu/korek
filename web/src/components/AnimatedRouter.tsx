@@ -3,11 +3,12 @@ import { FC, useContext, useEffect } from 'react';
 import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { loggedUserContext } from '../context/loggedUser';
-import Chats from '../pages/Chats/Chats';
+import Chats from '../pages/chats/Chats';
 
 import Hero from '../pages/hero/Hero';
 import Login from '../pages/login/Login';
 import Register from '../pages/login/Register';
+import Profile from '../pages/profile/Profile';
 import Teachers from '../pages/teachers/Teachers';
 
 import '../styles/animations.css';
@@ -21,13 +22,14 @@ const AnimatedRouter: FC = (): JSX.Element => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
+    const { pathname } = location;
+
     if (
-      (location.pathname !== '/' &&
-        location.pathname !== '/register' &&
-        location.pathname !== '/login' &&
+      (pathname !== '/' &&
+        pathname !== '/register' &&
+        pathname !== '/login' &&
         !user) ||
-      (user &&
-        (location.pathname === '/login' || location.pathname === '/register'))
+      (user && (pathname === '/login' || pathname === '/register'))
     )
       history.push('/');
   }, [location, user, history]);
@@ -50,6 +52,9 @@ const AnimatedRouter: FC = (): JSX.Element => {
           unmountOnExit
         >
           <Switch location={location}>
+            <Route exact path="/profile">
+              <Profile />
+            </Route>
             <Route exact path="/register">
               <Register />
             </Route>

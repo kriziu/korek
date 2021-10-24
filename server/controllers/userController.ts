@@ -13,8 +13,6 @@ router.get('/chatted', authenticateToken, async (req, res) => {
   try {
     const { authId } = req.body;
 
-    console.log(authId);
-
     let roomsId: string[] = await Message.find({
       roomId: { $regex: '.*' + authId + '.*' },
     })
@@ -60,8 +58,6 @@ router.get('/', async (req, res) => {
     const teachersWithSubjects = teachers.filter(teacher =>
       teacher.subjects.length === 0 ? false : true
     );
-
-    console.log(req.body.authId);
 
     const subjects: Subjects[] = req.body.subjects;
 
@@ -115,7 +111,6 @@ router.post('/', async (req, res) => {
     res.json({ token: token });
   } catch (err) {
     const msg = (err as Error).message;
-    console.log(msg);
     if (msg) return res.status(500).send({ error: msg });
     res.status(500).send();
   }
@@ -153,7 +148,10 @@ router.patch('/', authenticateToken, async (req, res) => {
       req.body,
       { new: true }
     );
-    res.json(user);
+
+    const token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET as string);
+
+    res.json({ token: token });
   } catch (err) {
     const msg = (err as Error).message;
     if (msg) return res.status(500).send({ error: msg });
