@@ -10,8 +10,11 @@ import 'package:korek/models/user.dart';
 
 class UsersProvider with ChangeNotifier {
   final List<User> _teachers = [];
-
   List<User> get teachers => [..._teachers];
+
+  final List<Rating> _ratings = [];
+  List<Rating> get ratings => [..._ratings];
+
 
   Future<void> fetchTeachers() async {
     _teachers.clear();
@@ -42,6 +45,23 @@ class UsersProvider with ChangeNotifier {
     } else {
       await fetchTeachers();
     }
+  }
+
+
+  Future<void> getUserRatings(String id) async {
+    _ratings.clear();
+    final token = await TokenManager.token;
+    final response = await http.get(Uri.parse('$BASE_URL/rates/$id'),
+        headers: <String, String>{
+          HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: token,
+        },
+    );
+    final jsonData = jsonDecode(response.body) as List<dynamic>;
+    final data = jsonData.map((rating) => Rating.fromJson(rating)).toList();
+    _ratings.addAll(data);
+    print(_ratings);
+    notifyListeners();
   }
 
 }

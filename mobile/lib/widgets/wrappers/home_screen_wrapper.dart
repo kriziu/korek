@@ -4,6 +4,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:korek/providers/auth_provider.dart';
 import 'package:korek/screens/chats_screen.dart';
 import 'package:korek/screens/home_screen.dart';
+import 'package:korek/screens/reviews_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreenWrapper extends StatefulWidget {
@@ -15,31 +16,38 @@ class HomeScreenWrapper extends StatefulWidget {
 
 class _HomeScreenWrapperState extends State<HomeScreenWrapper> {
   final views = [const HomeScreen(), const ChatsScreen()];
-
+  List<Widget> teacherViews = [];
   int index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    teacherViews = [const ChatsScreen(), ReviewsScreen(Provider.of<AuthProvider>(context,listen: false).user)];
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<AuthProvider>(context).user;
 
     return PlatformScaffold(
-        bottomNavBar: (user != null && user.userType == "student")
-            ? PlatformNavBar(
+        bottomNavBar: PlatformNavBar(
                 currentIndex: index,
                 itemChanged: (i) => setState(() => index = i),
-                items: const [
+                items:  [
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.school), label: 'Learn'),
+                      icon: const Icon(Icons.school), label: user?.userType == "student" ? 'Learn' : "Chats"),
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.chat), label: 'Chats'),
+                      icon: const Icon(Icons.chat), label: user?.userType == "student" ? 'Chats' : "Reviews"),
                 ],
-              )
-            : null,
-        body: (user != null && user.userType == "student")
+              ),
+        body: (user?.userType == "student")
             ? IndexedStack(
                 children: views,
                 index: index,
               )
-            : const ChatsScreen());
+            : IndexedStack(
+          children: teacherViews,
+          index: index,
+        ));
   }
 }
