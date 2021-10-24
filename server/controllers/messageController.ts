@@ -13,14 +13,8 @@ router.post('/', authenticateToken, async (req, res) => {
       message: req.body.message,
     });
 
-    try {
-      message.save();
-      res.status(201).json(message);
-    } catch (err) {
-      const msg = (err as Error).message;
-      if (msg) return res.status(400).send({ error: msg });
-      res.status(500).send();
-    }
+    message.save();
+    res.status(201).json(message);
   } catch (err) {
     const msg = (err as Error).message;
     if (msg) return res.status(400).send({ error: msg });

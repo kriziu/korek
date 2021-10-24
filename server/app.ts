@@ -7,6 +7,8 @@ import { Server, Socket } from 'socket.io';
 
 import userController from './controllers/userController';
 import messageController from './controllers/messageController';
+import rateController from './controllers/rateController';
+import walletController from './controllers/walletController';
 import { MessageType } from './models/message.model';
 
 dotenv.config();
@@ -32,6 +34,10 @@ app.use(cors());
 app.use('/users', userController);
 
 app.use('/messages', messageController);
+
+app.use('/rates', rateController);
+
+app.use('/wallet', walletController);
 
 app.get('/', (req, res) => {
   res.send('Server running...');

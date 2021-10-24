@@ -101,25 +101,18 @@ router.post('/', async (req, res) => {
       email: req.body.email,
       password: hashedPassword,
       price: req.body.price,
+      rate: 0,
+      wallet: 0,
       avatarId: req.body.avatarId,
       userType: req.body.userType,
       subjects: req.body.subjects,
     });
 
-    try {
-      const newUser = await user.save();
+    await user.save();
 
-      const token = jwt.sign(
-        { user },
-        process.env.ACCESS_TOKEN_SECRET as string
-      );
+    const token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET as string);
 
-      res.json({ token: token });
-    } catch (err) {
-      const msg = (err as Error).message;
-      if (msg) return res.status(400).send({ error: msg });
-      res.status(500).send();
-    }
+    res.json({ token: token });
   } catch (err) {
     const msg = (err as Error).message;
     console.log(msg);

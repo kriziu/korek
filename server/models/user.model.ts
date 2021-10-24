@@ -37,6 +37,8 @@ export interface UserType {
   email: string;
   password: string;
   price: number;
+  rate: number;
+  wallet: number;
   avatarId: Avatars;
   userType: 'teacher' | 'student';
   subjects: Subjects[];
@@ -63,6 +65,17 @@ const userSchema = new mongoose.Schema<UserType>({
   price: {
     type: Number,
     required: true,
+  },
+  rate: {
+    type: Number,
+    required: true,
+    min: 0,
+    max: 5,
+  },
+  wallet: {
+    type: Number,
+    required: true,
+    min: 0,
   },
   avatarId: {
     type: String,

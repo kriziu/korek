@@ -23,7 +23,7 @@ Content-Type: application/json
 {
   "firstName": "Teacher",
   "lastName": "s",
-  "email": "t1133@gmail.cl",
+  "email": "t1133@gmail.cw",
   "password":"password",
   "price": 20,
   "avatarId": "female_1",
@@ -38,7 +38,7 @@ POST http://localhost:8080/users/login
 Content-Type: application/json
 
 {
-  "email": "t1133@gmail.cl",
+  "email": "t1133@gmail.ck",
   "password":"password"
 }
 
@@ -91,3 +91,42 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzFj
 
 GET http://localhost:8080/users/chatted
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzFjNTdhMTViMTQ0Y2U0YzMzYTU1NCIsImZpcnN0TmFtZSI6IkJydW5vIiwibGFzdE5hbWUiOiJEemnEmWNpZWxza2kxIiwiZW1haWwiOiJicnVub2R6aTA3QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJGF2aUxSSVBibGhvMHFRb1d6WnpQUy5jcmpDYVBwblVZbUtCYUNweUQvRUtSQmFZaG1TcXBhIiwicHJpY2UiOjY5LCJhdmF0YXJJZCI6ImZlbWFsZV8xIiwic3ViamVjdHMiOlsibWF0aCJdLCJ1c2VyVHlwZSI6InRlYWNoZXIiLCJfX3YiOjB9LCJpYXQiOjE2MzQ5OTIyODh9.HIKI9One01ieYydy2-rWHiysD5EIURvbl9WDjnYECp8
+
+###
+
+POST http://localhost:8080/rates
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzQxNDA5MWI3ZGZlOWUzYzlhOTE5MCIsImZpcnN0TmFtZSI6IkJydW5vIiwibGFzdE5hbWUiOiJEemnEmWNpZWxza2kiLCJlbWFpbCI6InVyc3p1bGFkemlAZ21haWwuY28iLCJwYXNzd29yZCI6IiQyYiQxMCRRdlpSS1hYRnlOdlA4V2lCbE9wUjIuMWRxOVk2M3Vnd1dyVmZuUUNWTGhuNm05UUJrTzcucSIsInByaWNlIjowLCJhdmF0YXJJZCI6ImZlbWFsZV80Iiwic3ViamVjdHMiOlsicGh5c2ljcyIsImNoZW1pc3RyeSIsImVuZ2xpc2giXSwidXNlclR5cGUiOiJzdHVkZW50IiwiX192IjowfSwiaWF0IjoxNjM0OTk3NDI2fQ.g4EScDYAjJr4KjQVdJt46L5Xhtc_XStmKlQVdTi8LjY
+Content-Type: application/json
+
+{
+  "teacherId": "61754e94e3b5b7f23b50a09d",
+  "stars": 5,
+  "from": "6171e62a366c2d2c5a9d28ff",
+  "message": "dobry nauczyciel"
+}
+
+###
+
+GET http://localhost:8080/rates/61754e94e3b5b7f23b50a09d
+
+###
+
+GET http://localhost:8080/users/6175581da5ac24fc1e45a54d
+
+###
+
+DELETE http://localhost:8080/rates/6175529898fd3f94cd8030cb
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzQxNDA5MWI3ZGZlOWUzYzlhOTE5MCIsImZpcnN0TmFtZSI6IkJydW5vIiwibGFzdE5hbWUiOiJEemnEmWNpZWxza2kiLCJlbWFpbCI6InVyc3p1bGFkemlAZ21haWwuY28iLCJwYXNzd29yZCI6IiQyYiQxMCRRdlpSS1hYRnlOdlA4V2lCbE9wUjIuMWRxOVk2M3Vnd1dyVmZuUUNWTGhuNm05UUJrTzcucSIsInByaWNlIjowLCJhdmF0YXJJZCI6ImZlbWFsZV80Iiwic3ViamVjdHMiOlsicGh5c2ljcyIsImNoZW1pc3RyeSIsImVuZ2xpc2giXSwidXNlclR5cGUiOiJzdHVkZW50IiwiX192IjowfSwiaWF0IjoxNjM0OTk3NDI2fQ.g4EScDYAjJr4KjQVdJt46L5Xhtc_XStmKlQVdTi8LjY
+
+###
+
+POST http://localhost:8080/wallet/pay
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImZpcnN0TmFtZSI6IlRlYWNoZXIiLCJsYXN0TmFtZSI6InMiLCJlbWFpbCI6InQxMTMzQGdtYWlsLmNrIiwicGFzc3dvcmQiOiIkMmIkMTAkYnIxbks2ZGNNNnRoSlpGMHRoL0xPZUlXZGNLRWJFL0lCV3pRdjFiN3FsOFFXR2VvN21IL08iLCJwcmljZSI6MjAsInJhdGUiOjAsIndhbGxldCI6MCwiYXZhdGFySWQiOiJmZW1hbGVfMSIsInN1YmplY3RzIjpbInBvbGlzaCJdLCJ1c2VyVHlwZSI6InRlYWNoZXIiLCJfaWQiOiI2MTc1NTgxZGE1YWMyNGZjMWU0NWE1NGQiLCJfX3YiOjB9LCJpYXQiOjE2MzUwODAyMjF9.UdQ7cWrYsUL2FwPUPgLraLKCqhsJRk8tDqBC_sLrDNE
+Content-Type: application/json
+
+{
+  "much": 25,
+  "teacherId": "61755833a5ac24fc1e45a551"
+}
+
+//6175581da5ac24fc1e45a54d
