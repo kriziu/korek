@@ -14,7 +14,7 @@ import { Input, InputIcon } from '../../components/Input';
 import NavBar from '../../components/NavBar/NavBar';
 import { AVATARS, SUBJECTS } from '../../contants';
 import { loggedUserContext } from '../../context/loggedUser';
-import { Flex, Right, StyledCenter } from './Profile.elements';
+import { CSCenter, Flex, Right, StyledCenter } from './Profile.elements';
 import { StyledSelect } from '../../components/StyledSelect';
 import { Header2, Header3 } from '../../components/Header';
 import { validateEmail } from '../../utils/functions';
@@ -154,89 +154,91 @@ const Profile: FC = () => {
               width="500rem"
             />
           </StyledCenter>
-          <Right>
-            <Flex style={{ justifyContent: 'flex-end' }}>
-              <Header2 style={{ marginRight: '2rem' }}>
-                {user?.firstName} {user?.lastName}
-              </Header2>
-              <div onClick={() => setAvatarSetter(true)}>
-                <Avatar id={user?.avatarId as AVATARS} size="lg" />
+          <CSCenter>
+            <Right>
+              <Flex style={{ justifyContent: 'flex-end' }}>
+                <Header2 style={{ marginRight: '2rem' }}>
+                  {user?.firstName} {user?.lastName}
+                </Header2>
+                <div onClick={() => setAvatarSetter(true)}>
+                  <Avatar id={user?.avatarId as AVATARS} size="lg" />
+                </div>
+              </Flex>
+
+              <Flex>
+                <InputIcon style={{ width: '85%' }}>
+                  <MdPersonOutline />
+                  <Input
+                    placeholder="First Name"
+                    value={fName}
+                    onChange={e => {
+                      const val = !fName.length
+                        ? e.target.value.toUpperCase()
+                        : e.target.value;
+                      setFWarn(false);
+                      setFName(val);
+                    }}
+                    warn={fWarn}
+                  />
+                </InputIcon>
+                <Button onClick={handleFNameUpd}>Save</Button>
+              </Flex>
+              <Flex>
+                <InputIcon style={{ width: '85%' }}>
+                  <MdPersonOutline />
+                  <Input
+                    placeholder="Last Name"
+                    value={lName}
+                    onChange={e => {
+                      const val = !lName.length
+                        ? e.target.value.toUpperCase()
+                        : e.target.value;
+                      setLWarn(false);
+                      setLName(val);
+                    }}
+                    warn={lWarn}
+                  />
+                </InputIcon>
+                <Button onClick={handleLNameUpd}>Save</Button>
+              </Flex>
+              <Flex>
+                <InputIcon style={{ width: '85%' }}>
+                  <FiAtSign />
+                  <Input
+                    placeholder="Email"
+                    value={email}
+                    onChange={e => {
+                      setEmail(e.target.value);
+                      setEmailWarn(false);
+                    }}
+                    warn={emailWarn}
+                  />
+                </InputIcon>
+                <Button onClick={handleEmailUpd}>Save</Button>
+              </Flex>
+              <div>
+                <Header3 style={{ marginTop: '3rem', marginBottom: '1rem' }}>
+                  Your subjects
+                </Header3>
+                <StyledSelect
+                  options={SelectSubjects}
+                  value={help}
+                  onChange={e => e && setHelp(e)}
+                  isMulti
+                />
+                <Button
+                  style={{ width: '100%', marginTop: '1rem' }}
+                  onClick={handleSubjectsUpd}
+                >
+                  Save
+                </Button>
               </div>
-            </Flex>
 
-            <Flex>
-              <InputIcon style={{ width: '85%' }}>
-                <MdPersonOutline />
-                <Input
-                  placeholder="First Name"
-                  value={fName}
-                  onChange={e => {
-                    const val = !fName.length
-                      ? e.target.value.toUpperCase()
-                      : e.target.value;
-                    setFWarn(false);
-                    setFName(val);
-                  }}
-                  warn={fWarn}
-                />
-              </InputIcon>
-              <Button onClick={handleFNameUpd}>Save</Button>
-            </Flex>
-            <Flex>
-              <InputIcon style={{ width: '85%' }}>
-                <MdPersonOutline />
-                <Input
-                  placeholder="Last Name"
-                  value={lName}
-                  onChange={e => {
-                    const val = !lName.length
-                      ? e.target.value.toUpperCase()
-                      : e.target.value;
-                    setLWarn(false);
-                    setLName(val);
-                  }}
-                  warn={lWarn}
-                />
-              </InputIcon>
-              <Button onClick={handleLNameUpd}>Save</Button>
-            </Flex>
-            <Flex>
-              <InputIcon style={{ width: '85%' }}>
-                <FiAtSign />
-                <Input
-                  placeholder="Email"
-                  value={email}
-                  onChange={e => {
-                    setEmail(e.target.value);
-                    setEmailWarn(false);
-                  }}
-                  warn={emailWarn}
-                />
-              </InputIcon>
-              <Button onClick={handleEmailUpd}>Save</Button>
-            </Flex>
-            <div>
-              <Header3 style={{ marginTop: '3rem', marginBottom: '1rem' }}>
-                Your subjects
-              </Header3>
-              <StyledSelect
-                options={SelectSubjects}
-                value={help}
-                onChange={e => e && setHelp(e)}
-                isMulti
-              />
-              <Button
-                style={{ width: '100%', marginTop: '1rem' }}
-                onClick={handleSubjectsUpd}
-              >
-                Save
+              <Button onClick={() => setToken(null)} secondary>
+                Logout
               </Button>
-            </div>
-
-            <Button onClick={() => setToken(null)} secondary>
-              Logout
-            </Button>
-          </Right>
+            </Right>
+          </CSCenter>
         </Flex>
       </div>
       <Footer />

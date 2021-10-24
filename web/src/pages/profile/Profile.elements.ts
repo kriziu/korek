@@ -17,18 +17,31 @@ export const Right = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: 80rem;
+  width: 100%;
+
+  @media screen and (max-width: ${breakpoints.lg}) {
+    width: 60%;
+  }
+
+  @media screen and (max-width: ${breakpoints.sm}) {
+    width: 75%;
+  }
+`;
+
+export const CSCenter = styled.div`
   width: 60%;
   padding-right: 40rem;
+  padding-bottom: 5rem;
 
   @media screen and (max-width: ${breakpoints.xl}) {
     padding-right: 10rem;
   }
 
   @media screen and (max-width: ${breakpoints.lg}) {
-    width: 50%;
+    width: 100%;
     padding-right: 0;
-    margin-left: 50%;
-    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
   }
 `;
 

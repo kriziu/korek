@@ -11,6 +11,7 @@ import {
   Container,
   Message,
   Messages,
+  SmContainer,
   StyledInput,
   Top,
 } from './Chat.elements';
@@ -102,28 +103,32 @@ const Chat: FC<CurrentChat> = ({ firstName, lastName, avatarId, roomId }) => {
   };
 
   return (
-    <Container>
-      <Top>
-        <Avatar id={avatarId} />
-        <Header3 style={{ marginLeft: '1rem' }}>
-          {firstName} {lastName}
-        </Header3>
-        <Button>Enter room</Button>
-        {user?.userType === 'student' && <Button secondary>Pay</Button>}
-      </Top>
-      <div style={{ width: '80%' }}>
-        <Messages ref={ref}>
-          <TransitionGroup component={null}>{renderMessages()}</TransitionGroup>
-        </Messages>
-        <Bottom onSubmit={handleSendMessage}>
-          <StyledInput
-            value={message}
-            onChange={e => setMessage(e.target.value)}
-          />
-          <Button type="submit">Send</Button>
-        </Bottom>
-      </div>
-    </Container>
+    <div style={{ display: 'flex', justifyContent: 'center', flex: 1 }}>
+      <Container>
+        <Top>
+          <Avatar id={avatarId} />
+          <Header3 style={{ marginLeft: '1rem', maxWidth: '17.3rem' }}>
+            {firstName} {lastName}
+          </Header3>
+          <Button>Enter room</Button>
+          {user?.userType === 'student' && <Button secondary>Pay</Button>}
+        </Top>
+        <SmContainer>
+          <Messages ref={ref}>
+            <TransitionGroup component={null}>
+              {renderMessages()}
+            </TransitionGroup>
+          </Messages>
+          <Bottom onSubmit={handleSendMessage}>
+            <StyledInput
+              value={message}
+              onChange={e => setMessage(e.target.value)}
+            />
+            <Button type="submit">Send</Button>
+          </Bottom>
+        </SmContainer>
+      </Container>
+    </div>
   );
 };
 

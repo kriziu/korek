@@ -20,6 +20,11 @@ export const Img = styled.img`
     width: 60rem;
     height: 60rem;
   }
+
+  @media screen and (max-width: ${breakpoints.xsm}) {
+    width: 27rem;
+    height: 27rem;
+  }
 `;
 
 export const SubjectList = styled.ul`
@@ -35,8 +40,12 @@ export const SubjectList = styled.ul`
   padding: 1rem 0;
   margin-bottom: 5rem;
 
-  @media screen and (max-width: ${breakpoints.lg}) {
-    width: 50%;
+  @media screen and (max-width: ${breakpoints.xl}) {
+    width: 40%;
+  }
+
+  @media screen and (max-width: ${breakpoints.md}) {
+    width: 60%;
   }
 
   .active,
@@ -53,17 +62,21 @@ export const SubjectList = styled.ul`
 
     :not(:last-child) {
       margin-right: 3rem;
+
+      @media screen and (max-width: ${breakpoints.xl}) {
+        margin-right: 2rem;
+      }
     }
   }
 `;
 
 export const NotFound = styled(Center)`
-  height: 60vh;
+  height: max-content;
   flex-direction: column;
   margin-bottom: 4rem;
+  margin-top: 2rem;
 
   img {
-    padding-top: 5rem;
     height: 60rem;
   }
 `;

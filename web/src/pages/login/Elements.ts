@@ -48,6 +48,11 @@ export const BackBtn = styled.button`
   right: 10rem;
   transition: var(--trans-default);
 
+  @media screen and (max-width: ${breakpoints.md}) {
+    top: 5rem;
+    right: 5rem;
+  }
+
   svg {
     width: 3rem;
     height: 3rem;
@@ -87,6 +92,11 @@ export const Card = styled.div`
 
   @media screen and (max-width: ${breakpoints.md}) {
     width: 70%;
+  }
+
+  @media screen and (max-width: ${breakpoints.xsm}) {
+    width: 90%;
+    padding: 5rem 2rem;
   }
 
   .flex {

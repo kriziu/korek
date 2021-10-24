@@ -3,7 +3,7 @@ import { breakpoints } from '../../../styles/breakpoints';
 import { scrollY } from '../../../styles/scroll';
 
 export const Container = styled.div`
-  margin: 0 20rem;
+  margin: 0 15rem;
 
   @media screen and (max-width: ${breakpoints.lg}) {
     margin: 0 8rem;

@@ -6,10 +6,8 @@ import { scrollY } from '../../../styles/scroll';
 export const Container = styled.div`
   flex: 1;
   @media screen and (max-width: ${breakpoints.sm}) {
-    position: absolute;
-    width: 80vw;
-    left: 64%;
-    transform: translateX(-50%);
+    flex: initial;
+    width: 80%;
   }
 `;
 
@@ -19,7 +17,13 @@ export const Top = styled.div`
 
   button {
     margin-left: 2rem;
-    width: 15rem;
+  }
+`;
+
+export const SmContainer = styled.div`
+  width: 80%;
+  @media screen and (max-width: ${breakpoints.sm}) {
+    width: 100%;
   }
 `;
 

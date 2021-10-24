@@ -10,6 +10,7 @@ import { BigButton } from './components/BigButton';
 import Footer from '../../components/Footer/Footer';
 import styled from '@emotion/styled';
 import { breakpoints } from '../../styles/breakpoints';
+import { PhoneContainer } from '../../components/Container';
 
 const Img = styled.img`
   @media screen and (max-width: ${breakpoints.sm}) {
@@ -40,22 +41,23 @@ const Hero: FC = () => {
             <Button onClick={handleRegisterButton}>Register</Button>
           </div>
         </Nav>
+        <PhoneContainer>
+          <Header1>
+            Learn Anytime, Anywhere <br /> and Accelerate Future
+          </Header1>
+          <SmallHeader style={{ marginBottom: '5rem' }}>
+            We believe everyone can make something amazing!
+          </SmallHeader>
 
-        <Header1>
-          Learn Anytime, Anywhere <br /> and Accelerate Future
-        </Header1>
-        <SmallHeader style={{ marginBottom: '5rem' }}>
-          We believe everyone can make something amazing!
-        </SmallHeader>
+          <Center style={{ marginBottom: '5rem' }}>
+            <Img src="/images/hero_learning.svg" alt="Study online" />
+          </Center>
 
-        <Center style={{ marginBottom: '5rem' }}>
-          <Img src="/images/hero_learning.svg" alt="Study online" />
-        </Center>
-
-        <Header1>Join us to make world better!</Header1>
-        <Center style={{ marginTop: '2rem', paddingBottom: '8rem' }}>
-          <BigButton onClick={handleRegisterButton}>Join now</BigButton>
-        </Center>
+          <Header1>Join us to make world better!</Header1>
+          <Center style={{ marginTop: '2rem', paddingBottom: '8rem' }}>
+            <BigButton onClick={handleRegisterButton}>Join now</BigButton>
+          </Center>
+        </PhoneContainer>
       </div>
       <Footer />
     </div>
