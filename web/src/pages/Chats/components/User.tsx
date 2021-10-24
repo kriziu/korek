@@ -11,10 +11,10 @@ import {
   Container,
   SubjectList,
 } from '../../teachers/components/Teacher.elements';
-import { CurrentChat } from '../Chats';
 import { loggedUserContext } from '../../../context/loggedUser';
 import '../../../styles/animations.css';
 import WriteRate from '../../../components/Rate/WriteRate';
+import { CurrentChat } from '../Chats';
 
 const StyledSubjectList = styled(SubjectList)`
   li {

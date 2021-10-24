@@ -9,8 +9,7 @@ import UserList from './components/UserList';
 import '../../styles/animations.css';
 import { Center } from '../../components/Center';
 import { AVATARS } from '../../contants';
-import { Img } from './Chats.elements';
-import { Container } from './Chats.elements';
+import { Container, Img } from './Chats.elements';
 
 export interface CurrentChat {
   firstName: string;
