@@ -1,11 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:korek/providers/auth_provider.dart';
 import 'package:korek/screens/register_screen.dart';
 import 'package:korek/widgets/adaptive_button.dart';
+import 'package:korek/widgets/dialogs/loading_dialog.dart';
+import 'package:provider/provider.dart';
+
+import '../widgets/wrappers/home_screen_wrapper.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,18 +18,33 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final _formKey = GlobalKey<FormState>();
 
-
-  final _registerData = {
-    'email':'',
-    'password':'',
+  final _loginData = {
+    'email': '',
+    'password': '',
   };
 
-  Future<void> _submitForm() async{
-    if(_formKey.currentState!.validate()){
-
+  Future<void> _login() async {
+    try {
+      if (_formKey.currentState!.validate()) {
+        showPlatformDialog(
+            context: context,
+            builder: (_) => const LoadingDialog(title: "Loging..."),
+            barrierDismissible: false);
+        await Provider.of<AuthProvider>(context, listen: false).logIn(_loginData);
+        Navigator.of(context)
+          ..pop()
+          ..pushAndRemoveUntil(
+              platformPageRoute(
+                context: context,
+                builder: (context) => const HomeScreenWrapper(),
+              ),
+              (Route<dynamic> route) => false);
+      }
+    } catch (e) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 
@@ -35,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return PlatformScaffold(
       body: Center(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(24),
@@ -60,7 +79,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 48,
                     ),
                     PlatformTextFormField(
-                      validator: (val) => RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val!) ? null : 'Provide correct email',
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (val) =>
+                          RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                  .hasMatch(val!)
+                              ? null
+                              : 'Provide correct email',
                       style: const TextStyle(fontSize: 15),
                       material: (_, __) => MaterialTextFormFieldData(
                           decoration: const InputDecoration(
@@ -70,25 +95,30 @@ class _LoginScreenState extends State<LoginScreen> {
                                 size: 24,
                                 color: Color(0xff343434),
                               ))),
-                      onChanged: (val) => _registerData['email'] = val,
+                      onChanged: (val) => _loginData['email'] = val,
                     ),
                     const SizedBox(
                       height: 16,
                     ),
                     PlatformTextFormField(
-                      validator: (val) => val!.length >= 6 ? null: 'Provide min 6 letters password',
+                      onFieldSubmitted: (value) async {
+                        await _login();
+                      },
+                      validator: (val) => val!.length >= 6
+                          ? null
+                          : 'Provide min 6 letters password',
                       style: const TextStyle(fontSize: 15),
                       obscureText: true,
                       material: (_, __) => MaterialTextFormFieldData(
                           decoration: const InputDecoration(
-                            hintText: 'Password',
-                            prefixIcon: Icon(
-                              Icons.lock_open,
-                              size: 24,
-                              color: Color(0xff343434),
-                            ),
-                          )),
-                      onChanged: (val) => _registerData['password'] = val,
+                        hintText: 'Password',
+                        prefixIcon: Icon(
+                          Icons.lock_open,
+                          size: 24,
+                          color: Color(0xff343434),
+                        ),
+                      )),
+                      onChanged: (val) => _loginData['password'] = val,
                     ),
                     const SizedBox(
                       height: 16,
@@ -102,33 +132,35 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontWeight: FontWeight.w500,
                               fontSize: 17),
                         ),
-                        onPressed: ()async => await _submitForm(),
+                        onPressed: () async => await _login(),
                       ),
                       width: double.infinity,
                     ),
                     const SizedBox(
                       height: 8,
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text("Don\'t have an account?",style: platformThemeData(
-                          context,
-                          material: (data) => data.textTheme.headline5!.copyWith(fontSize: 14.5,color:Colors.black),
-                          cupertino: (data) => data.textTheme.navTitleTextStyle.copyWith(fontSize: 14.5,color:Colors.black),
-                        )),
-                        GestureDetector(
-                          onTap: () => Navigator.of(context).pop(),
-                          child: Text(" Register here",style: platformThemeData(
-                            context,
-                            material: (data) => data.textTheme.headline5!.copyWith(fontSize: 14.5,color:Theme.of(context).primaryColor),
-                            cupertino: (data) => data.textTheme.navTitleTextStyle.copyWith(fontSize: 14.5,color:Theme.of(context).primaryColor),
-                          ),),
+                    SizedBox(
+                      child: AdaptiveButton(
+                        outlined: true,
+                        child: Text(
+                          "Don't have an account? Register",
+                          style: GoogleFonts.montserrat(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17),
                         ),
-                        const SizedBox(width: 4,),
-                      ],
-                    )
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            platformPageRoute(
+                              context: context,
+                              builder: (context) => const RegisterScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      width: double.infinity,
+                    ),
                   ],
                 ),
               ),
