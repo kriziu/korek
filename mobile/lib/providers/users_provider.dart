@@ -60,7 +60,6 @@ class UsersProvider with ChangeNotifier {
     final jsonData = jsonDecode(response.body) as List<dynamic>;
     final data = jsonData.map((rating) => Rating.fromJson(rating)).toList();
     _ratings.addAll(data);
-    print(_ratings);
     notifyListeners();
   }
 

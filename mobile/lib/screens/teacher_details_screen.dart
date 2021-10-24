@@ -7,6 +7,7 @@ import 'package:korek/helpers/helpers.dart';
 import 'package:korek/models/message.dart';
 import 'package:korek/models/user.dart';
 import 'package:korek/providers/auth_provider.dart';
+import 'package:korek/screens/reviews_screen.dart';
 import 'package:korek/widgets/adaptive_button.dart';
 import 'package:korek/widgets/dialogs/loading_dialog.dart';
 import 'package:provider/provider.dart';
@@ -43,8 +44,10 @@ class _TeacherDetailsScreenState extends State<TeacherDetailsScreen> {
       appSocket.emit('createRoom', roomId);
       appSocket.emit('joinRoom', roomId);
 
-      await Provider.of<MessagesProvider>(context, listen: false).sendMessage(Message(roomId, currentUser.id, _controller.text));
-      await Provider.of<MessagesProvider>(context, listen: false).fetchChatted();
+      await Provider.of<MessagesProvider>(context, listen: false)
+          .sendMessage(Message(roomId, currentUser.id, _controller.text));
+      await Provider.of<MessagesProvider>(context, listen: false)
+          .fetchChatted();
 
       Navigator.of(context)
         ..pop()
@@ -158,76 +161,99 @@ class _TeacherDetailsScreenState extends State<TeacherDetailsScreen> {
                 bottom: 0,
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width - 48,
-                  child: AdaptiveButton(
-                      child: Text(
-                        "Choose teacher",
-                        style: GoogleFonts.montserrat(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 17),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width - 48,
+                        child: AdaptiveButton(
+                          outlined: true,
+                            onPressed: () {
+                              Navigator.of(context).push(platformPageRoute(context: context,builder: (context)=> ReviewsScreen(widget.teacher,backButtonVisible: true,)));
+                            },
+                            child: Text(
+                              "Show ratings",
+                              style: GoogleFonts.montserrat(
+                                  color: Theme.of(context).primaryColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 17),
+                            )),
                       ),
-                      onPressed: () {
-                        showPlatformDialog(
-                            context: context,
-                            builder: (context) => PlatformAlertDialog(
-                                  title: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                        "assets/${widget.teacher.avatarId}.svg",
-                                        width: 30,
-                                        height: 30,
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        "${widget.teacher.firstName} ${widget.teacher.lastName}",
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                    ],
-                                  ),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      const Text("How I can help you?"),
-                                      const SizedBox(height: 8),
-                                      TextField(
-                                        controller: _controller,
-                                        minLines: 3,
-                                        maxLines: 3,
-                                        decoration: InputDecoration(
-                                            hintText: "Message"),
-                                      )
-                                    ],
-                                  ),
-                                  actions: [
-                                    PlatformDialogAction(
-                                      child: Text(
-                                        "Cancel",
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    PlatformDialogAction(
-                                      child: Text("Send",
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .primaryColor)),
-                                      onPressed: () async {
-                                        await _sendMessage();
-                                      },
-                                    ),
-                                  ],
-                                ));
-                      }),
+                      const SizedBox(height: 8,),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width - 48,
+                        child: AdaptiveButton(
+                            child: Text(
+                              "Choose teacher",
+                              style: GoogleFonts.montserrat(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 17),
+                            ),
+                            onPressed: () {
+                              showPlatformDialog(
+                                  context: context,
+                                  builder: (context) => PlatformAlertDialog(
+                                        title: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              "assets/${widget.teacher.avatarId}.svg",
+                                              width: 30,
+                                              height: 30,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              "${widget.teacher.firstName} ${widget.teacher.lastName}",
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                          ],
+                                        ),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            const Text("How I can help you?"),
+                                            const SizedBox(height: 8),
+                                            TextField(
+                                              controller: _controller,
+                                              minLines: 3,
+                                              maxLines: 3,
+                                              decoration: const InputDecoration(
+                                                  hintText: "Message"),
+                                            )
+                                          ],
+                                        ),
+                                        actions: [
+                                          PlatformDialogAction(
+                                            child: Text(
+                                              "Cancel",
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          PlatformDialogAction(
+                                            child: Text("Send",
+                                                style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .primaryColor)),
+                                            onPressed: () async {
+                                              await _sendMessage();
+                                            },
+                                          ),
+                                        ],
+                                      ));
+                            }),
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],

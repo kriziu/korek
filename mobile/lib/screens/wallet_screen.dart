@@ -173,7 +173,7 @@ class WalletScreen extends StatelessWidget {
                                         const TextInputType.numberWithOptions(
                                             decimal: true),
                                     decoration: const InputDecoration(
-                                        hintText: "Deposit"),
+                                        hintText: "Withdraw"),
                                   )
                                 ],
                               ),
@@ -194,7 +194,8 @@ class WalletScreen extends StatelessWidget {
                                           color:
                                               Theme.of(context).primaryColor)),
                                   onPressed: () async {
-                                    final withDraw = double.tryParse(withDrawController.text);
+                                    final withDraw = double.tryParse(
+                                        withDrawController.text);
                                     if (withDraw == null) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
@@ -202,7 +203,15 @@ class WalletScreen extends StatelessWidget {
                                       ));
                                       return;
                                     }
-                                    await userProvider.withdraw(withDraw);
+                                    try {
+                                      await userProvider.withdraw(withDraw);
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text("$e"),
+                                      ));
+                                    }
+
                                     Navigator.of(context).pop();
                                   },
                                 ),

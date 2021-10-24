@@ -6,7 +6,8 @@ import 'package:provider/provider.dart';
 
 class ReviewsScreen extends StatefulWidget {
   final User? teacher;
-  const ReviewsScreen(this.teacher,{Key? key}) : super(key: key);
+  final bool backButtonVisible;
+  const ReviewsScreen(this.teacher,{this.backButtonVisible = false,Key? key}) : super(key: key);
 
   @override
   _ReviewsScreenState createState() => _ReviewsScreenState();
@@ -29,7 +30,16 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               padding: const EdgeInsets.all(24),
               child: Column(
                 children: [
-                  Row(),
+
+                  if(widget.backButtonVisible)
+                    Align(
+                      child: IconButton(
+                        iconSize: 30,
+                        icon: const Icon(Icons.arrow_back),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                      alignment: Alignment.centerLeft,
+                    ),
                   const SizedBox(height: 32,),
                   Text("Reviews of ${widget.teacher!.firstName} ${widget.teacher!.lastName}",style: const TextStyle(color: Colors.black,fontWeight: FontWeight.w700,fontSize: 20),),
                   const SizedBox(height: 32,),

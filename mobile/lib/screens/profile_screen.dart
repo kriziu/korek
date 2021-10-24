@@ -8,6 +8,7 @@ import 'package:korek/models/update_data.dart';
 import 'package:korek/providers/auth_provider.dart';
 import 'package:korek/screens/change_avatar_screen.dart';
 import 'package:korek/screens/change_profile_item_screen.dart';
+import 'package:korek/screens/wallet_screen.dart';
 import 'package:korek/widgets/adaptive_button.dart';
 import 'package:korek/widgets/wrappers/login_wrapper.dart';
 import 'package:provider/provider.dart';
@@ -97,13 +98,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 //   ],
                 // ), onChanged: (bool value) {
                 // }, value: true,),
+
+
                 ListView.builder(
                   itemBuilder: (context, i) => _settingItem(i),
                   itemCount: UpdateData.updatedData.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                 ),
-                const SizedBox(height: 16,),
+
+            SizedBox(
+              width: double.infinity,
+              child: AdaptiveButton(
+                outlined: true,
+                child: Text("Wallet",style: GoogleFonts.montserrat(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17),),
+                onPressed: () async {
+
+                  Navigator.of(context).push(platformPageRoute(context: context,builder: (context)=>WalletScreen()));
+                },
+              )),
+                const SizedBox(height: 8,),
                 SizedBox(
                   width: double.infinity,
                   child: AdaptiveButton(
