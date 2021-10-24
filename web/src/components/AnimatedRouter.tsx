@@ -3,7 +3,7 @@ import { FC, useContext, useEffect } from 'react';
 import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { loggedUserContext } from '../context/loggedUser';
-import Chats from '../pages/chats/Chats';
+import Chats from '../pages/Chats/Chats';
 
 import Hero from '../pages/hero/Hero';
 import Login from '../pages/login/Login';
