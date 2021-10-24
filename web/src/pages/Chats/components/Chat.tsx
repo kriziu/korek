@@ -6,7 +6,14 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Avatar } from '../../../components/Avatar';
 import { Button } from '../../../components/Button';
 import { Header3 } from '../../../components/Header';
-import { Bottom, Message, Messages, StyledInput, Top } from './Chat.elements';
+import {
+  Bottom,
+  Container,
+  Message,
+  Messages,
+  StyledInput,
+  Top,
+} from './Chat.elements';
 import '../../../styles/animations.css';
 import { CurrentChat } from '../Chats';
 import { loggedUserContext } from '../../../context/loggedUser';
@@ -95,7 +102,7 @@ const Chat: FC<CurrentChat> = ({ firstName, lastName, avatarId, roomId }) => {
   };
 
   return (
-    <div style={{ flex: 1 }}>
+    <Container>
       <Top>
         <Avatar id={avatarId} />
         <Header3 style={{ marginLeft: '1rem' }}>
@@ -116,7 +123,7 @@ const Chat: FC<CurrentChat> = ({ firstName, lastName, avatarId, roomId }) => {
           <Button type="submit">Send</Button>
         </Bottom>
       </div>
-    </div>
+    </Container>
   );
 };
 

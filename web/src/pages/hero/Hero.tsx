@@ -8,6 +8,15 @@ import { Nav } from './components/Nav';
 import { Center } from '../../components/Center';
 import { BigButton } from './components/BigButton';
 import Footer from '../../components/Footer/Footer';
+import styled from '@emotion/styled';
+import { breakpoints } from '../../styles/breakpoints';
+
+const Img = styled.img`
+  @media screen and (max-width: ${breakpoints.sm}) {
+    width: 40rem;
+    height: 40rem;
+  }
+`;
 
 const Hero: FC = () => {
   const history = useHistory();
@@ -40,7 +49,7 @@ const Hero: FC = () => {
         </SmallHeader>
 
         <Center style={{ marginBottom: '5rem' }}>
-          <img src="/images/hero_learning.svg" alt="Study online" />
+          <Img src="/images/hero_learning.svg" alt="Study online" />
         </Center>
 
         <Header1>Join us to make world better!</Header1>

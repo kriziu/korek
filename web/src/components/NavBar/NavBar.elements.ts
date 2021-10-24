@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { breakpoints } from '../../styles/breakpoints';
 
 export const Nav = styled.nav`
   display: flex;
@@ -20,6 +21,10 @@ export const Nav = styled.nav`
     align-items: center;
     justify-content: space-between;
     width: 45rem;
+
+    @media screen and (max-width: ${breakpoints.sm}) {
+      width: 35rem;
+    }
 
     a {
       text-decoration: underline;

@@ -22,6 +22,7 @@ const { REACT_APP_SERVER_URL } = process.env;
 
 interface TeacherProps extends UserType {
   deleteFromList: (id: string) => void;
+  seeRates: (id: string) => void;
 }
 
 const Teacher: FC<TeacherProps> = ({
@@ -33,6 +34,7 @@ const Teacher: FC<TeacherProps> = ({
   avatarId,
   rate,
   deleteFromList,
+  seeRates,
 }) => {
   const { user, token } = useContext(loggedUserContext);
 
@@ -82,7 +84,7 @@ const Teacher: FC<TeacherProps> = ({
       </Header3>
       <SubjectList>{renderSubjects()}</SubjectList>
 
-      <Rating>
+      <Rating onClick={() => seeRates(_id)}>
         <AiFillStar />
         <Header3>
           {rate} | {price}$ / h

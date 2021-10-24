@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { breakpoints } from '../../styles/breakpoints';
 
 export const Background = styled.div`
   position: absolute;
@@ -83,6 +84,10 @@ export const Card = styled.div`
   border-radius: 5rem;
   position: relative;
   background-color: var(--color-white);
+
+  @media screen and (max-width: ${breakpoints.md}) {
+    width: 70%;
+  }
 
   .flex {
     display: flex;

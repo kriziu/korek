@@ -1,6 +1,8 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useState } from 'react';
 
 import styled from '@emotion/styled';
+import { BsFillPencilFill } from 'react-icons/bs';
+import { CSSTransition } from 'react-transition-group';
 
 import { Avatar } from '../../../components/Avatar';
 import { Button } from '../../../components/Button';
@@ -11,10 +13,36 @@ import {
 } from '../../teachers/components/Teacher.elements';
 import { CurrentChat } from '../Chats';
 import { loggedUserContext } from '../../../context/loggedUser';
+import '../../../styles/animations.css';
+import WriteRate from '../../../components/Rate/WriteRate';
 
 const StyledSubjectList = styled(SubjectList)`
   li {
     margin: 0;
+  }
+`;
+
+const RateBtn = styled.button`
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+
+  transition: var(--trans-default);
+
+  :hover {
+    svg {
+      width: 2.2rem;
+      height: 2.2rem;
+    }
+  }
+
+  svg {
+    transition: var(--trans-default);
+    width: 2rem;
+    height: 2rem;
   }
 `;
 
@@ -33,8 +61,13 @@ const User: FC<UserProps> = ({
   subjects,
   setCurrentChat,
   handleDeleteUserChat,
+  email,
+  wallet,
+  rate,
 }) => {
   const { user } = useContext(loggedUserContext);
+
+  const [writeRate, setWriteRate] = useState(false);
 
   const renderSubjects = (): JSX.Element[] => {
     return subjects.map(subject => {
@@ -60,7 +93,13 @@ const User: FC<UserProps> = ({
   };
 
   return (
-    <Container>
+    <Container style={{ position: 'relative' }}>
+      {user?.userType === 'student' && (
+        <RateBtn onClick={() => setWriteRate(true)}>
+          <BsFillPencilFill />
+        </RateBtn>
+      )}
+
       <Avatar id={avatarId} />
       <Header3 style={{ marginTop: '1rem', maxWidth: '18rem' }}>
         {firstName} {lastName}
@@ -83,6 +122,26 @@ const User: FC<UserProps> = ({
       >
         Revoke
       </Button>
+      <CSSTransition
+        in={writeRate}
+        timeout={200}
+        classNames="fade-fast"
+        unmountOnExit
+      >
+        <WriteRate
+          avatarId={avatarId}
+          firstName={firstName}
+          lastName={lastName}
+          email={email}
+          rate={rate}
+          wallet={wallet}
+          userType="teacher"
+          price={price}
+          _id={_id}
+          subjects={subjects}
+          close={() => setWriteRate(false)}
+        />
+      </CSSTransition>
     </Container>
   );
 };

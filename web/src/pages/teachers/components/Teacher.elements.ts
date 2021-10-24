@@ -34,6 +34,7 @@ export const Rating = styled.div`
   display: flex;
   margin: 2rem 0;
   align-items: center;
+  cursor: pointer;
 
   svg {
     color: var(--color-yellow);

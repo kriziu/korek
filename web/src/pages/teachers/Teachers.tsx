@@ -1,5 +1,7 @@
 import { FC, useState } from 'react';
 
+import styled from '@emotion/styled';
+
 import { Button } from '../../components/Button';
 import { Header1, Header2, SmallHeader } from '../../components/Header';
 import { Center } from '../../components/Center';
@@ -8,6 +10,15 @@ import NavBar from '../../components/NavBar/NavBar';
 import { Input, InputIcon } from '../../components/Input';
 import { AiOutlineSearch } from 'react-icons/ai';
 import TeacherList from './components/TeacherList';
+import { breakpoints } from '../../styles/breakpoints';
+
+const StyledInIcon = styled(InputIcon)`
+  width: 60rem;
+
+  @media screen and (max-width: ${breakpoints.sm}) {
+    width: 30rem;
+  }
+`;
 
 const Teachers: FC = () => {
   const [search, setSearch] = useState('');
@@ -30,14 +41,14 @@ const Teachers: FC = () => {
           }}
         >
           <Center style={{ marginBottom: '5rem' }}>
-            <InputIcon style={{ width: '60rem' }}>
+            <StyledInIcon>
               <AiOutlineSearch />
               <Input
                 placeholder="Search for teachers"
                 value={tempSearch}
                 onChange={e => setTempSearch(e.target.value)}
               />
-            </InputIcon>
+            </StyledInIcon>
             <Button style={{ padding: '1.4rem 4rem' }}>Search</Button>
           </Center>
         </form>

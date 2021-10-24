@@ -143,7 +143,7 @@ const UserList: FC<{
   };
 
   return (
-    <Container>
+    <Container className="list">
       <Header3 style={{ marginBottom: '2rem' }}>
         {user?.userType === 'teacher' ? 'Your students' : 'Your teachers'}
       </Header3>

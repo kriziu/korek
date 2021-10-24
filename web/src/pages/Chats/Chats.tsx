@@ -9,6 +9,8 @@ import UserList from './components/UserList';
 import '../../styles/animations.css';
 import { Center } from '../../components/Center';
 import { AVATARS } from '../../contants';
+import { Img } from './Chats.elements';
+import { Container } from './Chats.elements';
 
 export interface CurrentChat {
   firstName: string;
@@ -29,7 +31,7 @@ const Chats: FC = () => {
     <div>
       <div style={{ minHeight: '100vh' }}>
         <NavBar />
-        <div style={{ display: 'flex' }}>
+        <Container>
           <UserList setCurrentChat={setChat} chat={chat} />
           <SwitchTransition>
             <CSSTransition
@@ -40,21 +42,13 @@ const Chats: FC = () => {
               {chat.roomId ? (
                 <Chat {...chat} />
               ) : (
-                <Center
-                  style={{
-                    flex: 1,
-                    height: 'auto',
-                    flexDirection: 'column',
-                    marginLeft: '-30rem',
-                    pointerEvents: 'none',
-                  }}
-                >
-                  <img src="/images/hero_chat.svg" alt="Start chatting" />
+                <Center className="center">
+                  <Img src="/images/hero_chat.svg" alt="Start chatting" />
                 </Center>
               )}
             </CSSTransition>
           </SwitchTransition>
-        </div>
+        </Container>
       </div>
       <Footer />
     </div>

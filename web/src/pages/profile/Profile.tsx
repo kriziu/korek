@@ -5,18 +5,19 @@ import { FiAtSign } from 'react-icons/fi';
 import { Avatar, AvatarSelector } from '../../components/Avatar';
 import { GroupBase, MultiValue, OptionsOrGroups } from 'react-select';
 import axios from 'axios';
+import { CSSTransition } from 'react-transition-group';
+import { toast } from 'react-toastify';
 
 import { Button } from '../../components/Button';
-import { Center } from '../../components/Center';
 import Footer from '../../components/Footer/Footer';
 import { Input, InputIcon } from '../../components/Input';
 import NavBar from '../../components/NavBar/NavBar';
 import { AVATARS, SUBJECTS } from '../../contants';
 import { loggedUserContext } from '../../context/loggedUser';
-import { Flex, Right } from './Profile.elements';
+import { Flex, Right, StyledCenter } from './Profile.elements';
 import { StyledSelect } from '../../components/StyledSelect';
 import { Header2, Header3 } from '../../components/Header';
-import { CSSTransition } from 'react-transition-group';
+import { validateEmail } from '../../utils/functions';
 
 const SelectSubjects: OptionsOrGroups<SubjectType, GroupBase<any>> = [
   { value: SUBJECTS.MATH, label: 'Math' },
@@ -36,13 +37,38 @@ const SelectSubjects: OptionsOrGroups<SubjectType, GroupBase<any>> = [
 const { REACT_APP_SERVER_URL } = process.env;
 
 const Profile: FC = () => {
-  const { setToken, token, user, setUser } = useContext(loggedUserContext);
+  const { setToken, token, user } = useContext(loggedUserContext);
 
   const [help, setHelp] = useState<MultiValue<SubjectType>>([]);
   const [avatarSetter, setAvatarSetter] = useState(false);
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
   const [email, setEmail] = useState('');
+  const [emailWarn, setEmailWarn] = useState(false);
+  const [fWarn, setFWarn] = useState(false);
+  const [lWarn, setLWarn] = useState(false);
+
+  const success = () =>
+    toast.success('Account updated!', {
+      position: 'top-center',
+      autoClose: 10000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+  const error = () =>
+    toast.error('Account update error!', {
+      position: 'top-center',
+      autoClose: 10000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
 
   const updateUser = (data: UserType) => {
     token &&
@@ -54,6 +80,10 @@ const Profile: FC = () => {
         })
         .then(res => {
           setToken(res.data.token);
+          success();
+        })
+        .catch(err => {
+          error();
         });
   };
 
@@ -79,6 +109,8 @@ const Profile: FC = () => {
     if (user && fName.length > 2) {
       updateUser({ ...user, firstName: fName });
       setFName('');
+    } else {
+      setFWarn(true);
     }
   };
 
@@ -86,13 +118,27 @@ const Profile: FC = () => {
     if (user && lName.length > 2) {
       updateUser({ ...user, lastName: lName });
       setLName('');
+    } else {
+      setLWarn(true);
     }
   };
 
   const handleEmailUpd = () => {
-    if (user && email) {
+    if (user && validateEmail(email)) {
       updateUser({ ...user, email: email });
       setEmail('');
+    } else {
+      setEmailWarn(true);
+    }
+  };
+
+  const handleSubjectsUpd = () => {
+    if (user && help.length) {
+      const subjectsUpd = help.map(subject => {
+        return subject.value;
+      });
+
+      updateUser({ ...user, subjects: subjectsUpd as SUBJECTS[] });
     }
   };
 
@@ -101,13 +147,13 @@ const Profile: FC = () => {
       <div style={{ minHeight: '100vh' }}>
         <NavBar />
         <Flex>
-          <Center style={{ marginLeft: '-30rem', marginRight: '-30rem' }}>
+          <StyledCenter style={{ marginLeft: '-30rem', marginRight: '-30rem' }}>
             <img
               src="./images/hero_profile.svg"
               alt="Account edit"
               width="500rem"
             />
-          </Center>
+          </StyledCenter>
           <Right>
             <Flex style={{ justifyContent: 'flex-end' }}>
               <Header2 style={{ marginRight: '2rem' }}>
@@ -124,7 +170,14 @@ const Profile: FC = () => {
                 <Input
                   placeholder="First Name"
                   value={fName}
-                  onChange={e => setFName(e.target.value)}
+                  onChange={e => {
+                    const val = !fName.length
+                      ? e.target.value.toUpperCase()
+                      : e.target.value;
+                    setFWarn(false);
+                    setFName(val);
+                  }}
+                  warn={fWarn}
                 />
               </InputIcon>
               <Button onClick={handleFNameUpd}>Save</Button>
@@ -135,7 +188,14 @@ const Profile: FC = () => {
                 <Input
                   placeholder="Last Name"
                   value={lName}
-                  onChange={e => setLName(e.target.value)}
+                  onChange={e => {
+                    const val = !lName.length
+                      ? e.target.value.toUpperCase()
+                      : e.target.value;
+                    setLWarn(false);
+                    setLName(val);
+                  }}
+                  warn={lWarn}
                 />
               </InputIcon>
               <Button onClick={handleLNameUpd}>Save</Button>
@@ -146,7 +206,11 @@ const Profile: FC = () => {
                 <Input
                   placeholder="Email"
                   value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  onChange={e => {
+                    setEmail(e.target.value);
+                    setEmailWarn(false);
+                  }}
+                  warn={emailWarn}
                 />
               </InputIcon>
               <Button onClick={handleEmailUpd}>Save</Button>
@@ -161,10 +225,17 @@ const Profile: FC = () => {
                 onChange={e => e && setHelp(e)}
                 isMulti
               />
-              <Button style={{ width: '100%', marginTop: '1rem' }}>Save</Button>
+              <Button
+                style={{ width: '100%', marginTop: '1rem' }}
+                onClick={handleSubjectsUpd}
+              >
+                Save
+              </Button>
             </div>
 
-            <Button onClick={() => setToken(null)}>Logout</Button>
+            <Button onClick={() => setToken(null)} secondary>
+              Logout
+            </Button>
           </Right>
         </Flex>
       </div>

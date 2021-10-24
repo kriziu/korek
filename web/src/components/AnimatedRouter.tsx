@@ -9,6 +9,7 @@ import Hero from '../pages/hero/Hero';
 import Login from '../pages/login/Login';
 import Register from '../pages/login/Register';
 import Profile from '../pages/profile/Profile';
+import Rates from '../pages/rates/Rates';
 import Teachers from '../pages/teachers/Teachers';
 
 import '../styles/animations.css';
@@ -62,7 +63,7 @@ const AnimatedRouter: FC = (): JSX.Element => {
               <Login />
             </Route>
             <Route exact path="/discover">
-              {user?.userType === 'teacher' ? <div>1</div> : <Teachers />}
+              {user?.userType === 'teacher' ? <Rates /> : <Teachers />}
             </Route>
             <Route exact path="/">
               {user?._id ? <Chats /> : <Hero />}

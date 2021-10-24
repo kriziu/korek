@@ -4,8 +4,7 @@ GET http://localhost:8080/users/61718584216fadced5d98634
 
 ###
 
-GET http://localhost:8080/users
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTcxODU4NDIxNmZhZGNlZDVkOTg2MzQiLCJpYXQiOjE2MzQ4MzE3NjZ9.uWZD0e3bavpsiHOAYQ4ViOFTnT7_qzJ6_t12vzBb2Z0
+GET https://whiteboard-mrldf5towq-ew.a.run.app/users
 
 ###
 
@@ -34,17 +33,17 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/users/login
+POST https://annular-hexagon-329514.appspot.com/users/login
 Content-Type: application/json
 
 {
-  "email": "t1133@gmail.ck",
-  "password":"password"
+  "email": "brunodzi07@gmail.com",
+  "password":"123"
 }
 
 ###
 
-PATCH http://localhost:8080/users
+PATCH https://whiteboard-mrldf5towq-ew.a.run.app/users
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 Content-Type: application/json
 
@@ -95,13 +94,12 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzFj
 ###
 
 POST http://localhost:8080/rates
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzQxNDA5MWI3ZGZlOWUzYzlhOTE5MCIsImZpcnN0TmFtZSI6IkJydW5vIiwibGFzdE5hbWUiOiJEemnEmWNpZWxza2kiLCJlbWFpbCI6InVyc3p1bGFkemlAZ21haWwuY28iLCJwYXNzd29yZCI6IiQyYiQxMCRRdlpSS1hYRnlOdlA4V2lCbE9wUjIuMWRxOVk2M3Vnd1dyVmZuUUNWTGhuNm05UUJrTzcucSIsInByaWNlIjowLCJhdmF0YXJJZCI6ImZlbWFsZV80Iiwic3ViamVjdHMiOlsicGh5c2ljcyIsImNoZW1pc3RyeSIsImVuZ2xpc2giXSwidXNlclR5cGUiOiJzdHVkZW50IiwiX192IjowfSwiaWF0IjoxNjM0OTk3NDI2fQ.g4EScDYAjJr4KjQVdJt46L5Xhtc_XStmKlQVdTi8LjY
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzU2YTBiNDc0NjZiNDEwNWMzNGE3MiIsImZpcnN0TmFtZSI6IkJydW5vIiwibGFzdE5hbWUiOiJVY3plbiIsImVtYWlsIjoia3Jpem94QHdwLnBsIiwicGFzc3dvcmQiOiIkMmIkMTAkQkFJNkp4c3FoV05SbEFsa1Y0RTd6ZUgvMkpBZWpJeXNXQ2kveG1xb2lQOEJpVXI4dmVBbVMiLCJwcmljZSI6MCwicmF0ZSI6MCwid2FsbGV0IjowLCJhdmF0YXJJZCI6ImZlbWFsZV80Iiwic3ViamVjdHMiOlsibWF0aCJdLCJ1c2VyVHlwZSI6InN0dWRlbnQiLCJfX3YiOjB9LCJpYXQiOjE2MzUwOTczNzZ9.gL9sGfUSH09RlwxCrJqUx0j5MSiKlb9gIMD_RXOW7Gc
 Content-Type: application/json
 
 {
   "teacherId": "61754e94e3b5b7f23b50a09d",
   "stars": 5,
-  "from": "6171e62a366c2d2c5a9d28ff",
   "message": "dobry nauczyciel"
 }
 

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Center } from '../../../components/Center';
+import { breakpoints } from '../../../styles/breakpoints';
 import { scrollY } from '../../../styles/scroll';
 
 export const List = styled.ul`
@@ -14,6 +15,13 @@ export const List = styled.ul`
   ${scrollY}
 `;
 
+export const Img = styled.img`
+  @media screen and (max-width: ${breakpoints.lg}) {
+    width: 60rem;
+    height: 60rem;
+  }
+`;
+
 export const SubjectList = styled.ul`
   list-style: none;
   display: flex;
@@ -26,6 +34,10 @@ export const SubjectList = styled.ul`
   transition: var(--trans-default);
   padding: 1rem 0;
   margin-bottom: 5rem;
+
+  @media screen and (max-width: ${breakpoints.lg}) {
+    width: 50%;
+  }
 
   .active,
   li:hover {

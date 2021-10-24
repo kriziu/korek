@@ -1,8 +1,17 @@
 import styled from '@emotion/styled';
 import { Input } from '../../../components/Input';
+import { breakpoints } from '../../../styles/breakpoints';
 import { scrollY } from '../../../styles/scroll';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  flex: 1;
+  @media screen and (max-width: ${breakpoints.sm}) {
+    position: absolute;
+    width: 80vw;
+    left: 64%;
+    transform: translateX(-50%);
+  }
+`;
 
 export const Top = styled.div`
   display: flex;

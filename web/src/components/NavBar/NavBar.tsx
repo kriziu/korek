@@ -19,9 +19,7 @@ const NavBar: FC = () => {
           <Link to="/">Chats</Link>
         </li>
         <li>
-          <Link to="/discover">
-            Discover {user?.userType === 'student' && 'teachers'}
-          </Link>
+          <Link to="/discover">Discover</Link>
         </li>
         <li>
           <Link to="/wallet">Wallet</Link>

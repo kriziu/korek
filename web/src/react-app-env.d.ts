@@ -28,7 +28,7 @@ declare global {
 
   interface RateType {
     teacherId: string;
-    from: any;
+    from: UserType;
     stars: number;
     message: string;
   }

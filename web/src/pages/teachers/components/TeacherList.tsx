@@ -9,11 +9,12 @@ import axios from 'axios';
 
 import { Center } from '../../../components/Center';
 import Teacher from './Teacher';
-import { List, NotFound, SubjectList } from './TeacherList.elements';
+import { Img, List, NotFound, SubjectList } from './TeacherList.elements';
 import '../../../styles/animations.css';
 import { Header2 } from '../../../components/Header';
 import { SUBJECTS } from '../../../contants';
 import { loggedUserContext } from '../../../context/loggedUser';
+import RatesPopup from '../../../components/Rate/RatesPopup';
 
 const subjects: string[] = Object.values(SUBJECTS).map(subject => subject);
 
@@ -27,6 +28,8 @@ const TeacherList: FC<{ search: string }> = ({ search }) => {
   const [active, setActive] = useState<typeof subjects>([]);
   const [teachers, setTeachers] = useState<UserType[]>([]);
   const [found, setFound] = useState(1);
+  const [seeRates, setSeeRates] = useState(false);
+  const [selectedTeacher, setSelectedTeacher] = useState('');
 
   useEffect(() => {
     setFound(1);
@@ -61,6 +64,10 @@ const TeacherList: FC<{ search: string }> = ({ search }) => {
       }
     });
   }, [token, user]);
+
+  useEffect(() => {
+    selectedTeacher ? setSeeRates(true) : setSeeRates(false);
+  }, [selectedTeacher]);
 
   const handleActiveClick = (subject: string) => {
     setFound(1);
@@ -107,6 +114,10 @@ const TeacherList: FC<{ search: string }> = ({ search }) => {
     });
   };
 
+  const handleSeeRates = (id: string) => {
+    setSelectedTeacher(id);
+  };
+
   const renderTeachers = (): JSX.Element[] => {
     const tempTeachers =
       active[0] === 'all'
@@ -141,7 +152,11 @@ const TeacherList: FC<{ search: string }> = ({ search }) => {
       return (
         <CSSTransition key={teacher._id} timeout={200} classNames="slide">
           <li>
-            <Teacher {...teacher} deleteFromList={deleteFromList} />
+            <Teacher
+              {...teacher}
+              deleteFromList={deleteFromList}
+              seeRates={handleSeeRates}
+            />
           </li>
         </CSSTransition>
       );
@@ -165,13 +180,23 @@ const TeacherList: FC<{ search: string }> = ({ search }) => {
               <NotFound>
                 <Header2>No teacher found</Header2>
 
-                <img src="/images/hero_no_results.svg" alt="No teacher found" />
+                <Img src="/images/hero_no_results.svg" alt="No teacher found" />
               </NotFound>
             )}
           </CSSTransition>
         </SwitchTransition>
       </Center>
-      <Center></Center>
+      <CSSTransition
+        in={seeRates}
+        timeout={200}
+        classNames="fade-fast"
+        unmountOnExit
+      >
+        <RatesPopup
+          teacherId={selectedTeacher}
+          close={() => setSelectedTeacher('')}
+        />
+      </CSSTransition>
     </div>
   );
 };
