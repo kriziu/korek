@@ -1,11 +1,10 @@
 
 
-GET http://localhost:8080/users/61647d8877c05d2104e8642d
+GET http://localhost:8080/users/61718584216fadced5d98634
 
 ###
 
-GET http://localhost:8080/users
-
+GET https://whiteboard-mrldf5towq-ew.a.run.app/users
 
 ###
 
@@ -23,26 +22,29 @@ Content-Type: application/json
 {
   "firstName": "Teacher",
   "lastName": "s",
-  "email": "t@gmail.com",
+  "email": "t1133@gmail.cw",
   "password":"password",
+  "price": 20,
+  "avatarId": "female_1",
   "userType": "teacher",
-  "subjects": [],
-  "connected": []
+  "subjects": ["polish"],
+  "connected": [{"_id": "123", "subject": "polish"}]
 }
 
 ###
 
-POST http://localhost:8080/users/login
+POST https://annular-hexagon-329514.appspot.com/users/login
 Content-Type: application/json
 
 {
-  "email": "woj1k1315@gmail.com",
-  "password":"password"
+  "email": "brunodzi07@gmail.com",
+  "password":"123"
 }
 
 ###
 
-PATCH http://localhost:8080/users/61647d8877c05d2104e8642d
+PATCH https://whiteboard-mrldf5towq-ew.a.run.app/users
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 Content-Type: application/json
 
 {
@@ -66,3 +68,62 @@ Content-Type: application/json
   "_id": "61647d8877c05d2104e8642d",
   "subject": "english"
 }
+
+###
+
+POST http://localhost:8080/messages
+Content-Type: application/json
+
+{
+  "roomId": "6169395f3bd3943503f43474_61681e655c8c0353fa8b30e0",
+  "from": "61681e655c8c0353fa8b30e0",
+  "message": "siema 123"
+}
+
+###
+
+DELETE http://localhost:8080/messages/617115bc1268b8030085abf6_6169395f3bd3943503f43474
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzFjNTdhMTViMTQ0Y2U0YzMzYTU1NCIsImZpcnN0TmFtZSI6IkJydW5vIiwibGFzdE5hbWUiOiJEemnEmWNpZWxza2kxIiwiZW1haWwiOiJicnVub2R6aTA3QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJGF2aUxSSVBibGhvMHFRb1d6WnpQUy5jcmpDYVBwblVZbUtCYUNweUQvRUtSQmFZaG1TcXBhIiwicHJpY2UiOjY5LCJhdmF0YXJJZCI6ImZlbWFsZV8xIiwic3ViamVjdHMiOlsibWF0aCJdLCJ1c2VyVHlwZSI6InRlYWNoZXIiLCJfX3YiOjB9LCJpYXQiOjE2MzQ5OTIyODh9.HIKI9One01ieYydy2-rWHiysD5EIURvbl9WDjnYECp1
+
+
+###
+
+GET http://localhost:8080/users/chatted
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzFjNTdhMTViMTQ0Y2U0YzMzYTU1NCIsImZpcnN0TmFtZSI6IkJydW5vIiwibGFzdE5hbWUiOiJEemnEmWNpZWxza2kxIiwiZW1haWwiOiJicnVub2R6aTA3QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJGF2aUxSSVBibGhvMHFRb1d6WnpQUy5jcmpDYVBwblVZbUtCYUNweUQvRUtSQmFZaG1TcXBhIiwicHJpY2UiOjY5LCJhdmF0YXJJZCI6ImZlbWFsZV8xIiwic3ViamVjdHMiOlsibWF0aCJdLCJ1c2VyVHlwZSI6InRlYWNoZXIiLCJfX3YiOjB9LCJpYXQiOjE2MzQ5OTIyODh9.HIKI9One01ieYydy2-rWHiysD5EIURvbl9WDjnYECp8
+
+###
+
+POST http://localhost:8080/rates
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzU2YTBiNDc0NjZiNDEwNWMzNGE3MiIsImZpcnN0TmFtZSI6IkJydW5vIiwibGFzdE5hbWUiOiJVY3plbiIsImVtYWlsIjoia3Jpem94QHdwLnBsIiwicGFzc3dvcmQiOiIkMmIkMTAkQkFJNkp4c3FoV05SbEFsa1Y0RTd6ZUgvMkpBZWpJeXNXQ2kveG1xb2lQOEJpVXI4dmVBbVMiLCJwcmljZSI6MCwicmF0ZSI6MCwid2FsbGV0IjowLCJhdmF0YXJJZCI6ImZlbWFsZV80Iiwic3ViamVjdHMiOlsibWF0aCJdLCJ1c2VyVHlwZSI6InN0dWRlbnQiLCJfX3YiOjB9LCJpYXQiOjE2MzUwOTczNzZ9.gL9sGfUSH09RlwxCrJqUx0j5MSiKlb9gIMD_RXOW7Gc
+Content-Type: application/json
+
+{
+  "teacherId": "61754e94e3b5b7f23b50a09d",
+  "stars": 5,
+  "message": "dobry nauczyciel"
+}
+
+###
+
+GET http://localhost:8080/rates/61754e94e3b5b7f23b50a09d
+
+###
+
+GET http://localhost:8080/users/6175581da5ac24fc1e45a54d
+
+###
+
+DELETE http://localhost:8080/rates/6175529898fd3f94cd8030cb
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzQxNDA5MWI3ZGZlOWUzYzlhOTE5MCIsImZpcnN0TmFtZSI6IkJydW5vIiwibGFzdE5hbWUiOiJEemnEmWNpZWxza2kiLCJlbWFpbCI6InVyc3p1bGFkemlAZ21haWwuY28iLCJwYXNzd29yZCI6IiQyYiQxMCRRdlpSS1hYRnlOdlA4V2lCbE9wUjIuMWRxOVk2M3Vnd1dyVmZuUUNWTGhuNm05UUJrTzcucSIsInByaWNlIjowLCJhdmF0YXJJZCI6ImZlbWFsZV80Iiwic3ViamVjdHMiOlsicGh5c2ljcyIsImNoZW1pc3RyeSIsImVuZ2xpc2giXSwidXNlclR5cGUiOiJzdHVkZW50IiwiX192IjowfSwiaWF0IjoxNjM0OTk3NDI2fQ.g4EScDYAjJr4KjQVdJt46L5Xhtc_XStmKlQVdTi8LjY
+
+###
+
+POST http://localhost:8080/wallet/deposit
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzU2YTBiNDc0NjZiNDEwNWMzNGE3MiIsImZpcnN0TmFtZSI6IkJydW5vIiwibGFzdE5hbWUiOiJVY3plbiIsImVtYWlsIjoia3Jpem94QHdwLnBsIiwicGFzc3dvcmQiOiIkMmIkMTAkQkFJNkp4c3FoV05SbEFsa1Y0RTd6ZUgvMkpBZWpJeXNXQ2kveG1xb2lQOEJpVXI4dmVBbVMiLCJwcmljZSI6MCwicmF0ZSI6MCwid2FsbGV0IjowLCJhdmF0YXJJZCI6ImZlbWFsZV80Iiwic3ViamVjdHMiOlsibWF0aCJdLCJ1c2VyVHlwZSI6InN0dWRlbnQiLCJfX3YiOjB9LCJpYXQiOjE2MzUwOTczNzZ9.gL9sGfUSH09RlwxCrJqUx0j5MSiKlb9gIMD_RXOW7Gc
+Content-Type: application/json
+
+{
+  "much": 25
+}
+
+//6175581da5ac24fc1e45a54d
