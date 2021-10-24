@@ -16,6 +16,7 @@ import {
 } from './Teacher.elements';
 import Modal from '../../../components/Modal';
 import { loggedUserContext } from '../../../context/loggedUser';
+import { socket } from '../../../utils/socket';
 
 const { REACT_APP_SERVER_URL } = process.env;
 
@@ -46,10 +47,14 @@ const Teacher: FC<UserType> = ({
   const handleInvite = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (token && text) {
+      const roomId = _id + '_' + user?._id;
+      socket.emit('createRoom', roomId);
+      // socket.emit('send', { roomId, from: user?._id, msg: text });
+
       axios.post(
         `${REACT_APP_SERVER_URL}/messages`,
         {
-          roomId: _id + '_' + user?._id,
+          roomId,
           message: text,
         },
         {

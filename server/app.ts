@@ -45,6 +45,11 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket: Socket) => {
+  socket.on('createRoom', (id: string) => {
+    console.log(id);
+    socket.broadcast.emit('created', id);
+  });
+
   socket.on('joinRoom', (id: string) => {
     socket.join(id);
   });

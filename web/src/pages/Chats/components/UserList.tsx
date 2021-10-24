@@ -25,7 +25,25 @@ const UserList: FC<{
   const [users, setUsers] = useState<UserType[]>([]);
 
   useEffect(() => {
-    // TODO WYWALA BLAD ALE DZIALA
+    socket.on('created', (id: string) => {
+      const ids = id.split('_');
+      if (user && ids.includes(user._id)) {
+        const userId = ids[0] === user._id ? ids[1] : ids[0];
+
+        axios
+          .get<UserType>(`${REACT_APP_SERVER_URL}/users/${userId}`)
+          .then(res => {
+            setUsers(prev => [...prev, res.data]);
+          });
+      }
+    });
+
+    return () => {
+      socket.off('created');
+    };
+  }, [user]);
+
+  useEffect(() => {
     socket.on('deleted', (id: string) => {
       if (id === chat.roomId) {
         setCurrentChat({
@@ -41,6 +59,10 @@ const UserList: FC<{
 
       setUsers(prev => prev.filter(userArr => userArr._id !== secondId));
     });
+
+    return () => {
+      socket.off('deleted');
+    };
   }, [chat.roomId, setCurrentChat, user?._id]);
 
   useEffect(() => {

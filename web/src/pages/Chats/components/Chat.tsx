@@ -43,6 +43,10 @@ const Chat: FC<CurrentChat> = ({ firstName, lastName, avatarId, roomId }) => {
           });
         });
     }
+
+    return () => {
+      socket.off('receive');
+    };
   }, [roomId, user, token]);
 
   useEffect(() => {
