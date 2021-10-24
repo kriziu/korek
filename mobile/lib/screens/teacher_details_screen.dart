@@ -39,14 +39,12 @@ class _TeacherDetailsScreenState extends State<TeacherDetailsScreen> {
           builder: (_) => const LoadingDialog(title: "Sending..."),
           barrierDismissible: false);
 
-      final roomId = widget.teacher.id + '_' + Provider.of<AuthProvider>(context,listen: false).user!.id;
+      final roomId = widget.teacher.id + '_' + currentUser!.id;
       appSocket.emit('createRoom', roomId);
       appSocket.emit('joinRoom', roomId);
 
-      await Provider.of<MessagesProvider>(context, listen: false).sendMessage(
-          Message(widget.teacher.id + "_" + currentUser!.id, currentUser.id,
-              _controller.text));
-      Provider.of<MessagesProvider>(context, listen: false).fetchChatted();
+      await Provider.of<MessagesProvider>(context, listen: false).sendMessage(Message(roomId, currentUser.id, _controller.text));
+      await Provider.of<MessagesProvider>(context, listen: false).fetchChatted();
 
       Navigator.of(context)
         ..pop()
@@ -134,10 +132,10 @@ class _TeacherDetailsScreenState extends State<TeacherDetailsScreen> {
                           size: 48,
                         ),
                         const SizedBox(width: 4),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 4.0),
-                          child: Text('4.7',
-                              style: TextStyle(
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Text(widget.teacher.rate.toString(),
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 28,
                                   fontWeight: FontWeight.w700)),

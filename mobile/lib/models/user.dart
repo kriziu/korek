@@ -8,7 +8,7 @@ class User {
   String email;
   double price;
   double rate;
-  double wallet;
+  int wallet;
   String avatarId;
   List<Subjects?> subjects;
   String userType;
@@ -44,8 +44,8 @@ class User {
         lastName: json['lastName'] ?? 'Last Name',
         userType: json['userType'] ?? 'student',
         connected: json['connected'] ?? [],
-        rate: double.tryParse(json['rate'].toString()) ?? 1,
-        wallet: double.tryParse(json['wallet'].toString()) ?? 0,
+        rate: double.tryParse(json['rate'].toString()) ?? 0,
+        wallet: json['wallet'] ?? 36,
         email: json['email'] ?? 'unknown email',
         subjects: (json['subjects'] as List<dynamic>)
             .map((subject) => EnumToString.fromString(subjectsList, subject))
@@ -55,9 +55,9 @@ class User {
         avatarId: json['avatarId'] ?? 'unknown avatar id');
   }
 
-// @override
-// String toString() {
-//   return firstName+'\n'+lastName+'\n'+userType+'\n'+connected.toString()+'\n'+email+'\n'+subjects.toString()+'\n'+price.toString()+'\n'+id+'\n'+avatarId+'\n';
-// }
+@override
+String toString() {
+  return firstName+'\n'+lastName+'\n'+userType+'\n'+connected.toString()+'\n'+email+'\n'+subjects.toString()+'\n'+price.toString()+'\n'+id+'\n'+avatarId+'\n';
+}
 
 }

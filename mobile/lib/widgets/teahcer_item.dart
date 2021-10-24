@@ -73,10 +73,10 @@ class TeacherItem extends StatelessWidget {
                         size: 28,
                       ),
                       const SizedBox(width: 4),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 4.0),
-                        child: Text('4.7',
-                            style: TextStyle(
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4.0),
+                        child: Text(teacher.rate.toString(),
+                            style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700)),

@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:korek/models/user.dart';
+import 'package:korek/providers/auth_provider.dart';
+import 'package:korek/screens/wallet_screen.dart';
 import 'package:korek/widgets/adaptive_button.dart';
+import 'package:provider/provider.dart';
 
 class PayScreen extends StatelessWidget {
   final User teacher;
@@ -12,6 +15,7 @@ class PayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<AuthProvider>(context);
     return PlatformScaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -73,11 +77,11 @@ class PayScreen extends StatelessWidget {
                 Container(
                   width: 100,
                   height: 100,
-                  child: const Center(
+                  child: Center(
                       child: FittedBox(
                     child: Text(
-                      "54\$",
-                      style: TextStyle(
+                      "${userProvider.user!.wallet}\$",
+                      style: const TextStyle(
                           color: Colors.white,
                           fontSize: 24,
                           fontWeight: FontWeight.w700),
@@ -116,11 +120,11 @@ class PayScreen extends StatelessWidget {
                 Container(
                   width: 100,
                   height: 100,
-                  child: const Center(
+                  child: Center(
                       child: FittedBox(
                     child: Text(
-                      "25\$",
-                      style: TextStyle(
+                      "${teacher.price}\$",
+                      style: const TextStyle(
                           color: Colors.white,
                           fontSize: 24,
                           fontWeight: FontWeight.w700),
@@ -134,7 +138,15 @@ class PayScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: AdaptiveButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                        try{
+                          await userProvider.pay(teacher.price, teacher.id);
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Successfully payed")));
+                          Navigator.of(context).pop();
+                        }catch(e){
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$e")));
+                        }
+                    },
                     child: Text(
                       "Pay",
                       style: GoogleFonts.montserrat(
@@ -148,7 +160,9 @@ class PayScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: AdaptiveButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(platformPageRoute(context: context,builder: (context) => WalletScreen()));
+                    },
                     child: Text(
                       "Add deposit",
                       style: GoogleFonts.montserrat(

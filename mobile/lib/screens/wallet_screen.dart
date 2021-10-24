@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:korek/providers/auth_provider.dart';
 import 'package:korek/widgets/adaptive_button.dart';
+import 'package:provider/provider.dart';
 
 class WalletScreen extends StatelessWidget {
-  const WalletScreen({Key? key}) : super(key: key);
+  WalletScreen({Key? key}) : super(key: key);
+  final depositController = TextEditingController();
+  final withDrawController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<AuthProvider>(context);
     return PlatformScaffold(
       body: SafeArea(
         child: Padding(
@@ -41,21 +46,17 @@ class WalletScreen extends StatelessWidget {
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
-                    color: Theme
-                        .of(context)
-                        .primaryColor,
+                    color: Theme.of(context).primaryColor,
                     shape: BoxShape.circle),
                 child: Center(
                   child: Text(
-                    "36\$",
+                    userProvider.user!.wallet.toString() + "\$",
                     style: platformThemeData(
                       context,
-                      material: (data) =>
-                          data.textTheme.headline2!
-                              .copyWith(color: Colors.white),
-                      cupertino: (data) =>
-                          data.textTheme.actionTextStyle
-                              .copyWith(color: Colors.white),
+                      material: (data) => data.textTheme.headline2!
+                          .copyWith(color: Colors.white),
+                      cupertino: (data) => data.textTheme.actionTextStyle
+                          .copyWith(color: Colors.white),
                     ),
                   ),
                 ),
@@ -67,30 +68,31 @@ class WalletScreen extends StatelessWidget {
                   onPressed: () {
                     showPlatformDialog(
                         context: context,
-                        builder: (context) =>
-                            PlatformAlertDialog(
-                              title:
-                                  const Text(
-                                    "Add deposit",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w700),
-                                  ),
+                        builder: (context) => PlatformAlertDialog(
+                              title: const Text(
+                                "Add deposit",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700),
+                              ),
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment:
-                                CrossAxisAlignment.center,
-                                children:  [
-                                  const Text("Write how much deposit you want to add."),
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                      "Write how much deposit you want to add."),
                                   const SizedBox(height: 8),
                                   TextField(
+                                    controller: depositController,
                                     minLines: 1,
                                     maxLines: 1,
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.allow(RegExp('[0-9.]+')),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9.]+')),
                                     ],
-                                    keyboardType: const TextInputType.numberWithOptions(
-                                        decimal: true),
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            decimal: true),
                                     decoration: const InputDecoration(
                                         hintText: "Deposit"),
                                   )
@@ -101,10 +103,7 @@ class WalletScreen extends StatelessWidget {
                                   child: Text(
                                     "Cancel",
                                     style: TextStyle(
-                                        color:
-                                        Theme
-                                            .of(context)
-                                            .primaryColor),
+                                        color: Theme.of(context).primaryColor),
                                   ),
                                   onPressed: () {
                                     Navigator.of(context).pop();
@@ -113,11 +112,20 @@ class WalletScreen extends StatelessWidget {
                                 PlatformDialogAction(
                                   child: Text("Add",
                                       style: TextStyle(
-                                          color: Theme
-                                              .of(context)
-                                              .primaryColor)),
-                                  onPressed: () {
-                                    //add money
+                                          color:
+                                              Theme.of(context).primaryColor)),
+                                  onPressed: () async {
+                                    final deposit =
+                                        double.tryParse(depositController.text);
+                                    if (deposit == null) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text("Provide correct value"),
+                                      ));
+                                      return;
+                                    }
+                                    await userProvider.addDeposit(deposit);
+                                    Navigator.of(context).pop();
                                   },
                                 ),
                               ],
@@ -137,14 +145,74 @@ class WalletScreen extends StatelessWidget {
                 width: double.infinity,
                 child: AdaptiveButton(
                   onPressed: () {
-                    //withdraw the money
+                    showPlatformDialog(
+                        context: context,
+                        builder: (context) => PlatformAlertDialog(
+                              title: const Text(
+                                "Withdraw money",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                      "Write how much deposit you want to withdraw."),
+                                  const SizedBox(height: 8),
+                                  TextField(
+                                    controller: withDrawController,
+                                    minLines: 1,
+                                    maxLines: 1,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9.]+')),
+                                    ],
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            decimal: true),
+                                    decoration: const InputDecoration(
+                                        hintText: "Deposit"),
+                                  )
+                                ],
+                              ),
+                              actions: [
+                                PlatformDialogAction(
+                                  child: Text(
+                                    "Cancel",
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                PlatformDialogAction(
+                                  child: Text("Withdraw",
+                                      style: TextStyle(
+                                          color:
+                                              Theme.of(context).primaryColor)),
+                                  onPressed: () async {
+                                    final withDraw = double.tryParse(withDrawController.text);
+                                    if (withDraw == null) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text("Provide correct value"),
+                                      ));
+                                      return;
+                                    }
+                                    await userProvider.withdraw(withDraw);
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ));
                   },
                   child: Text(
                     "Withdraw",
                     style: GoogleFonts.montserrat(
-                        color: Theme
-                            .of(context)
-                            .primaryColor,
+                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.w500,
                         fontSize: 17),
                   ),

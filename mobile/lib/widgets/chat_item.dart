@@ -9,9 +9,11 @@ import 'package:korek/models/rating.dart';
 import 'package:korek/models/user.dart';
 import 'package:korek/providers/auth_provider.dart';
 import 'package:korek/providers/messages_provider.dart';
+import 'package:korek/providers/users_provider.dart';
 import 'package:korek/screens/chat_screen.dart';
 import 'package:korek/screens/pay_screen.dart';
 import 'package:korek/widgets/adaptive_button.dart';
+import 'package:korek/widgets/dialogs/loading_dialog.dart';
 import 'package:provider/provider.dart';
 
 class ChatItem extends StatelessWidget {
@@ -53,10 +55,9 @@ class ChatItem extends StatelessWidget {
                         final roomId = currentUser.userType == "teacher"
                             ? currentUser.id + "_" + user.id
                             : user.id + "_" + currentUser.id;
-                        appSocket.emit(
-                          "deleteRoom",roomId
-                        );
-                        Provider.of<MessagesProvider>(context,listen: false).deleteChat(roomId, user.id);
+                        appSocket.emit("deleteRoom", roomId);
+                        Provider.of<MessagesProvider>(context, listen: false)
+                            .deleteChat(roomId, user.id);
                       }
                       Navigator.of(context).pop();
                     },
@@ -120,10 +121,10 @@ class ChatItem extends StatelessWidget {
                           size: 28,
                         ),
                         const SizedBox(width: 4),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 4.0),
-                          child: Text('4.7',
-                              style: TextStyle(
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Text(user.rate.toString(),
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700)),
@@ -172,7 +173,7 @@ class ChatItem extends StatelessWidget {
                             smallPadding: true,
                             outlined: true,
                             onPressed: () {
-                              final Rating rating = Rating(5, "");
+                              final Rating rating = Rating(5, "", "");
                               showPlatformDialog(
                                   context: context,
                                   builder: (context) =>
@@ -226,7 +227,7 @@ class ChatItem extends StatelessWidget {
                 initialRating: 5,
                 minRating: 1,
                 direction: Axis.horizontal,
-                allowHalfRating: true,
+                allowHalfRating: false,
                 itemCount: 5,
                 glowColor: Colors.amber,
                 itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -235,7 +236,7 @@ class ChatItem extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 onRatingUpdate: (r) {
-                  rating.rating = r;
+                  rating.stars = r.toInt();
                 },
               ),
             ),
@@ -243,7 +244,7 @@ class ChatItem extends StatelessWidget {
               height: 16,
             ),
             PlatformTextField(
-              onChanged: (val) => rating.rateMessage = val,
+              onChanged: (val) => rating.message = val,
               hintText: 'Optional Message',
               minLines: 3,
               maxLines: 5,
@@ -263,7 +264,26 @@ class ChatItem extends StatelessWidget {
           PlatformDialogAction(
             child: Text("Add Rate",
                 style: TextStyle(color: Theme.of(context).primaryColor)),
-            onPressed: () {},
+            onPressed: () async {
+              try {
+                showPlatformDialog(
+                    context: context,
+                    builder: (_) => const LoadingDialog(title: "Adding rate..."),
+                    barrierDismissible: false);
+                rating.teacherId = user.id;
+                await Provider.of<UsersProvider>(context, listen: false)
+                    .addRate(rating);
+                await Provider.of<MessagesProvider>(context, listen: false)
+                    .fetchChatted();
+                Navigator.of(context)
+                  ..pop()
+                  ..pop();
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Rate Added")));
+              } catch (e) {
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+              }
+            },
           ),
         ],
       );

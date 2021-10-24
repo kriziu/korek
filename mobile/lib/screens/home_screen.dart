@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void sortTeachers() {
     switch (_filters.sortType.sort) {
       case Sort.rating:
-        teachers.sort((a, b) => a.firstName.compareTo(b.firstName));
+        teachers.sort((a, b) => a.rate.compareTo(b.rate));
         break;
       case Sort.lowPrice:
         teachers.sort((a, b) => b.price.compareTo(a.price));

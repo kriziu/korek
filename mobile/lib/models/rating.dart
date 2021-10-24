@@ -1,11 +1,24 @@
+import 'package:korek/models/user.dart';
+
 class Rating {
-  String id = "";
-  double rating = 5;
-  String rateMessage = "";
+  String teacherId = "";
+  int stars = 5;
+  String message = "";
+  User? from;
 
-  Rating(this.rating, this.rateMessage, {this.id = ""});
+  Rating(this.stars, this.message, this.teacherId,{this.from});
 
-  factory Rating.fromJson(Map<String, dynamic> json) =>
-      Rating(json['rating'] ?? 0, json['rateMessage'] ?? "",
-          id: json['_id'] ?? "");
+  factory Rating.fromJson(Map<String, dynamic> json) => Rating(
+      (int.tryParse(json['stars'].toString())) ?? 3,
+      json['message'] ?? "",
+      json['teacherId'] ?? "",
+      from : User.fromJson(json['from']));
+
+  Map<String,dynamic> toJson(){
+    return {
+        "teacherId": teacherId,
+        "stars": stars,
+        "message": message,
+    };
+  }
 }

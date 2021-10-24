@@ -48,7 +48,7 @@ class HomeDrawer extends StatelessWidget {
               Navigator.of(context)
                 ..pop()
                 ..push(platformPageRoute(
-                    context: context, builder: (context) => const WalletScreen()));
+                    context: context, builder: (context) => WalletScreen()));
             },
           ),
           ListTile(

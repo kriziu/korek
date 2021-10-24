@@ -38,6 +38,12 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    socket.off("receive");
+  }
+
+  @override
   void initState() {
     final currentUser = Provider.of<AuthProvider>(context, listen: false).user;
     final roomId = currentUser!.userType == "teacher"
@@ -53,6 +59,7 @@ class _ChatScreenState extends State<ChatScreen> {
     _fetchMessages();
     super.initState();
   }
+
 
 
   Future<void> _sendMessage() async {
